@@ -1,0 +1,68 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# An example controller showing a sample home page
+GET     /                                               controllers.HomeController.index
+# An example controller showing how to use dependency injection
+GET     /count                                          controllers.CountController.count
+# An example controller showing how to write asynchronous code
+GET     /message                                        controllers.AsyncController.message
+
+
+#TODO Remove above routes
+
+
+GET     /categories                                     controllers.categories.CategoryController.getCategories
+POST    /category                                       controllers.categories.CategoryController.createCategory
+PUT     /category/:categoryId                           controllers.categories.CategoryController.updateCategory(categoryId: String)
+DELETE  /category/:categoryId                           controllers.categories.CategoryController.deleteCategory(categoryId: String)
+
+GET     /subcategories                                  controllers.categories.SubcategoryController.getSubcategories
+POST    /subcategory                                    controllers.categories.SubcategoryController.createSubcategory
+PUT     /subcategory/:subcategoryId                     controllers.categories.SubcategoryController.updateSubcategory(subcategoryId: String)
+DELETE  /subcategory/:subcategoryId                     controllers.categories.SubcategoryController.deleteSubcategory(subcategoryId: String)
+
+GET     /baskets                                        controllers.basket.BasketController.getBaskets
+POST    /basket                                         controllers.basket.BasketController.createBasket
+PUT     /basket/:basketId                               controllers.basket.BasketController.updateBasket(basketId: String)
+DELETE  /basket/:basketId                               controllers.basket.BasketController.deleteBasket(basketId: String)
+
+GET     /orders                                         controllers.orders.OrderController.getOrders
+POST    /order                                          controllers.orders.OrderController.createOrder
+PUT     /order/:orderId                                 controllers.orders.OrderController.updateOrder(orderId: String)
+DELETE  /order/:orderId                                 controllers.orders.OrderController.deleteOrder(orderId: String)
+
+GET     /orderedProducts                                controllers.orders.OrderedProductsController.getOrderedProducts
+POST    /orderedProduct                                 controllers.orders.OrderedProductsController.createOrderedProduct
+PUT     /orderedProduct/:orderedProductId               controllers.orders.OrderedProductsController.updateOrderedProduct(orderedProductId: String)
+DELETE  /orderedProduct/:orderedProductId               controllers.orders.OrderedProductsController.deleteOrderedProduct(orderedProductId: String)
+
+GET     /payments                                       controllers.orders.PaymentController.getPayments
+POST    /payment                                        controllers.orders.PaymentController.createPayment
+PUT     /payment/:paymentId                             controllers.orders.PaymentController.updatePayment(paymentId: String)
+DELETE  /payment/:paymentId                             controllers.orders.PaymentController.deletePayment(paymentId: String)
+
+GET     /shippingInformation                            controllers.orders.ShippingInformationController.getShippingInformation
+POST    /shippingInformation                            controllers.orders.ShippingInformationController.createShippingInformation
+PUT     /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.updateShippingInformation(shippingInformationId: String)
+DELETE  /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.deleteShippingInformation(shippingInformationId: String)
+
+GET     /opinions                                       controllers.products.OpinionController.getOpinions
+POST    /opinion                                        controllers.products.OpinionController.createOpinion
+PUT     /opinion/:opinionId                             controllers.products.OpinionController.updateOpinion(opinionId: String)
+DELETE  /opinion/:opinionId                             controllers.products.OpinionController.deleteOpinion(opinionId: String)
+
+GET     /photos                                       controllers.products.PhotoController.getPhotos
+POST    /photo                                        controllers.products.PhotoController.createPhoto
+PUT     /photo/:photoId                               controllers.products.PhotoController.updatePhoto(photoId: String)
+DELETE  /photo/:photoId                               controllers.products.PhotoController.deletePhoto(photoId: String)
+
+GET     /products                                     controllers.products.ProductController.getProducts
+POST    /product                                      controllers.products.ProductController.createProduct
+PUT     /product/:productId                           controllers.products.ProductController.updateProduct(productId: String)
+DELETE  /product/:productId                           controllers.products.ProductController.deleteProduct(productId: String)
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                                   controllers.Assets.versioned(path="/public", file: Asset)
