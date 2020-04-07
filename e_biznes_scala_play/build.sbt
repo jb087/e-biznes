@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
   guice,
   "com.typesafe.play" %% "play-slick" % "4.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "4.0.0",
-  "org.xerial" % "sqlite-jdbc" % "3.7.2"
+  "org.xerial" % "sqlite-jdbc" % "3.30.1"
 )
 
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
