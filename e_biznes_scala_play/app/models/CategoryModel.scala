@@ -1,18 +1,22 @@
 package models
 
+import play.api.libs.json.Json
 import slick.jdbc.SQLiteProfile.api._
 
-object CategoryModel {
+case class Category(
+                     id: String,
+                     name: String
+                   )
 
-  case class Category(
-                       id: String,
-                       name: String
-                     )
+class CategoryTable(tag: Tag) extends Table[Category](tag, "CATEGORY") {
 
-  class CategoryTable(tag: Tag) extends Table[Category](tag, "CATEGORY") {
+  def id = column[String]("ID", O.PrimaryKey)
 
-    def id = column[String]("ID", O.PrimaryKey)
-    def name = column[String]("NAME", O.Unique)
-    override def * = (id, name) <>(Category.tupled, Category.unapply)
-  }
+  def name = column[String]("NAME", O.Unique)
+
+  override def * = (id, name) <> ((Category.apply _).tupled, Category.unapply)
+}
+
+object Category {
+  implicit val categoryFormat = Json.format[Category]
 }
