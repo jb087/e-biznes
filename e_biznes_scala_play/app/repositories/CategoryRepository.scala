@@ -19,9 +19,17 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
 
   val category = TableQuery[CategoryTable]
 
-  def create(name: String): Future[Int] = db.run {
+  def getCategories(): Future[Seq[Category]] = db.run {
+    category.result
+  }
+
+  def createCategory(name: String): Future[Int] = db.run {
     val id: String = UUID.randomUUID().toString
 
     category += Category(id, name)
+  }
+
+  def deleteCategory(categoryId: String): Future[Int] = db.run {
+    category.filter(_.id === categoryId).delete
   }
 }

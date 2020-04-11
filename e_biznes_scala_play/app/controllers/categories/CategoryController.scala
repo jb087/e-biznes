@@ -18,8 +18,9 @@ class CategoryController @Inject()(categoryRepository: CategoryRepository, cc: M
   }
 
 
-  def getCategories = Action {
-    Ok("")
+  def getCategories: Action[AnyContent] = Action.async {implicit request: MessagesRequest[AnyContent] =>
+    val categories = categoryRepository.getCategories()
+    categories.map(categoriesFromFuture => Ok(views.html.categories(categoriesFromFuture)))
   }
 
   def createCategory: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
@@ -34,7 +35,7 @@ class CategoryController @Inject()(categoryRepository: CategoryRepository, cc: M
         )
       },
       category => {
-        categoryRepository.create(category.name).map { _ =>
+        categoryRepository.createCategory(category.name).map { _ =>
           Redirect(routes.CategoryController.createCategory()).flashing("success" -> "category.created")
         }
       }
@@ -45,8 +46,9 @@ class CategoryController @Inject()(categoryRepository: CategoryRepository, cc: M
     Ok("")
   }
 
-  def deleteCategory(categoryId: String) = Action {
-    Ok("")
+  def deleteCategory(categoryId: String): Action[AnyContent] = Action {
+    categoryRepository.deleteCategory(categoryId)
+    Redirect(routes.CategoryController.getCategories())
   }
 }
 

@@ -11,9 +11,9 @@ GET     /message                                        controllers.AsyncControl
 
 
 GET     /categories                                     controllers.categories.CategoryController.getCategories
-POST    /category                                       controllers.categories.CategoryController.createCategory
+#POST    /category                                       controllers.categories.CategoryController.createCategory
 PUT     /category/:categoryId                           controllers.categories.CategoryController.updateCategory(categoryId: String)
-DELETE  /category/:categoryId                           controllers.categories.CategoryController.deleteCategory(categoryId: String)
+#DELETE  /category/:categoryId                           controllers.categories.CategoryController.deleteCategory(categoryId: String)
 
 GET     /subcategories                                  controllers.categories.SubcategoryController.getSubcategories
 POST    /subcategory                                    controllers.categories.SubcategoryController.createSubcategory
@@ -69,3 +69,4 @@ GET     /assets/*file                                   controllers.Assets.versi
 
 GET     /category                                       controllers.categories.CategoryController.createCategory
 POST    /categoryHandler                                controllers.categories.CategoryController.createCategoryHandler
+GET     /categoryDelete/:categoryId                     controllers.categories.CategoryController.deleteCategory(categoryId: String)
