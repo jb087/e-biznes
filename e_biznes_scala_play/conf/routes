@@ -12,7 +12,7 @@ GET     /message                                        controllers.AsyncControl
 
 GET     /categories                                     controllers.categories.CategoryController.getCategories
 #POST    /category                                       controllers.categories.CategoryController.createCategory
-PUT     /category/:categoryId                           controllers.categories.CategoryController.updateCategory(categoryId: String)
+#PUT     /category/:categoryId                           controllers.categories.CategoryController.updateCategory(categoryId: String)
 #DELETE  /category/:categoryId                           controllers.categories.CategoryController.deleteCategory(categoryId: String)
 
 GET     /subcategories                                  controllers.categories.SubcategoryController.getSubcategories
@@ -67,6 +67,8 @@ GET     /assets/*file                                   controllers.Assets.versi
 
 #TODO remove endpoints below, when react implementation will be done
 
-GET     /category                                       controllers.categories.CategoryController.createCategory
-POST    /categoryHandler                                controllers.categories.CategoryController.createCategoryHandler
+GET     /categoryCreate                                 controllers.categories.CategoryController.createCategory
+POST    /categoryCreateHandler                          controllers.categories.CategoryController.createCategoryHandler
 GET     /categoryDelete/:categoryId                     controllers.categories.CategoryController.deleteCategory(categoryId: String)
+GET     /categoryUpdate/:categoryId                     controllers.categories.CategoryController.updateCategory(categoryId: String)
+POST    /categoryUpdateHandler                          controllers.categories.CategoryController.updateCategoryHandler

@@ -23,6 +23,10 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
     category.result
   }
 
+  def getCategoryById(categoryId: String): Future[Category] = db.run {
+    category.filter(_.id === categoryId).result.head
+  }
+
   def createCategory(name: String): Future[Int] = db.run {
     val id: String = UUID.randomUUID().toString
 
@@ -31,5 +35,9 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
 
   def deleteCategory(categoryId: String): Future[Int] = db.run {
     category.filter(_.id === categoryId).delete
+  }
+
+  def updateCategory(categoryToUpdate: Category): Future[Int] = db.run {
+    category.filter(_.id === categoryToUpdate.id).update(categoryToUpdate)
   }
 }
