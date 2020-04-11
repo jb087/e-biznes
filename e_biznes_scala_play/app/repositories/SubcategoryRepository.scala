@@ -36,4 +36,8 @@ class SubcategoryRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(
 
     subcategory += Subcategory(id, parentId, name)
   }
+
+  def deleteSubcategory(subcategoryId: String): Future[Int] = db.run {
+    subcategory.filter(_.id === subcategoryId).delete
+  }
 }

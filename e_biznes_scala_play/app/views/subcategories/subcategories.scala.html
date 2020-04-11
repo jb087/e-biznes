@@ -3,6 +3,6 @@
 @for(subcategory <- subcategories) {
     <b>@subcategory.name</b>
     <a href="">Edit</a>
-    <a href="">Delete</a>
+    <a href="@controllers.categories.routes.SubcategoryController.deleteSubcategory(subcategory.id)">Delete</a>
     <br>
 }

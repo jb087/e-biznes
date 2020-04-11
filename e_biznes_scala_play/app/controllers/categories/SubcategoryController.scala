@@ -64,8 +64,9 @@ class SubcategoryController @Inject()(categoryRepository: CategoryRepository, su
     Ok("")
   }
 
-  def deleteSubcategory(subcategoryId: String) = Action {
-    Ok("")
+  def deleteSubcategory(subcategoryId: String): Action[AnyContent] = Action {
+    subcategoryRepository.deleteSubcategory(subcategoryId)
+    Redirect(routes.SubcategoryController.getSubcategories())
   }
 }
 
