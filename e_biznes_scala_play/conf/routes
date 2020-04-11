@@ -19,7 +19,7 @@ GET     /category/:categoryId                           controllers.categories.C
 GET     /subcategories                                  controllers.categories.SubcategoryController.getSubcategories
 GET     /subcategory/:subcategoryId                     controllers.categories.SubcategoryController.getSubcategoryById(subcategoryId: String)
 #POST    /subcategory                                    controllers.categories.SubcategoryController.createSubcategory
-PUT     /subcategory/:subcategoryId                     controllers.categories.SubcategoryController.updateSubcategory(subcategoryId: String)
+#PUT     /subcategory/:subcategoryId                     controllers.categories.SubcategoryController.updateSubcategory(subcategoryId: String)
 #DELETE  /subcategory/:subcategoryId                     controllers.categories.SubcategoryController.deleteSubcategory(subcategoryId: String)
 
 GET     /baskets                                        controllers.basket.BasketController.getBaskets
@@ -78,3 +78,5 @@ POST    /categoryUpdateHandler                          controllers.categories.C
 GET     /subcategoryCreate                              controllers.categories.SubcategoryController.createSubcategory
 POST    /subcategoryCreateHandler                       controllers.categories.SubcategoryController.createSubcategoryHandler
 GET     /subcategoryDelete/:subcategoryId               controllers.categories.SubcategoryController.deleteSubcategory(subcategoryId: String)
+GET     /subcategoryUpdate/:subcategoryId               controllers.categories.SubcategoryController.updateSubcategory(subcategoryId: String)
+POST    /subcategoryUpdateHandler                       controllers.categories.SubcategoryController.updateSubcategoryHandler

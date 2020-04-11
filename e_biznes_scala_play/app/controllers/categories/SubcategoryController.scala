@@ -1,7 +1,7 @@
 package controllers.categories
 
 import javax.inject.{Inject, Singleton}
-import models.Category
+import models.{Category, Subcategory}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
@@ -19,6 +19,14 @@ class SubcategoryController @Inject()(categoryRepository: CategoryRepository, su
       "name" -> nonEmptyText,
       "categoryId" -> nonEmptyText
     )(CreateSubcategoryForm.apply)(CreateSubcategoryForm.unapply)
+  }
+
+  val updateSubcategoryForm: Form[UpdateSubcategoryForm] = Form {
+    mapping(
+      "subcategoryId" -> nonEmptyText,
+      "name" -> nonEmptyText,
+      "categoryId" -> nonEmptyText
+    )(UpdateSubcategoryForm.apply)(UpdateSubcategoryForm.unapply)
   }
 
   def getSubcategories: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
@@ -60,8 +68,43 @@ class SubcategoryController @Inject()(categoryRepository: CategoryRepository, su
     )
   }
 
-  def updateSubcategory(subcategoryId: String) = Action {
-    Ok("")
+  def updateSubcategory(subcategoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    var categories = Seq[Category]()
+    categoryRepository.getCategories.onComplete {
+      case Success(categoriesFromFuture) => categories = categoriesFromFuture
+      case Failure(_) => print("Failed categories download")
+    }
+
+    val subcategory = subcategoryRepository.getSubcategoryById(subcategoryId)
+    subcategory.map(subcategoryFromFuture => {
+      val subcategoryForm = updateSubcategoryForm.fill(
+        UpdateSubcategoryForm(subcategoryFromFuture.id, subcategoryFromFuture.name, subcategoryFromFuture.parentId)
+      )
+
+      Ok(views.html.subcategories.subcategoryupdate(subcategoryForm, categories))
+    })
+  }
+
+
+  def updateSubcategoryHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    updateSubcategoryForm.bindFromRequest().fold(
+      errorForm => {
+        Future.successful {
+          var categories: Seq[Category] = Seq[Category]()
+          categoryRepository.getCategories.onComplete {
+            case Success(categoriesFromFuture) => categories = categoriesFromFuture
+            case Failure(_) => print("Failed categories download")
+          }
+
+          BadRequest(views.html.subcategories.subcategoryupdate(errorForm, categories))
+        }
+      },
+      subcategory => {
+        subcategoryRepository.updateSubcategory(Subcategory(subcategory.subcategoryId, subcategory.categoryId, subcategory.name)).map( _ =>
+          Redirect(routes.SubcategoryController.updateSubcategory(subcategory.subcategoryId)).flashing("success" -> "Subcategory updated!")
+        )
+      }
+    )
   }
 
   def deleteSubcategory(subcategoryId: String): Action[AnyContent] = Action {
@@ -71,3 +114,5 @@ class SubcategoryController @Inject()(categoryRepository: CategoryRepository, su
 }
 
 case class CreateSubcategoryForm(name: String, categoryId: String)
+
+case class UpdateSubcategoryForm(subcategoryId: String, name: String, categoryId: String)
