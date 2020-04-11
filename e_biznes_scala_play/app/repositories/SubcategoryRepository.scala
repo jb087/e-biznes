@@ -1,5 +1,7 @@
 package repositories
 
+import java.util.UUID
+
 import javax.inject.{Inject, Singleton}
 import models.{Subcategory, SubcategoryTable}
 import play.api.db.slick.DatabaseConfigProvider
@@ -27,5 +29,11 @@ class SubcategoryRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(
 
   def getSubcategoryByIdOption(subcategoryId: String): Future[Option[Subcategory]] = db.run {
     subcategory.filter(_.id === subcategoryId).result.headOption
+  }
+
+  def createSubcategory(parentId: String, name: String): Future[Int] = db.run {
+    val id: String = UUID.randomUUID().toString
+
+    subcategory += Subcategory(id, parentId, name)
   }
 }

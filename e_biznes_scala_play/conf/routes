@@ -76,3 +76,4 @@ GET     /categoryUpdate/:categoryId                     controllers.categories.C
 POST    /categoryUpdateHandler                          controllers.categories.CategoryController.updateCategoryHandler
 
 GET     /subcategoryCreate                              controllers.categories.SubcategoryController.createSubcategory
+POST    /subcategoryCreateHandler                       controllers.categories.SubcategoryController.createSubcategoryHandler

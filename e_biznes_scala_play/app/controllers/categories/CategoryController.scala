@@ -10,7 +10,8 @@ import repositories.CategoryRepository
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CategoryController @Inject()(categoryRepository: CategoryRepository, cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
+class CategoryController @Inject()(categoryRepository: CategoryRepository, cc: MessagesControllerComponents)
+                                  (implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
   val createCategoryForm: Form[CreateCategoryForm] = Form {
     mapping(
