@@ -14,6 +14,14 @@ class SubcategoryController @Inject()(subcategoryRepository: SubcategoryReposito
     subcategories.map(subcategoriesFromFuture => Ok(views.html.subcategories.subcategories(subcategoriesFromFuture)))
   }
 
+  def getSubcategoryById(subcategoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    val subcategory = subcategoryRepository.getSubcategoryByIdOption(subcategoryId)
+    subcategory.map(subcategoryFromFuture => subcategoryFromFuture match {
+      case Some(subcategoryFromFuture) => Ok(views.html.subcategories.subcategory(subcategoryFromFuture))
+      case None => Redirect(routes.SubcategoryController.getSubcategories())
+    })
+  }
+
   def createSubcategory = Action {
     Ok("")
   }

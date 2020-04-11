@@ -20,4 +20,12 @@ class SubcategoryRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(
   def getSubcategories: Future[Seq[Subcategory]] = db.run {
     subcategory.result
   }
+
+  def getSubcategoryById(subcategoryId: String): Future[Subcategory] = db.run {
+    subcategory.filter(_.id === subcategoryId).result.head
+  }
+
+  def getSubcategoryByIdOption(subcategoryId: String): Future[Option[Subcategory]] = db.run {
+    subcategory.filter(_.id === subcategoryId).result.headOption
+  }
 }
