@@ -27,6 +27,10 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
     category.filter(_.id === categoryId).result.head
   }
 
+  def getCategoryByIdOption(categoryId: String): Future[Option[Category]] = db.run {
+    category.filter(_.id === categoryId).result.headOption
+  }
+
   def createCategory(name: String): Future[Int] = db.run {
     val id: String = UUID.randomUUID().toString
 

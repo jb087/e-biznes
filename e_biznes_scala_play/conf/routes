@@ -11,6 +11,7 @@ GET     /message                                        controllers.AsyncControl
 
 
 GET     /categories                                     controllers.categories.CategoryController.getCategories
+GET     /category/:categoryId                           controllers.categories.CategoryController.getCategoryById(categoryId: String)
 #POST    /category                                       controllers.categories.CategoryController.createCategory
 #PUT     /category/:categoryId                           controllers.categories.CategoryController.updateCategory(categoryId: String)
 #DELETE  /category/:categoryId                           controllers.categories.CategoryController.deleteCategory(categoryId: String)

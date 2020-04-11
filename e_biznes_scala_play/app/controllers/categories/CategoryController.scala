@@ -30,6 +30,14 @@ class CategoryController @Inject()(categoryRepository: CategoryRepository, cc: M
     categories.map(categoriesFromFuture => Ok(views.html.categories.categories(categoriesFromFuture)))
   }
 
+  def getCategoryById(categoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    val category = categoryRepository.getCategoryByIdOption(categoryId)
+    category.map(categoryFromFuture => categoryFromFuture match {
+      case Some(categoryFromFuture) => Ok(views.html.categories.category(categoryFromFuture))
+      case None => Redirect(routes.CategoryController.getCategories())
+    })
+  }
+
   def createCategory: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     Ok(views.html.categories.categoryadd(createCategoryForm))
   }
