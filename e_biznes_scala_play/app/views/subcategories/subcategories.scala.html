@@ -1,0 +1,8 @@
+@(subcategories: Seq[Subcategory])
+
+@for(subcategory <- subcategories) {
+    <b>@subcategory.name</b>
+    <a href="">Edit</a>
+    <a href="">Delete</a>
+    <br>
+}

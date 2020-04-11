@@ -19,7 +19,7 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
 
   val category = TableQuery[CategoryTable]
 
-  def getCategories(): Future[Seq[Category]] = db.run {
+  def getCategories: Future[Seq[Category]] = db.run {
     category.result
   }
 

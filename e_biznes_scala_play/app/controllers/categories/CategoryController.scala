@@ -26,19 +26,19 @@ class CategoryController @Inject()(categoryRepository: CategoryRepository, cc: M
   }
 
   def getCategories: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    val categories = categoryRepository.getCategories()
-    categories.map(categoriesFromFuture => Ok(views.html.categories(categoriesFromFuture)))
+    val categories = categoryRepository.getCategories
+    categories.map(categoriesFromFuture => Ok(views.html.categories.categories(categoriesFromFuture)))
   }
 
   def createCategory: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    Ok(views.html.categoryadd(createCategoryForm))
+    Ok(views.html.categories.categoryadd(createCategoryForm))
   }
 
   def createCategoryHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     createCategoryForm.bindFromRequest().fold(
       errorForm => {
         Future.successful(
-          BadRequest(views.html.categoryadd(errorForm))
+          BadRequest(views.html.categories.categoryadd(errorForm))
         )
       },
       category => {
@@ -53,7 +53,7 @@ class CategoryController @Inject()(categoryRepository: CategoryRepository, cc: M
     val category = categoryRepository.getCategoryById(categoryId)
     category.map(categoryFromFuture => {
       val categoryForm = updateCategoryForm.fill(UpdateCategoryForm(categoryFromFuture.id, categoryFromFuture.name))
-      Ok(views.html.categoryupdate(categoryForm))
+      Ok(views.html.categories.categoryupdate(categoryForm))
     })
   }
 
@@ -61,7 +61,7 @@ class CategoryController @Inject()(categoryRepository: CategoryRepository, cc: M
     updateCategoryForm.bindFromRequest().fold(
       errorForm => {
         Future.successful(
-          BadRequest(views.html.categoryupdate(errorForm))
+          BadRequest(views.html.categories.categoryupdate(errorForm))
         )
       },
       category => {
