@@ -13,7 +13,11 @@
 
     <select name="categoryId" id="categoryId">
     @for(category <- categories) {
-        <option value="@category.id">@category.name</option>
+        @if(category.id == subcategory("categoryId").value.getOrElse("")) {
+            <option selected="selected" value="@category.id">@category.name</option>
+        } else {
+            <option value="@category.id">@category.name</option>
+        }
     }
     </select>
 

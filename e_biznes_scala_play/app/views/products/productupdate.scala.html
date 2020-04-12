@@ -15,7 +15,11 @@
 
     <select name="subcategoryId" id="subcategoryId">
     @for(subcategory <- subcategories) {
-        <option value="@subcategory.id">@subcategory.name</option>
+        @if(subcategory.id == product("subcategoryId").value.getOrElse("")) {
+            <option selected="selected" value="@subcategory.id">@subcategory.name</option>
+        } else {
+            <option value="@subcategory.id">@subcategory.name</option>
+        }
     }
     </select>
 
