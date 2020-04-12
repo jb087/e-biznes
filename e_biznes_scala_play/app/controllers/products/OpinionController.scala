@@ -22,6 +22,15 @@ class OpinionController @Inject()(opinionRepository: OpinionRepository, productR
     )(CreateOpinionForm.apply)(CreateOpinionForm.unapply)
   }
 
+  val updateOpinionForm: Form[UpdateOpinionForm] = Form {
+    mapping(
+      "opinionId" -> nonEmptyText,
+      "productId" -> nonEmptyText,
+      "opinion" -> nonEmptyText,
+      "rating" -> number
+    )(UpdateOpinionForm.apply)(UpdateOpinionForm.unapply)
+  }
+
   def getOpinions: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     opinionRepository.getOpinions
       .map(opinions => Ok(views.html.opinions.opinions(opinions)))
@@ -60,18 +69,55 @@ class OpinionController @Inject()(opinionRepository: OpinionRepository, productR
     )
   }
 
-  def updateOpinion(opinionId: String) = Action {
-    Ok("")
+  def updateOpinion(opinionId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    var products: Seq[Product] = Seq[Product]()
+    productRepository.getProducts.onComplete {
+      case Success(productsFromFuture) => products = productsFromFuture
+      case Failure(_) => print("Failed products download")
+    }
+
+    opinionRepository.getOpinionById(opinionId)
+      .map(opinion => {
+        val opinionForm = updateOpinionForm.fill(UpdateOpinionForm(opinion.id, opinion.productId, opinion.opinion, opinion.rating))
+
+        Ok(views.html.opinions.opinionupdate(opinionForm, products))
+      })
   }
 
-  def updateOpinionHandler: Action[AnyContent] = TODO
+  def updateOpinionHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    updateOpinionForm.bindFromRequest().fold(
+      errorForm => {
+        Future.successful {
+          var products: Seq[Product] = Seq[Product]()
+          productRepository.getProducts.onComplete {
+            case Success(productsFromFuture) => products = productsFromFuture
+            case Failure(_) => print("Failed products download")
+          }
 
-  def deleteOpinion(opinionId: String) = Action {
-    Ok("")
+          BadRequest(views.html.opinions.opinionupdate(errorForm, products))
+        }
+      },
+      opinion => {
+        opinionRepository.updateOpinion(Opinion(opinion.opinionId, opinion.productId, opinion.opinion, opinion.rating))
+          .map(_ => Redirect(routes.OpinionController.updateOpinion(opinion.opinionId)).flashing("success" -> "Opinion updated!"))
+      }
+    )
+  }
+
+  def deleteOpinion(opinionId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    opinionRepository.deleteOpinion(opinionId)
+      .map(_ => Redirect(routes.OpinionController.getOpinions()))
   }
 }
 
 case class CreateOpinionForm(
+                              productId: String,
+                              opinion: String,
+                              rating: Int
+                            )
+
+case class UpdateOpinionForm(
+                              opinionId: String,
                               productId: String,
                               opinion: String,
                               rating: Int

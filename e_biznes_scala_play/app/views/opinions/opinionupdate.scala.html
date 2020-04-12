@@ -1,0 +1,37 @@
+@import controllers.products.UpdateOpinionForm
+@import models.products.Product
+@(opinion: Form[UpdateOpinionForm], products: Seq[Product])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.products.routes.OpinionController.updateOpinionHandler()) {
+    @helper.CSRF.formField
+    <input name="opinionId" id="opinionId" value="@opinion("opinionId").value" type="hidden">
+    @textarea(opinion("opinion"))
+
+    <select name="rating" id="rating">
+        @for(rate <- 1 until 6) {
+            @if(opinion("rating").value.map(rating => Integer.parseInt(rating)).getOrElse(0) == rate) {
+                <option selected="selected" value="@rate">@rate</option>
+            } else {
+                <option value="@rate">@rate</option>
+            }
+        }
+    </select>
+    <br>
+    <select name="productId" id="productId">
+        @for(product <- products) {
+            @if(product.id == opinion("productId").value.getOrElse("")) {
+                <option selected="selected" value="@product.id">@product.title</option>
+            } else {
+                <option value="@product.id">@product.title</option>
+            }
+        }
+    </select>
+
+    <div class="buttons">
+        <input type="submit" value="Update Opinion"/>
+    </div>
+}
