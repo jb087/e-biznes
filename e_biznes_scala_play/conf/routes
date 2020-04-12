@@ -61,7 +61,7 @@ GET     /products                                     controllers.products.Produ
 GET     /product/:productId                           controllers.products.ProductController.getProductById(productId: String)
 #POST    /product                                      controllers.products.ProductController.createProduct
 PUT     /product/:productId                           controllers.products.ProductController.updateProduct(productId: String)
-DELETE  /product/:productId                           controllers.products.ProductController.deleteProduct(productId: String)
+#DELETE  /product/:productId                           controllers.products.ProductController.deleteProduct(productId: String)
 
 
 # Map static resources from the /public folder to the /assets URL path
@@ -84,3 +84,4 @@ POST    /subcategoryUpdateHandler                       controllers.categories.S
 
 GET     /productCreate                                  controllers.products.ProductController.createProduct
 POST    /productCreateHandler                           controllers.products.ProductController.createProductHandler
+GET     /productDelete/:productId                       controllers.products.ProductController.deleteProduct(productId: String)

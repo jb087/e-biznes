@@ -36,4 +36,8 @@ class ProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
 
     product += Product(id, newProduct.subcategoryId, newProduct.title, newProduct.price, newProduct.description, newProduct.date, newProduct.quantity)
   }
+
+  def deleteProduct(productId: String): Future[Int] = db.run {
+    product.filter(_.id === productId).delete
+  }
 }

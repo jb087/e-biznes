@@ -71,8 +71,9 @@ class ProductController @Inject()(productRepository: ProductRepository, subcateg
     Ok("")
   }
 
-  def deleteProduct(productId: String) = Action {
-    Ok("")
+  def deleteProduct(productId: String): Action[AnyContent] = Action {
+    productRepository.deleteProduct(productId)
+    Redirect(routes.ProductController.getProducts())
   }
 }
 
