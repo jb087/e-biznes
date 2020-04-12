@@ -1,9 +1,9 @@
-package repositories
+package repositories.categories
 
 import java.util.UUID
 
 import javax.inject.{Inject, Singleton}
-import models.{Category, CategoryTable}
+import models.categories.{Category, CategoryTable}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 

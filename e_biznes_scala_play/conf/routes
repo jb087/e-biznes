@@ -58,7 +58,8 @@ PUT     /photo/:photoId                               controllers.products.Photo
 DELETE  /photo/:photoId                               controllers.products.PhotoController.deletePhoto(photoId: String)
 
 GET     /products                                     controllers.products.ProductController.getProducts
-POST    /product                                      controllers.products.ProductController.createProduct
+GET     /product/:productId                           controllers.products.ProductController.getProductById(productId: String)
+#POST    /product                                      controllers.products.ProductController.createProduct
 PUT     /product/:productId                           controllers.products.ProductController.updateProduct(productId: String)
 DELETE  /product/:productId                           controllers.products.ProductController.deleteProduct(productId: String)
 
@@ -80,3 +81,6 @@ POST    /subcategoryCreateHandler                       controllers.categories.S
 GET     /subcategoryDelete/:subcategoryId               controllers.categories.SubcategoryController.deleteSubcategory(subcategoryId: String)
 GET     /subcategoryUpdate/:subcategoryId               controllers.categories.SubcategoryController.updateSubcategory(subcategoryId: String)
 POST    /subcategoryUpdateHandler                       controllers.categories.SubcategoryController.updateSubcategoryHandler
+
+GET     /productCreate                                  controllers.products.ProductController.createProduct
+POST    /productCreateHandler                           controllers.products.ProductController.createProductHandler

@@ -1,0 +1,8 @@
+@import models.products.Product
+@(product: Product)
+
+<b>@product.title</b>
+<p>
+    @product.price @product.quantity @product.date
+</p>
+<p>@product.description</p>

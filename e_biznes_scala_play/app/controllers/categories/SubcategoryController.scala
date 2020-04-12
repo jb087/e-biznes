@@ -1,11 +1,11 @@
 package controllers.categories
 
 import javax.inject.{Inject, Singleton}
-import models.{Category, Subcategory}
+import models.categories.{Category, Subcategory}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import repositories.{CategoryRepository, SubcategoryRepository}
+import repositories.categories.{CategoryRepository, SubcategoryRepository}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
@@ -36,10 +36,10 @@ class SubcategoryController @Inject()(categoryRepository: CategoryRepository, su
 
   def getSubcategoryById(subcategoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val subcategory = subcategoryRepository.getSubcategoryByIdOption(subcategoryId)
-    subcategory.map(subcategoryFromFuture => subcategoryFromFuture match {
+    subcategory.map {
       case Some(subcategoryFromFuture) => Ok(views.html.subcategories.subcategory(subcategoryFromFuture))
       case None => Redirect(routes.SubcategoryController.getSubcategories())
-    })
+    }
   }
 
   def createSubcategory: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>

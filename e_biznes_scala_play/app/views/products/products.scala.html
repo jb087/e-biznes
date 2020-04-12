@@ -1,0 +1,13 @@
+@import models.products.Product
+@(products: Seq[Product])
+
+@for(product <- products) {
+    <b>@product.title</b>
+    <p>
+        @product.price @product.quantity @product.date
+    </p>
+    <p>@product.description</p>
+    <a href="@controllers.categories.routes.SubcategoryController.updateSubcategory(product.id)">Edit</a>
+    <a href="@controllers.categories.routes.SubcategoryController.deleteSubcategory(product.id)">Delete</a>
+    <br>
+}

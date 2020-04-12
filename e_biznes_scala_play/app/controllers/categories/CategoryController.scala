@@ -1,11 +1,11 @@
 package controllers.categories
 
 import javax.inject.{Inject, Singleton}
-import models.Category
+import models.categories.Category
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import repositories.CategoryRepository
+import repositories.categories.CategoryRepository
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,10 +33,10 @@ class CategoryController @Inject()(categoryRepository: CategoryRepository, cc: M
 
   def getCategoryById(categoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val category = categoryRepository.getCategoryByIdOption(categoryId)
-    category.map(categoryFromFuture => categoryFromFuture match {
+    category.map {
       case Some(categoryFromFuture) => Ok(views.html.categories.category(categoryFromFuture))
       case None => Redirect(routes.CategoryController.getCategories())
-    })
+    }
   }
 
   def createCategory: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>

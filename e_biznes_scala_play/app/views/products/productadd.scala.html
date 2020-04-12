@@ -1,0 +1,26 @@
+@import controllers.products.CreateProductForm
+@import models.categories.Subcategory
+@(product: Form[CreateProductForm], subcategories: Seq[Subcategory])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.products.routes.ProductController.createProductHandler()) {
+    @helper.CSRF.formField
+    @inputText(product("title"))
+    @inputText(product("price"))
+    @inputText(product("quantity"))
+
+    <select name="subcategoryId" id="subcategoryId">
+    @for(subcategory <- subcategories) {
+        <option value="@subcategory.id">@subcategory.name</option>
+    }
+    </select>
+
+    @textarea(product("description"))
+
+    <div class="buttons">
+        <input type="submit" value="Add Product"/>
+    </div>
+}
