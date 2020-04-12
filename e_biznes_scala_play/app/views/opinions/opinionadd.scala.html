@@ -1,0 +1,28 @@
+@import controllers.products.CreateOpinionForm
+@import models.products.Product
+@(opinion: Form[CreateOpinionForm], products: Seq[Product])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.products.routes.OpinionController.createOpinionHandler()) {
+    @helper.CSRF.formField
+    @textarea(opinion("opinion"))
+
+    <select name="rating" id="rating">
+    @for(rate <- 1 until 6) {
+        <option value="@rate">@rate</option>
+    }
+    </select>
+    <br>
+    <select name="productId" id="productId">
+    @for(product <- products) {
+        <option value="@product.id">@product.title</option>
+    }
+    </select>
+
+    <div class="buttons">
+        <input type="submit" value="Add Opinion"/>
+    </div>
+}

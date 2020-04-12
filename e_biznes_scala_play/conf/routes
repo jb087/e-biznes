@@ -48,9 +48,10 @@ PUT     /shippingInformation/:shippingInformationId     controllers.orders.Shipp
 DELETE  /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.deleteShippingInformation(shippingInformationId: String)
 
 GET     /opinions                                       controllers.products.OpinionController.getOpinions
-POST    /opinion                                        controllers.products.OpinionController.createOpinion
-PUT     /opinion/:opinionId                             controllers.products.OpinionController.updateOpinion(opinionId: String)
-DELETE  /opinion/:opinionId                             controllers.products.OpinionController.deleteOpinion(opinionId: String)
+GET     /opinion/:opinionId                             controllers.products.OpinionController.getOpinionById(opinionId: String)
+#POST    /opinion                                        controllers.products.OpinionController.createOpinion
+#PUT     /opinion/:opinionId                             controllers.products.OpinionController.updateOpinion(opinionId: String)
+#DELETE  /opinion/:opinionId                             controllers.products.OpinionController.deleteOpinion(opinionId: String)
 
 GET     /photos                                       controllers.products.PhotoController.getPhotos
 POST    /photo                                        controllers.products.PhotoController.createPhoto
@@ -87,3 +88,9 @@ POST    /productCreateHandler                           controllers.products.Pro
 GET     /productDelete/:productId                       controllers.products.ProductController.deleteProduct(productId: String)
 GET     /productUpdate/:productId                       controllers.products.ProductController.updateProduct(productId: String)
 POST    /productUpdateHandler                           controllers.products.ProductController.updateProductHandler
+
+GET     /opinionCreate                                  controllers.products.OpinionController.createOpinion
+POST    /opinionCreateHandler                           controllers.products.OpinionController.createOpinionHandler
+GET     /opinionUpdate/:opinionId                       controllers.products.OpinionController.updateOpinion(opinionId: String)
+POST    /opinionUpdateHandler                           controllers.products.OpinionController.updateOpinionHandler
+GET     /opinionDelete/:opinionId                       controllers.products.OpinionController.deleteOpinion(opinionId: String)

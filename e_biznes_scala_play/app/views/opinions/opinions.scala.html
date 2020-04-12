@@ -1,0 +1,11 @@
+@import models.products.Opinion
+@(opinions: Seq[Opinion])
+
+@for(opinion <- opinions) {
+    <p>
+        @opinion.opinion
+        rating: @opinion.rating
+    </p>
+    <a href="@controllers.products.routes.OpinionController.updateOpinion(opinion.id)">Edit</a>
+    <a href="@controllers.products.routes.OpinionController.deleteOpinion(opinion.id)">Delete</a>
+}
