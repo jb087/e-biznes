@@ -29,6 +29,17 @@ class ProductController @Inject()(productRepository: ProductRepository, subcateg
     )(CreateProductForm.apply)(CreateProductForm.unapply)
   }
 
+  val updateProductForm: Form[UpdateProductForm] = Form {
+    mapping(
+      "productId" -> nonEmptyText,
+      "subcategoryId" -> nonEmptyText,
+      "title" -> nonEmptyText,
+      "price" -> of(doubleFormat),
+      "description" -> text,
+      "quantity" -> number
+    )(UpdateProductForm.apply)(UpdateProductForm.unapply)
+  }
+
   def getProducts: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     productRepository.getProducts
       .map(products => Ok(views.html.products.products(products)))
@@ -67,8 +78,41 @@ class ProductController @Inject()(productRepository: ProductRepository, subcateg
     )
   }
 
-  def updateProduct(productId: String) = Action {
-    Ok("")
+  def updateProduct(productId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    var subcategories: Seq[Subcategory] = Seq[Subcategory]()
+    subcategoryRepository.getSubcategories.onComplete {
+      case Success(subcategoriesFromFuture) => subcategories = subcategoriesFromFuture
+      case Failure(_) => print("Failed subcategories download")
+    }
+
+    productRepository.getProductById(productId)
+      .map(product => {
+        val productForm = updateProductForm.fill(
+          UpdateProductForm(product.id, product.subcategoryId, product.title, product.price, product.description, product.quantity)
+        )
+
+        Ok(views.html.products.productupdate(productForm, subcategories))
+      })
+  }
+
+  def updateProductHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    updateProductForm.bindFromRequest().fold(
+      errorForm => {
+        Future.successful {
+          var subcategories: Seq[Subcategory] = Seq[Subcategory]()
+          subcategoryRepository.getSubcategories.onComplete {
+            case Success(subcategoriesFromFuture) => subcategories = subcategoriesFromFuture
+            case Failure(_) => print("Failed subcategories download")
+          }
+
+          BadRequest(views.html.products.productupdate(errorForm, subcategories))
+        }
+      },
+      product => {
+        productRepository.updateProduct(Product(product.productId, product.subcategoryId, product.title, product.price, product.description, LocalDate.now(), product.quantity))
+          .map(_ => Redirect(routes.ProductController.updateProduct(product.productId)).flashing("success" -> "Product updated!"))
+      }
+    )
   }
 
   def deleteProduct(productId: String): Action[AnyContent] = Action {
@@ -78,6 +122,15 @@ class ProductController @Inject()(productRepository: ProductRepository, subcateg
 }
 
 case class CreateProductForm(
+                              subcategoryId: String,
+                              title: String,
+                              price: Double,
+                              description: String,
+                              quantity: Int
+                            )
+
+case class UpdateProductForm(
+                              productId: String,
                               subcategoryId: String,
                               title: String,
                               price: Double,

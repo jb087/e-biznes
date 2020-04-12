@@ -1,0 +1,27 @@
+@import controllers.products.UpdateProductForm
+@import models.categories.Subcategory
+@(product: Form[UpdateProductForm], subcategories: Seq[Subcategory])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.products.routes.ProductController.updateProductHandler()) {
+    @helper.CSRF.formField
+    <input name="productId" id="productId" value="@product("productId").value" type="hidden">
+    @inputText(product("title"))
+    @inputText(product("price"))
+    @inputText(product("quantity"))
+
+    <select name="subcategoryId" id="subcategoryId">
+    @for(subcategory <- subcategories) {
+        <option value="@subcategory.id">@subcategory.name</option>
+    }
+    </select>
+
+    @textarea(product("description"))
+
+    <div class="buttons">
+        <input type="submit" value="Update Product"/>
+    </div>
+}

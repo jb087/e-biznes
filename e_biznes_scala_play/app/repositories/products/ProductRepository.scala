@@ -40,4 +40,8 @@ class ProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
   def deleteProduct(productId: String): Future[Int] = db.run {
     product.filter(_.id === productId).delete
   }
+
+  def updateProduct(productToUpdate: Product): Future[Int] = db.run {
+    product.filter(_.id === productToUpdate.id).update(productToUpdate)
+  }
 }
