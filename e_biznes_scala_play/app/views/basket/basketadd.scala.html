@@ -8,6 +8,8 @@
 @form(controllers.basket.routes.BasketController.createBasketHandler()) {
     @helper.CSRF.formField
     <select name="isBought" id="isBought">
+
+
         <option value="0">false</option>
         <option value="1">true</option>
     </select>

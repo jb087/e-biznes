@@ -1,0 +1,25 @@
+@import controllers.basket.UpdateBasketForm
+@(basket: Form[UpdateBasketForm])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.basket.routes.BasketController.updateBasketHandler()) {
+    @helper.CSRF.formField
+    <input name="basketId" id="basketId" value="@basket("basketId").value" readonly style="width: 280px">
+    <br>
+    <select name="isBought" id="isBought">
+        @if(basket("isBought").value.map(isBought => Integer.parseInt(isBought)).getOrElse(0) == 1) {
+            <option value="0">false</option>
+            <option value="1" selected="selected">true</option>
+        } else {
+            <option value="0" selected="selected">false</option>
+            <option value="1">true</option>
+        }
+    </select>
+
+    <div class="buttons">
+        <input type="submit" value="Update Basket"/>
+    </div>
+}

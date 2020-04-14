@@ -1,6 +1,7 @@
 package controllers.basket
 
 import javax.inject.{Inject, Singleton}
+import models.basket.Basket
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
@@ -18,8 +19,15 @@ class BasketController @Inject()(basketRepository: BasketRepository, cc: Message
     )(CreateBasketForm.apply)(CreateBasketForm.unapply)
   }
 
+  val updateBasketForm: Form[UpdateBasketForm] = Form {
+    mapping(
+      "basketId" -> nonEmptyText,
+      "isBought" -> number
+    )(UpdateBasketForm.apply)(UpdateBasketForm.unapply)
+  }
+
   def getBaskets: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    basketRepository.getBaskets(0)
+    basketRepository.getBaskets()
       .map(baskets => Ok(views.html.basket.baskets(baskets)))
   }
 
@@ -49,13 +57,38 @@ class BasketController @Inject()(basketRepository: BasketRepository, cc: Message
     )
   }
 
-  def updateBasket(basketId: String) = Action {
-    Ok("")
+  def updateBasket(basketId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    basketRepository.getBasketById(basketId)
+      .map(basket => {
+        val basketForm = updateBasketForm.fill(UpdateBasketForm(basket.id, basket.isBought))
+
+        Ok(views.html.basket.basketupdate(basketForm))
+      })
   }
 
-  def deleteBasket(basketId: String) = Action {
-    Ok("")
+  def updateBasketHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    updateBasketForm.bindFromRequest().fold(
+      errorForm => {
+        Future.successful {
+          BadRequest(views.html.basket.basketupdate(errorForm))
+        }
+      },
+      basket => {
+        basketRepository.updateBasket(Basket(basket.basketId, basket.isBought))
+          .map(_ => Redirect(routes.BasketController.updateBasket(basket.basketId)).flashing("success" -> "Basket updated!"))
+      }
+    )
+  }
+
+  def deleteBasket(basketId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    basketRepository.deleteBasket(basketId)
+      .map(_ => Redirect(routes.BasketController.getBaskets()))
   }
 }
 
 case class CreateBasketForm(isBought: Int)
+
+case class UpdateBasketForm(
+                             basketId: String,
+                             isBought: Int
+                           )

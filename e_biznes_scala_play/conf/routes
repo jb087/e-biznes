@@ -25,8 +25,8 @@ GET     /subcategory/:subcategoryId                     controllers.categories.S
 GET     /baskets                                        controllers.basket.BasketController.getBaskets
 GET     /basket/:basketId                               controllers.basket.BasketController.getBasketById(basketId: String)
 #POST    /basket                                         controllers.basket.BasketController.createBasket
-PUT     /basket/:basketId                               controllers.basket.BasketController.updateBasket(basketId: String)
-DELETE  /basket/:basketId                               controllers.basket.BasketController.deleteBasket(basketId: String)
+#PUT     /basket/:basketId                               controllers.basket.BasketController.updateBasket(basketId: String)
+#DELETE  /basket/:basketId                               controllers.basket.BasketController.deleteBasket(basketId: String)
 
 GET     /orderedProducts                                controllers.basket.OrderedProductsController.getOrderedProducts
 POST    /orderedProduct                                 controllers.basket.OrderedProductsController.createOrderedProduct
@@ -106,3 +106,6 @@ POST    /photoUpdateHandler                             controllers.products.Pho
 
 GET     /basketCreate                                   controllers.basket.BasketController.createBasket
 POST    /basketCreateHandler                            controllers.basket.BasketController.createBasketHandler
+GET     /basketDelete/:basketId                         controllers.basket.BasketController.deleteBasket(basketId: String)
+GET     /basketUpdate/:basketId                         controllers.basket.BasketController.updateBasket(basketId: String)
+POST    /basketUpdateHandler                            controllers.basket.BasketController.updateBasketHandler
