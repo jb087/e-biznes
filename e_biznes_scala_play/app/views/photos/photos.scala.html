@@ -3,6 +3,8 @@
 
 @for(photo <- photos) {
     <img src=@{controllers.products.routes.PhotoController.getPhoto(photo.id)}>
+    <a href="@controllers.products.routes.PhotoController.updatePhoto(photo.id)">Edit</a>
+    <a href="@controllers.products.routes.PhotoController.deletePhoto(photo.id)">Delete</a>
     <br>
     <br>
 }

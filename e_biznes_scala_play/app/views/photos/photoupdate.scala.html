@@ -1,0 +1,34 @@
+@import controllers.products.UpdatePhotoForm
+@import models.products.Product
+@(photo: Form[UpdatePhotoForm], products: Seq[Product])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.products.routes.PhotoController.updatePhotoHandler()) {
+    @helper.CSRF.formField
+    <input name="photoId" id="photoId" value="@photo("photoId").value" type="hidden">
+
+    <select name="productId" id="productId">
+    @for(product <- products) {
+        @if(product.id == photo("productId").value.getOrElse("")) {
+            <option selected="selected" value="@product.id">@product.title</option>
+        } else {
+            <option value="@product.id">@product.title</option>
+        }
+    }
+    </select>
+
+    <br>
+    <br>
+
+    <img src=@{controllers.products.routes.PhotoController.getPhoto(photo("photoId").value.orNull)}>
+
+    <br>
+    <br>
+
+    <div class="buttons">
+        <input type="submit" value="Update Photo"/>
+    </div>
+}

@@ -56,8 +56,8 @@ GET     /opinion/:opinionId                             controllers.products.Opi
 GET     /photos                                       controllers.products.PhotoController.getPhotos
 GET     /photo/:photoId                                controllers.products.PhotoController.getPhotoById(photoId: String)
 #POST    /photo                                        controllers.products.PhotoController.createPhoto
-PUT     /photo/:photoId                               controllers.products.PhotoController.updatePhoto(photoId: String)
-DELETE  /photo/:photoId                               controllers.products.PhotoController.deletePhoto(photoId: String)
+#PUT     /photo/:photoId                               controllers.products.PhotoController.updatePhoto(photoId: String)
+#DELETE  /photo/:photoId                               controllers.products.PhotoController.deletePhoto(photoId: String)
 
 GET     /products                                     controllers.products.ProductController.getProducts
 GET     /product/:productId                           controllers.products.ProductController.getProductById(productId: String)
@@ -99,3 +99,6 @@ GET     /opinionDelete/:opinionId                       controllers.products.Opi
 GET     /photoCreate                                    controllers.products.PhotoController.createPhoto
 POST    /photoCreateHandler                             controllers.products.PhotoController.createPhotoHandler
 GET     /photoJPG/:photoId                              controllers.products.PhotoController.getPhoto(photoId: String)
+GET     /photoDelete/:photoId                           controllers.products.PhotoController.deletePhoto(photoId: String)
+GET     /photoUpdate/:photoId                           controllers.products.PhotoController.updatePhoto(photoId: String)
+POST    /photoUpdateHandler                             controllers.products.PhotoController.updatePhotoHandler
