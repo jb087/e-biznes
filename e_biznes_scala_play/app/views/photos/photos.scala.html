@@ -1,0 +1,8 @@
+@import models.products.Photo
+@(photos: Seq[Photo])
+
+@for(photo <- photos) {
+    <img src=@{controllers.products.routes.PhotoController.getPhoto(photo.id)}>
+    <br>
+    <br>
+}

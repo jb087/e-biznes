@@ -1,0 +1,20 @@
+@import models.products.Product
+@(products: Seq[Product])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(action = controllers.products.routes.PhotoController.createPhotoHandler(), 'enctype -> "multipart/form-data") {
+    @helper.CSRF.formField
+    <select name="productId" id="productId">
+    @for(product <- products) {
+        <option value="@product.id">@product.title</option>
+    }
+    </select>
+    <input type="file" name="picture">
+    <br>
+    <div class="buttons">
+        <input type="submit" value="Add Photo"/>
+    </div>
+}

@@ -1,0 +1,4 @@
+@import models.products.Photo
+@(photo: Photo)
+
+<img src=@{controllers.products.routes.PhotoController.getPhoto(photo.id)}>
