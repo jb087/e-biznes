@@ -1,4 +1,4 @@
-package controllers.orders
+package controllers.basket
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AbstractController, ControllerComponents}

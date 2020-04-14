@@ -27,15 +27,15 @@ POST    /basket                                         controllers.basket.Baske
 PUT     /basket/:basketId                               controllers.basket.BasketController.updateBasket(basketId: String)
 DELETE  /basket/:basketId                               controllers.basket.BasketController.deleteBasket(basketId: String)
 
+GET     /orderedProducts                                controllers.basket.OrderedProductsController.getOrderedProducts
+POST    /orderedProduct                                 controllers.basket.OrderedProductsController.createOrderedProduct
+PUT     /orderedProduct/:orderedProductId               controllers.basket.OrderedProductsController.updateOrderedProduct(orderedProductId: String)
+DELETE  /orderedProduct/:orderedProductId               controllers.basket.OrderedProductsController.deleteOrderedProduct(orderedProductId: String)
+
 GET     /orders                                         controllers.orders.OrderController.getOrders
 POST    /order                                          controllers.orders.OrderController.createOrder
 PUT     /order/:orderId                                 controllers.orders.OrderController.updateOrder(orderId: String)
 DELETE  /order/:orderId                                 controllers.orders.OrderController.deleteOrder(orderId: String)
-
-GET     /orderedProducts                                controllers.orders.OrderedProductsController.getOrderedProducts
-POST    /orderedProduct                                 controllers.orders.OrderedProductsController.createOrderedProduct
-PUT     /orderedProduct/:orderedProductId               controllers.orders.OrderedProductsController.updateOrderedProduct(orderedProductId: String)
-DELETE  /orderedProduct/:orderedProductId               controllers.orders.OrderedProductsController.deleteOrderedProduct(orderedProductId: String)
 
 GET     /payments                                       controllers.orders.PaymentController.getPayments
 POST    /payment                                        controllers.orders.PaymentController.createPayment
