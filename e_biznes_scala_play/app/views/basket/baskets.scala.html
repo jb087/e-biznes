@@ -1,0 +1,9 @@
+@import models.basket.Basket
+@(baskets: Seq[Basket])
+
+@for(basket <- baskets) {
+    <b>@basket.id</b>
+    <p>@basket.isBought</p>
+    <a href="@controllers.basket.routes.BasketController.updateBasket(basket.id)">Edit</a>
+    <a href="@controllers.basket.routes.BasketController.deleteBasket(basket.id)">Delete</a>
+}

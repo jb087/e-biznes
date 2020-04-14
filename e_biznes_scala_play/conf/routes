@@ -23,7 +23,8 @@ GET     /subcategory/:subcategoryId                     controllers.categories.S
 #DELETE  /subcategory/:subcategoryId                     controllers.categories.SubcategoryController.deleteSubcategory(subcategoryId: String)
 
 GET     /baskets                                        controllers.basket.BasketController.getBaskets
-POST    /basket                                         controllers.basket.BasketController.createBasket
+GET     /basket/:basketId                               controllers.basket.BasketController.getBasketById(basketId: String)
+#POST    /basket                                         controllers.basket.BasketController.createBasket
 PUT     /basket/:basketId                               controllers.basket.BasketController.updateBasket(basketId: String)
 DELETE  /basket/:basketId                               controllers.basket.BasketController.deleteBasket(basketId: String)
 
@@ -102,3 +103,6 @@ GET     /photoJPG/:photoId                              controllers.products.Pho
 GET     /photoDelete/:photoId                           controllers.products.PhotoController.deletePhoto(photoId: String)
 GET     /photoUpdate/:photoId                           controllers.products.PhotoController.updatePhoto(photoId: String)
 POST    /photoUpdateHandler                             controllers.products.PhotoController.updatePhotoHandler
+
+GET     /basketCreate                                   controllers.basket.BasketController.createBasket
+POST    /basketCreateHandler                            controllers.basket.BasketController.createBasketHandler

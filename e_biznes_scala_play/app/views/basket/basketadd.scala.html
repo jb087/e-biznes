@@ -1,0 +1,18 @@
+@import controllers.basket.CreateBasketForm
+@(basket: Form[CreateBasketForm])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.basket.routes.BasketController.createBasketHandler()) {
+    @helper.CSRF.formField
+    <select name="isBought" id="isBought">
+        <option value="0">false</option>
+        <option value="1">true</option>
+    </select>
+
+    <div class="buttons">
+        <input type="submit" value="Add Basket"/>
+    </div>
+}
