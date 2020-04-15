@@ -19,7 +19,7 @@ class OrderedProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvide
 
   val orderedProduct = TableQuery[OrderedProductTable]
 
-  def getOrderedProducts(): Future[Seq[OrderedProduct]] = db.run {
+  def getOrderedProducts: Future[Seq[OrderedProduct]] = db.run {
     orderedProduct.result
   }
 

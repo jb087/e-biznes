@@ -1,0 +1,29 @@
+@import controllers.orders.CreateOrderForm
+@import models.basket.Basket
+@(order: Form[CreateOrderForm], baskets: Seq[Basket])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.orders.routes.OrderController.createOrderHandler()) {
+    @helper.CSRF.formField
+
+    <label>BasketId:</label>
+    <select name="basketId" id="basketId">
+    @for(basket <- baskets) {
+        <option value="@basket.id">@basket.id</option>
+    }
+    </select>
+    <br>
+    <label>State:</label>
+    <select name="state" id="state">
+    @for(state <- Seq("NOT_PAID", "PAID", "CANCELLED", "DELIVERED")) {
+        <option value="@state">@state</option>
+    }
+    </select>
+    <br>
+    <div class="buttons">
+        <input type="submit" value="Add Order"/>
+    </div>
+}

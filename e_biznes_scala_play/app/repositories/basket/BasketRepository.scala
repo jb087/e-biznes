@@ -19,7 +19,7 @@ class BasketRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impli
 
   val basket = TableQuery[BasketTable]
 
-  def getBaskets(): Future[Seq[Basket]] = db.run {
+  def getBaskets: Future[Seq[Basket]] = db.run {
     basket.result
   }
 

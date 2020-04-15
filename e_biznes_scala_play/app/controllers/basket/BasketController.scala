@@ -27,7 +27,7 @@ class BasketController @Inject()(basketRepository: BasketRepository, cc: Message
   }
 
   def getBaskets: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    basketRepository.getBaskets()
+    basketRepository.getBaskets
       .map(baskets => Ok(views.html.basket.baskets(baskets)))
   }
 

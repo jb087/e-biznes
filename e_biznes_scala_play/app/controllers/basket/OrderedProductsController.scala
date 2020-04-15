@@ -35,7 +35,7 @@ class OrderedProductsController @Inject()(orderedProductRepository: OrderedProdu
   }
 
   def getOrderedProducts: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    orderedProductRepository.getOrderedProducts()
+    orderedProductRepository.getOrderedProducts
       .map(orderedProducts => Ok(views.html.orderedProducts.orderedproducts(orderedProducts)))
   }
 

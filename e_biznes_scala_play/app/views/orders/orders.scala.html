@@ -1,0 +1,12 @@
+@import models.orders.Order
+@(orders: Seq[Order])
+
+@for(order <- orders) {
+    <b>Id: @order.id</b>
+    <p>
+        BasketId: @order.basketId <br>
+        State: @order.state <br>
+    </p>
+    <a href="@controllers.orders.routes.OrderController.updateOrder(order.id)">Edit</a>
+    <a href="@controllers.orders.routes.OrderController.deleteOrder(order.id)">Delete</a>
+}
