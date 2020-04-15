@@ -36,4 +36,12 @@ class OrderRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implic
 
     order += Order(id, newOrder.basketId, newOrder.state)
   }
+
+  def deleteOrder(orderId: String): Future[Int] = db.run {
+    order.filter(_.id === orderId).delete
+  }
+
+  def updateOrder(orderToUpdate: Order): Future[Int] = db.run {
+    order.filter(_.id === orderToUpdate.id).update(orderToUpdate)
+  }
 }

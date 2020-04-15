@@ -9,8 +9,8 @@ import play.api.mvc._
 import repositories.basket.BasketRepository
 import repositories.orders.OrderRepository
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class OrderController @Inject()(orderRepository: OrderRepository, basketRepository: BasketRepository, cc: MessagesControllerComponents)
@@ -21,6 +21,14 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
       "basketId" -> nonEmptyText,
       "state" -> nonEmptyText
     )(CreateOrderForm.apply)(CreateOrderForm.unapply)
+  }
+
+  val updateOrderForm: Form[UpdateOrderForm] = Form {
+    mapping(
+      "orderId" -> nonEmptyText,
+      "basketId" -> nonEmptyText,
+      "state" -> nonEmptyText
+    )(UpdateOrderForm.apply)(UpdateOrderForm.unapply)
   }
 
   def getOrders: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
@@ -37,21 +45,24 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
   }
 
   def createOrder: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    basketRepository.getBaskets(0)
-      .map(baskets => Ok(views.html.orders.orderadd(createOrderForm, baskets)))
+    val baskets: Seq[Basket] = Await.result(basketRepository.getBaskets(0), Duration.Inf)
+    val basketIdsFromOrders: Seq[String] = Await.result(orderRepository.getOrders, Duration.Inf).map(_.basketId)
+    val uniqueBaskets: Seq[Basket] = baskets.filter(basket => !basketIdsFromOrders.contains(basket.id))
+
+    Future.successful {
+      Ok(views.html.orders.orderadd(createOrderForm, uniqueBaskets))
+    }
   }
 
   def createOrderHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     createOrderForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          var baskets: Seq[Basket] = Seq[Basket]()
-          basketRepository.getBaskets(0).onComplete {
-            case Success(basketsFromFuture) => baskets = basketsFromFuture
-            case Failure(_) => print("Failed baskets download")
-          }
+          val baskets: Seq[Basket] = Await.result(basketRepository.getBaskets(0), Duration.Inf)
+          val basketIdsFromOrders: Seq[String] = Await.result(orderRepository.getOrders, Duration.Inf).map(_.basketId)
+          val uniqueBaskets: Seq[Basket] = baskets.filter(basket => !basketIdsFromOrders.contains(basket.id))
 
-          BadRequest(views.html.orders.orderadd(errorForm, baskets))
+          BadRequest(views.html.orders.orderadd(errorForm, uniqueBaskets))
         }
       },
       order => {
@@ -61,16 +72,52 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
     )
   }
 
-  def updateOrder(orderId: String) = Action {
-    Ok("")
+  def updateOrder(orderId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    val baskets: Seq[Basket] = Await.result(basketRepository.getBaskets(0), Duration.Inf)
+    val basketIdsFromOrders: Seq[String] = Await.result(orderRepository.getOrders, Duration.Inf).map(_.basketId)
+    val order: Order = Await.result(orderRepository.getOrderById(orderId), Duration.Inf)
+    val basketIdsFromOrdersWithoutCurrent = basketIdsFromOrders.filter(id => !id.equals(order.basketId))
+    val uniqueBaskets: Seq[Basket] = baskets.filter(basket => !basketIdsFromOrdersWithoutCurrent.contains(basket.id))
+
+    orderRepository.getOrderById(orderId)
+      .map(order => {
+        val orderForm = updateOrderForm.fill(UpdateOrderForm(order.id, order.basketId, order.state))
+
+        Ok(views.html.orders.orderupdate(orderForm, uniqueBaskets))
+      })
   }
 
-  def deleteOrder(orderId: String) = Action {
-    Ok("")
+  def updateOrderHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    updateOrderForm.bindFromRequest().fold(
+      errorForm => {
+        Future.successful {
+          val baskets: Seq[Basket] = Await.result(basketRepository.getBaskets(0), Duration.Inf)
+          val basketIdsFromOrders: Seq[String] = Await.result(orderRepository.getOrders, Duration.Inf).map(_.basketId)
+          val uniqueBaskets: Seq[Basket] = baskets.filter(basket => !basketIdsFromOrders.contains(basket.id))
+
+          BadRequest(views.html.orders.orderupdate(errorForm, uniqueBaskets))
+        }
+      },
+      order => {
+        orderRepository.updateOrder(Order(order.orderId, order.basketId, order.state))
+          .map(_ => Redirect(routes.OrderController.updateOrder(order.orderId)).flashing("success" -> "Order Updated!"))
+      }
+    )
+  }
+
+  def deleteOrder(orderId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    orderRepository.deleteOrder(orderId)
+      .map(_ => Redirect(routes.OrderController.getOrders()))
   }
 }
 
 case class CreateOrderForm(
+                            basketId: String,
+                            state: String
+                          )
+
+case class UpdateOrderForm(
+                            orderId: String,
                             basketId: String,
                             state: String
                           )

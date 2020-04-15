@@ -37,8 +37,8 @@ GET     /orderedProduct/:orderedProductId               controllers.basket.Order
 GET     /orders                                         controllers.orders.OrderController.getOrders
 GET     /order/:orderId                                 controllers.orders.OrderController.getOrderById(orderId: String)
 #POST    /order                                          controllers.orders.OrderController.createOrder
-PUT     /order/:orderId                                 controllers.orders.OrderController.updateOrder(orderId: String)
-DELETE  /order/:orderId                                 controllers.orders.OrderController.deleteOrder(orderId: String)
+#PUT     /order/:orderId                                 controllers.orders.OrderController.updateOrder(orderId: String)
+#DELETE  /order/:orderId                                 controllers.orders.OrderController.deleteOrder(orderId: String)
 
 GET     /payments                                       controllers.orders.PaymentController.getPayments
 POST    /payment                                        controllers.orders.PaymentController.createPayment
@@ -120,3 +120,6 @@ POST    /orderedProductUpdateHandler                    controllers.basket.Order
 
 GET     /orderCreate                                    controllers.orders.OrderController.createOrder
 POST    /orderCreateHandler                             controllers.orders.OrderController.createOrderHandler
+GET     /orderUpadte/:orderId                           controllers.orders.OrderController.updateOrder(orderId: String)
+POST    /orderUpadteHandler                             controllers.orders.OrderController.updateOrderHandler
+GET     /orderDelete/:orderId                           controllers.orders.OrderController.deleteOrder(orderId: String)

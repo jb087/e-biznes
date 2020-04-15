@@ -1,0 +1,38 @@
+@import controllers.orders.UpdateOrderForm
+@import models.basket.Basket
+@(order: Form[UpdateOrderForm], baskets: Seq[Basket])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.orders.routes.OrderController.updateOrderHandler()) {
+    @helper.CSRF.formField
+    <input name="orderId" id="orderId" value="@order("orderId").value" type="hidden">
+
+    <label>BasketId:</label>
+    <select name="basketId" id="basketId">
+    @for(basket <- baskets) {
+        @if(basket.id == order("basketId").value.getOrElse("")) {
+            <option value="@basket.id" selected="selected">@basket.id</option>
+        } else {
+            <option value="@basket.id">@basket.id</option>
+        }
+    }
+    </select>
+    <br>
+    <label>State:</label>
+    <select name="state" id="state">
+    @for(state <- Seq("NOT_PAID", "PAID", "CANCELLED", "DELIVERED")) {
+        @if(state == order("state").value.getOrElse("")) {
+            <option value="@state" selected="selected">@state</option>
+        } else {
+            <option value="@state">@state</option>
+        }
+    }
+    </select>
+    <br>
+    <div class="buttons">
+        <input type="submit" value="Update Order"/>
+    </div>
+}
