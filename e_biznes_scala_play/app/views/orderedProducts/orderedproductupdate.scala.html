@@ -1,0 +1,41 @@
+@import controllers.basket.UpdateOrderedProductForm
+@import models.basket.Basket
+@import models.products.Product
+@(orderedProduct: Form[UpdateOrderedProductForm], baskets: Seq[Basket], products: Seq[Product])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.basket.routes.OrderedProductsController.updateOrderedProductHandler()) {
+    @helper.CSRF.formField
+    <input name="orderedProductId" id="orderedProductId" value="@orderedProduct("orderedProductId").value" type="hidden">
+
+    <label>BasketId:</label>
+    <select name="basketId" id="basketId">
+    @for(basket <- baskets) {
+        @if(basket.id == orderedProduct("basketId").value.getOrElse("")) {
+            <option value="@basket.id" selected="selected">@basket.id</option>
+        } else {
+            <option value="@basket.id">@basket.id</option>
+        }
+    }
+    </select>
+    <br>
+    <label>Product:</label>
+    <select name="productId" id="productId">
+    @for(product <- products) {
+        @if(product.id == orderedProduct("productId").value.getOrElse("")) {
+            <option selected="selected" value="@product.id">@product.title</option>
+        } else {
+            <option value="@product.id">@product.title</option>
+        }
+    }
+    </select>
+    <br>
+    @inputText(orderedProduct("quantity"))
+    <br>
+    <div class="buttons">
+        <input type="submit" value="Add Ordered Product"/>
+    </div>
+}

@@ -31,8 +31,8 @@ GET     /basket/:basketId                               controllers.basket.Baske
 GET     /orderedProducts                                controllers.basket.OrderedProductsController.getOrderedProducts
 GET     /orderedProduct/:orderedProductId               controllers.basket.OrderedProductsController.getOrderedProductById(orderedProductId: String)
 #POST    /orderedProduct                                 controllers.basket.OrderedProductsController.createOrderedProduct
-PUT     /orderedProduct/:orderedProductId               controllers.basket.OrderedProductsController.updateOrderedProduct(orderedProductId: String)
-DELETE  /orderedProduct/:orderedProductId               controllers.basket.OrderedProductsController.deleteOrderedProduct(orderedProductId: String)
+#PUT     /orderedProduct/:orderedProductId               controllers.basket.OrderedProductsController.updateOrderedProduct(orderedProductId: String)
+#DELETE  /orderedProduct/:orderedProductId               controllers.basket.OrderedProductsController.deleteOrderedProduct(orderedProductId: String)
 
 GET     /orders                                         controllers.orders.OrderController.getOrders
 POST    /order                                          controllers.orders.OrderController.createOrder
@@ -113,3 +113,6 @@ POST    /basketUpdateHandler                            controllers.basket.Baske
 
 GET     /orderedProductCreate                           controllers.basket.OrderedProductsController.createOrderedProduct
 POST    /orderedProductCreateHandler                    controllers.basket.OrderedProductsController.createOrderedProductHandler
+GET     /orderedProductDelete/:orderedProductId         controllers.basket.OrderedProductsController.deleteOrderedProduct(orderedProductId: String)
+GET     /orderedProductUpdate/:orderedProductId         controllers.basket.OrderedProductsController.updateOrderedProduct(orderedProductId: String)
+POST    /orderedProductUpdateHandler                    controllers.basket.OrderedProductsController.updateOrderedProductHandler
