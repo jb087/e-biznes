@@ -1,0 +1,32 @@
+@import controllers.basket.CreateOrderedProductForm
+@import models.basket.Basket
+@import models.products.Product
+@(orderedProduct: Form[CreateOrderedProductForm], baskets: Seq[Basket], products: Seq[Product])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.basket.routes.OrderedProductsController.createOrderedProductHandler()) {
+    @helper.CSRF.formField
+
+    <label>BasketId:</label>
+    <select name="basketId" id="basketId">
+    @for(basket <- baskets) {
+        <option value="@basket.id">@basket.id</option>
+    }
+    </select>
+    <br>
+    <label>Product:</label>
+    <select name="productId" id="productId">
+    @for(product <- products) {
+        <option value="@product.id">@product.title</option>
+    }
+    </select>
+    <br>
+    @inputText(orderedProduct("quantity"))
+    <br>
+    <div class="buttons">
+        <input type="submit" value="Add Ordered Product"/>
+    </div>
+}

@@ -8,6 +8,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 @Singleton
 class ProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
@@ -43,5 +44,16 @@ class ProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
 
   def updateProduct(productToUpdate: Product): Future[Int] = db.run {
     product.filter(_.id === productToUpdate.id).update(productToUpdate)
+  }
+
+  def decreaseProductQuantity(productId: String, subtractQuantity: Int) = {
+      getProductById(productId)
+        .onComplete( {
+          case Success(productFromFuture) =>
+            val productToUpdate = Product(productFromFuture.id, productFromFuture.subcategoryId, productFromFuture.title, productFromFuture.price,
+              productFromFuture.description, productFromFuture.date, productFromFuture.quantity - subtractQuantity)
+            updateProduct(productToUpdate)
+          case Failure(_) => print("Failed product quantity decrease")
+        })
   }
 }

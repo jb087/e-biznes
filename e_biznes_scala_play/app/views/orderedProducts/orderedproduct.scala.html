@@ -1,0 +1,9 @@
+@import models.basket.OrderedProduct
+@(orderedProduct: OrderedProduct)
+
+<b>id: @orderedProduct.id</b>
+<p>
+    basketId: @orderedProduct.basketId <br>
+    productId: @orderedProduct.productId <br>
+    quantity: @orderedProduct.quantity <br>
+</p>

@@ -1,0 +1,14 @@
+@import models.basket.OrderedProduct
+@(orderedProducts: Seq[OrderedProduct])
+
+@for(orderedProduct <- orderedProducts) {
+    <b>id: @orderedProduct.id</b>
+    <br>
+    <p>
+        basketId: @orderedProduct.basketId <br>
+        productId: @orderedProduct.productId <br>
+        quantity: @orderedProduct.quantity <br>
+    </p>
+    <a href="@controllers.basket.routes.OrderedProductsController.updateOrderedProduct(orderedProduct.id)">Edit</a>
+    <a href="@controllers.basket.routes.OrderedProductsController.deleteOrderedProduct(orderedProduct.id)">Delete</a>
+}
