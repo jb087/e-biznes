@@ -1,0 +1,17 @@
+@import models.orders.ShippingInformation
+@(shippingInformation: Seq[ShippingInformation])
+
+@for(information <- shippingInformation) {
+    <b>@information.firstName</b><br>
+    <b>@information.lastName</b><br>
+    <p>
+        @information.email <br>
+        @information.street <br>
+        @information.houseNumber <br>
+        @information.city <br>
+        @information.zipCode <br>
+    </p>
+    <a href="@controllers.orders.routes.ShippingInformationController.updateShippingInformation(information.id)">Edit</a>
+    <a href="@controllers.orders.routes.ShippingInformationController.deleteShippingInformation(information.id)">Delete</a>
+    <br><br>
+}

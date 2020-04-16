@@ -1,0 +1,30 @@
+@import controllers.orders.CreateShippingInformationForm
+@import models.orders.Order
+@(information: Form[CreateShippingInformationForm], orders: Seq[Order])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.orders.routes.ShippingInformationController.createShippingInformationHandler()) {
+    @helper.CSRF.formField
+
+    <label>OrderId:</label>
+    <select name="orderId" id="orderId">
+    @for(order <- orders) {
+        <option value="@order.id">@order.id</option>
+    }
+    </select>
+    <br>
+    @inputText(information("firstName"))
+    @inputText(information("lastName"))
+    @inputText(information("email"))
+    @inputText(information("street"))
+    @inputText(information("houseNumber"))
+    @inputText(information("city"))
+    @inputText(information("zipCode"))
+    <br>
+    <div class="buttons">
+        <input type="submit" value="Add Shipping Information"/>
+    </div>
+}

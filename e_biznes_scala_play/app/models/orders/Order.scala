@@ -16,7 +16,7 @@ class OrderTable(tag: Tag) extends Table[Order](tag, "ORDER") {
 
   def id = column[String]("ID", O.PrimaryKey)
 
-  def basketId = column[String]("BASKET_ID")
+  def basketId = column[String]("BASKET_ID", O.Unique)
 
   def basketId_fk = foreignKey("BASKET_ID_FK", basketId, basket)(_.id)
 

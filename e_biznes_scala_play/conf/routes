@@ -46,7 +46,8 @@ PUT     /payment/:paymentId                             controllers.orders.Payme
 DELETE  /payment/:paymentId                             controllers.orders.PaymentController.deletePayment(paymentId: String)
 
 GET     /shippingInformation                            controllers.orders.ShippingInformationController.getShippingInformation
-POST    /shippingInformation                            controllers.orders.ShippingInformationController.createShippingInformation
+GET     /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.getShippingInformationById(shippingInformationId: String)
+#POST    /shippingInformation                            controllers.orders.ShippingInformationController.createShippingInformation
 PUT     /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.updateShippingInformation(shippingInformationId: String)
 DELETE  /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.deleteShippingInformation(shippingInformationId: String)
 
@@ -123,3 +124,6 @@ POST    /orderCreateHandler                             controllers.orders.Order
 GET     /orderUpadte/:orderId                           controllers.orders.OrderController.updateOrder(orderId: String)
 POST    /orderUpadteHandler                             controllers.orders.OrderController.updateOrderHandler
 GET     /orderDelete/:orderId                           controllers.orders.OrderController.deleteOrder(orderId: String)
+
+GET     /shippingInformationCreate                      controllers.orders.ShippingInformationController.createShippingInformation
+POST    /shippingInformationCreateHandler               controllers.orders.ShippingInformationController.createShippingInformationHandler
