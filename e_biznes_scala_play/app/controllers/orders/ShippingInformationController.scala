@@ -27,6 +27,20 @@ class ShippingInformationController @Inject()(shippingInformationRepository: Shi
     )(CreateShippingInformationForm.apply)(CreateShippingInformationForm.unapply)
   }
 
+  val updateShippingInformationForm: Form[UpdateShippingInformationForm] = Form {
+    mapping(
+      "shippingInformationId" -> nonEmptyText,
+      "orderId" -> nonEmptyText,
+      "firstName" -> nonEmptyText,
+      "lastName" -> nonEmptyText,
+      "email" -> email,
+      "street" -> nonEmptyText,
+      "houseNumber" -> nonEmptyText,
+      "city" -> nonEmptyText,
+      "zipCode" -> nonEmptyText
+    )(UpdateShippingInformationForm.apply)(UpdateShippingInformationForm.unapply)
+  }
+
   def getShippingInformation: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     shippingInformationRepository.getShippingInformation
       .map(shippingInformation => Ok(views.html.shippingInformation.shippinginformation(shippingInformation)))
@@ -65,16 +79,60 @@ class ShippingInformationController @Inject()(shippingInformationRepository: Shi
     )
   }
 
-  def updateShippingInformation(shippingInformationId: String) = Action {
-    Ok("")
+  def updateShippingInformation(shippingInformationId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    val orders = Await.result(orderRepository.getOrders, Duration.Inf)
+
+    shippingInformationRepository.getShippingInformationById(shippingInformationId)
+      .map(information => {
+        val shippingInformationForm = updateShippingInformationForm.fill(
+          UpdateShippingInformationForm(information.id, information.orderId, information.firstName, information.lastName,
+            information.email, information.street, information.houseNumber, information.city, information.zipCode)
+        )
+
+        Ok(views.html.shippingInformation.shippinginformationupdate(shippingInformationForm, orders))
+      })
   }
 
-  def deleteShippingInformation(shippingInformationId: String) = Action {
-    Ok("")
+  def updateShippingInformationHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    updateShippingInformationForm.bindFromRequest().fold(
+      errorForm => {
+        Future.successful {
+          val orders = Await.result(orderRepository.getOrders, Duration.Inf)
+
+          BadRequest(views.html.shippingInformation.shippinginformationupdate(errorForm, orders))
+        }
+      },
+      information => {
+        shippingInformationRepository.updateShippingInformation(
+          ShippingInformation(information.shippingInformationId, information.orderId, information.firstName, information.lastName,
+            information.email, information.street, information.houseNumber, information.city, information.zipCode)
+        )
+          .map(_ => Redirect(routes.ShippingInformationController.updateShippingInformation(information.shippingInformationId))
+            .flashing("success" -> "Shipping Information Updated!")
+          )
+      }
+    )
+  }
+
+  def deleteShippingInformation(shippingInformationId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    shippingInformationRepository.deleteShippingInformation(shippingInformationId)
+      .map(_ => Redirect(routes.ShippingInformationController.getShippingInformation()))
   }
 }
 
 case class CreateShippingInformationForm(
+                                          orderId: String,
+                                          firstName: String,
+                                          lastName: String,
+                                          email: String,
+                                          street: String,
+                                          houseNumber: String,
+                                          city: String,
+                                          zipCode: String
+                                        )
+
+case class UpdateShippingInformationForm(
+                                          shippingInformationId: String,
                                           orderId: String,
                                           firstName: String,
                                           lastName: String,

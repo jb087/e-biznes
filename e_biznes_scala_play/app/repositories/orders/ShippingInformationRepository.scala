@@ -12,12 +12,12 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class ShippingInformationRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
 
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  val shippingInformation = TableQuery[ShippingInformationTable]
+  private val shippingInformation = TableQuery[ShippingInformationTable]
 
   def getShippingInformation: Future[Seq[ShippingInformation]] = db.run {
     shippingInformation.result
@@ -36,5 +36,13 @@ class ShippingInformationRepository @Inject()(dbConfigProvider: DatabaseConfigPr
 
     shippingInformation += ShippingInformation(id, newShippingInformation.orderId, newShippingInformation.firstName, newShippingInformation.lastName,
       newShippingInformation.email, newShippingInformation.street, newShippingInformation.houseNumber, newShippingInformation.city, newShippingInformation.zipCode)
+  }
+
+  def deleteShippingInformation(shippingInformationId: String): Future[Int] = db.run {
+    shippingInformation.filter(_.id === shippingInformationId).delete
+  }
+
+  def updateShippingInformation(shippingInformationToUpdate: ShippingInformation): Future[Int] = db.run {
+    shippingInformation.filter(_.id === shippingInformationToUpdate.id).update(shippingInformationToUpdate)
   }
 }

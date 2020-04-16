@@ -48,8 +48,8 @@ DELETE  /payment/:paymentId                             controllers.orders.Payme
 GET     /shippingInformation                            controllers.orders.ShippingInformationController.getShippingInformation
 GET     /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.getShippingInformationById(shippingInformationId: String)
 #POST    /shippingInformation                            controllers.orders.ShippingInformationController.createShippingInformation
-PUT     /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.updateShippingInformation(shippingInformationId: String)
-DELETE  /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.deleteShippingInformation(shippingInformationId: String)
+#PUT     /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.updateShippingInformation(shippingInformationId: String)
+#DELETE  /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.deleteShippingInformation(shippingInformationId: String)
 
 GET     /opinions                                       controllers.products.OpinionController.getOpinions
 GET     /opinion/:opinionId                             controllers.products.OpinionController.getOpinionById(opinionId: String)
@@ -127,3 +127,6 @@ GET     /orderDelete/:orderId                           controllers.orders.Order
 
 GET     /shippingInformationCreate                      controllers.orders.ShippingInformationController.createShippingInformation
 POST    /shippingInformationCreateHandler               controllers.orders.ShippingInformationController.createShippingInformationHandler
+GET     /shippingInformationUp/:shippingInformationId   controllers.orders.ShippingInformationController.updateShippingInformation(shippingInformationId: String)
+POST    /shippingInformationUpHandler                   controllers.orders.ShippingInformationController.updateShippingInformationHandler
+GET     /shippingInformationDel/:shippingInformationId  controllers.orders.ShippingInformationController.deleteShippingInformation(shippingInformationId: String)
