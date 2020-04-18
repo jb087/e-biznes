@@ -8,7 +8,9 @@
         Is done: @payment.isDone <br>
         Date: @payment.date <br>
     </p>
-    <a href="@controllers.orders.routes.PaymentController.updatePayment(payment.id)">Edit</a>
+    @if(payment.isDone == 0) {
+        <a href="@controllers.orders.routes.PaymentController.updatePayment(payment.id)">Edit</a>
+    }
     <a href="@controllers.orders.routes.PaymentController.deletePayment(payment.id)">Delete</a>
     <br><br>
 }

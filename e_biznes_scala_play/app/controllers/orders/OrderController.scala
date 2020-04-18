@@ -86,12 +86,11 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
 
     val shippingInformation: Seq[ShippingInformation] = Await.result(shippingInformationRepository.getShippingInformation, Duration.Inf)
 
-    orderRepository.getOrderById(orderId)
-      .map(order => {
-        val orderForm = updateOrderForm.fill(UpdateOrderForm(order.id, order.basketId, order.shippingInformationId, order.state))
+    Future.successful {
+      val orderForm = updateOrderForm.fill(UpdateOrderForm(order.id, order.basketId, order.shippingInformationId, order.state))
 
-        Ok(views.html.orders.orderupdate(orderForm, uniqueBaskets, shippingInformation))
-      })
+      Ok(views.html.orders.orderupdate(orderForm, uniqueBaskets, shippingInformation))
+    }
   }
 
   def updateOrderHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>

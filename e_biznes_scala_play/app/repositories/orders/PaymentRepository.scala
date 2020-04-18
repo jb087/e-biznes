@@ -52,4 +52,19 @@ class PaymentRepository @Inject()(orderRepository: OrderRepository, dbConfigProv
   def deletePayment(paymentId: String): Future[Int] = db.run {
     payment.filter(_.id === paymentId).delete
   }
+
+  def updatePayment(paymentToUpdate: Payment): Future[Unit] = {
+    val order = Await.result(orderRepository.getOrderById(paymentToUpdate.orderId), Duration.Inf)
+
+    db.run {
+      updatePayment(paymentToUpdate, Order(order.id, order.basketId, order.shippingInformationId, "NOT_PAID"))
+    }
+  }
+
+  private val updatePayment = (paymentToUpdate: Payment, orderToUpdate: Order) => {
+    for {
+      pay <- payment.filter(_.id === paymentToUpdate.id).update(paymentToUpdate)
+      order <- order.filter(_.id === orderToUpdate.id).update(orderToUpdate)
+    } yield ()
+  }.transactionally
 }
