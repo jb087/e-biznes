@@ -1,0 +1,22 @@
+@import controllers.orders.CreatePaymentForm
+@import models.orders.Order
+@(payment: Form[CreatePaymentForm], orders: Seq[Order])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(controllers.orders.routes.PaymentController.createPaymentHandler()) {
+    @helper.CSRF.formField
+
+    <label>OrderId:</label>
+    <select name="orderId" id="orderId">
+    @for(order <- orders) {
+        <option value="@order.id">@order.id</option>
+    }
+    </select>
+    <br>
+    <div class="buttons">
+        <input type="submit" value="Add Payment"/>
+    </div>
+}

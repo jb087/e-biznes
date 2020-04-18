@@ -24,13 +24,6 @@
     }
     </select>
     <br>
-    <label>State:</label>
-    <select name="state" id="state">
-    @for(state <- Seq("NOT_PAID", "PAID", "CANCELLED", "DELIVERED")) {
-        <option value="@state">@state</option>
-    }
-    </select>
-    <br>
     <div class="buttons">
         <input type="submit" value="Add Order"/>
     </div>

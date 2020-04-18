@@ -19,8 +19,7 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
   val createOrderForm: Form[CreateOrderForm] = Form {
     mapping(
       "basketId" -> nonEmptyText,
-      "shippingInformationId" -> nonEmptyText,
-      "state" -> nonEmptyText
+      "shippingInformationId" -> nonEmptyText
     )(CreateOrderForm.apply)(CreateOrderForm.unapply)
   }
 
@@ -72,7 +71,7 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
         }
       },
       order => {
-        orderRepository.createOrder(Order("", order.basketId, order.shippingInformationId, order.state))
+        orderRepository.createOrder(Order("", order.basketId, order.shippingInformationId, "CANCELLED"))
           .map(_ => Redirect(routes.OrderController.createOrder()).flashing("success" -> "Order Created!"))
       }
     )
@@ -125,8 +124,7 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
 
 case class CreateOrderForm(
                             basketId: String,
-                            shippingInformationId: String,
-                            state: String
+                            shippingInformationId: String
                           )
 
 case class UpdateOrderForm(
