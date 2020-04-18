@@ -4,12 +4,14 @@
 <a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.products.routes.ProductController.createProduct()">Create</a><br><br><br>
 @for(product <- products) {
-    <b>@product.title</b>
+    <a href="@controllers.products.routes.ProductController.getProductById(product.id)"><b>@product.title</b></a>
     <p>
-        @product.price @product.quantity @product.date
+        Price: @product.price <br>
+        Quantity: @product.quantity <br>
+        Create date: @product.date
     </p>
     <p>@product.description</p>
     <a href="@controllers.products.routes.ProductController.updateProduct(product.id)">Edit</a>
     <a href="@controllers.products.routes.ProductController.deleteProduct(product.id)">Delete</a>
-    <br>
+    <br><br>
 }
