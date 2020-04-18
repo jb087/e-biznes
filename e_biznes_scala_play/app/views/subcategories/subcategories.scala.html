@@ -4,8 +4,7 @@
 <a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.categories.routes.SubcategoryController.createSubcategory()">Create</a><br><br><br>
 @for(subcategory <- subcategories) {
-    <a href="@controllers.categories.routes.SubcategoryController.getSubcategoryById(subcategory.id)"><b>@subcategory.id</b></a>
-    <p>@subcategory.name</p>
+    <a href="@controllers.categories.routes.SubcategoryController.getSubcategoryById(subcategory.id)"><b>@subcategory.name</b></a>
     <a href="@controllers.categories.routes.SubcategoryController.updateSubcategory(subcategory.id)">Edit</a>
     <a href="@controllers.categories.routes.SubcategoryController.deleteSubcategory(subcategory.id)">Delete</a>
     <br><br>

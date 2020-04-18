@@ -4,10 +4,11 @@
 <a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.products.routes.OpinionController.createOpinion()">Create</a><br><br><br>
 @for(opinion <- opinions) {
+    <a href="@controllers.products.routes.OpinionController.getOpinionById(opinion.id)">@opinion.opinion</a><br>
     <p>
-        @opinion.opinion
         rating: @opinion.rating
     </p>
     <a href="@controllers.products.routes.OpinionController.updateOpinion(opinion.id)">Edit</a>
     <a href="@controllers.products.routes.OpinionController.deleteOpinion(opinion.id)">Delete</a>
+    <br><br>
 }
