@@ -4,7 +4,7 @@
 <a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.orders.routes.PaymentController.createPayment()">Create</a><br><br><br>
 @for(payment <- payments) {
-    <b>Id: @payment.id</b><br>
+    <a href="@controllers.orders.routes.PaymentController.getPaymentById(payment.id)"><b>Id: @payment.id</b></a>
     <p>
         OrderId: @payment.orderId <br>
         Is done: @payment.isDone <br>
