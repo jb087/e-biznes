@@ -1,6 +1,8 @@
 @import models.orders.Payment
 @(payment: Payment)
 
+<a href="@controllers.orders.routes.PaymentController.getPayments()">Payments</a><br><br><br>
+
 <b>Id: @payment.id</b><br>
 <p>
     OrderId: @payment.orderId <br>

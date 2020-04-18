@@ -4,6 +4,8 @@
 
 @import helper._
 
+<a href="@controllers.products.routes.PhotoController.getPhotos()">Back</a><br><br><br>
+
 @flash.get("success").getOrElse("")
 
 @form(controllers.products.routes.PhotoController.updatePhotoHandler()) {

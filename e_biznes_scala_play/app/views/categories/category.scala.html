@@ -1,4 +1,6 @@
 @import models.categories.Category
 @(category: Category)
 
+<a href="@controllers.categories.routes.CategoryController.getCategories()">Categories</a><br><br><br>
+
 <b>@category.name</b>

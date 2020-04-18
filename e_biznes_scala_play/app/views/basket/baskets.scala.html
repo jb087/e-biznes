@@ -1,6 +1,7 @@
 @import models.basket.Basket
 @(baskets: Seq[Basket])
 
+<a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.basket.routes.BasketController.createBasket()">Create</a><br><br><br>
 @for(basket <- baskets) {
     <b>@basket.id</b>

@@ -3,6 +3,8 @@
 
 @import helper._
 
+<a href="@controllers.categories.routes.CategoryController.getCategories()">Back</a><br><br><br>
+
 @flash.get("success").getOrElse("")
 
 @form(controllers.categories.routes.CategoryController.updateCategoryHandler()) {

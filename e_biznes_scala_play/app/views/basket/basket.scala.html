@@ -1,5 +1,7 @@
 @import models.basket.Basket
 @(basket: Basket)
 
+<a href="@controllers.basket.routes.BasketController.getBaskets()">Baskets</a><br><br><br>
+
 <b>@basket.id</b>
 <p>@basket.isBought</p>

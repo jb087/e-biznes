@@ -1,6 +1,7 @@
 @import models.products.Product
 @(products: Seq[Product])
 
+<a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.products.routes.ProductController.createProduct()">Create</a><br><br><br>
 @for(product <- products) {
     <b>@product.title</b>

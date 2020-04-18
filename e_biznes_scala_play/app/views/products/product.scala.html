@@ -1,6 +1,8 @@
 @import models.products.Product
 @(product: Product)
 
+<a href="@controllers.products.routes.ProductController.getProducts()">Products</a><br><br><br>
+
 <b>@product.title</b>
 <p>
     @product.price @product.quantity @product.date

@@ -1,6 +1,8 @@
 @import models.basket.OrderedProduct
 @(orderedProduct: OrderedProduct)
 
+<a href="@controllers.basket.routes.OrderedProductsController.getOrderedProducts()">Ordered Products</a><br><br><br>
+
 <b>id: @orderedProduct.id</b>
 <p>
     basketId: @orderedProduct.basketId <br>

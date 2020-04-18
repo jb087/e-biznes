@@ -5,6 +5,8 @@
 
 @import helper._
 
+<a href="@controllers.orders.routes.OrderController.getOrders()">Back</a><br><br><br>
+
 @flash.get("success").getOrElse("")
 
 @form(controllers.orders.routes.OrderController.createOrderHandler()) {

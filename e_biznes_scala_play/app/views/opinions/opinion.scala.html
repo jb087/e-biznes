@@ -1,6 +1,8 @@
 @import models.products.Opinion
 @(opinion: Opinion)
 
+<a href="@controllers.products.routes.OpinionController.getOpinions()">Opinions</a><br><br><br>
+
 <p>
     @opinion.opinion
     rating: @opinion.rating

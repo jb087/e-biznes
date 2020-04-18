@@ -1,6 +1,7 @@
 @import models.orders.Order
 @(orders: Seq[Order])
 
+<a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.orders.routes.OrderController.createOrder()">Create</a><br><br><br>
 @for(order <- orders) {
     <b>Id: @order.id</b>

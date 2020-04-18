@@ -4,6 +4,8 @@
 
 @import helper._
 
+<a href="@controllers.categories.routes.SubcategoryController.getSubcategories()">Back</a><br><br><br>
+
 @flash.get("success").getOrElse("")
 
 @form(controllers.categories.routes.SubcategoryController.updateSubcategoryHandler()) {

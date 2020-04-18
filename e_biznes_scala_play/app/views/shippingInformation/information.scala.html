@@ -1,6 +1,8 @@
 @import models.orders.ShippingInformation
 @(information: ShippingInformation)
 
+<a href="@controllers.orders.routes.ShippingInformationController.getShippingInformation()">Shipping Information</a><br><br><br>
+
 <b>@information.firstName</b><br>
 <b>@information.lastName</b><br>
 <p>
