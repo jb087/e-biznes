@@ -4,9 +4,10 @@
 <a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.orders.routes.OrderController.createOrder()">Create</a><br><br><br>
 @for(order <- orders) {
-    <b>Id: @order.id</b>
+    <a href="@controllers.orders.routes.OrderController.getOrderById(order.id)"><b>Id: @order.id</b></a>
     <p>
         BasketId: @order.basketId <br>
+        ShippingInformationId: @order.shippingInformationId <br>
         State: @order.state <br>
     </p>
     <a href="@controllers.orders.routes.OrderController.updateOrder(order.id)">Edit</a>
