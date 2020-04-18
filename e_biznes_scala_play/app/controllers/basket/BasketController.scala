@@ -13,12 +13,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class BasketController @Inject()(basketRepository: BasketRepository, cc: MessagesControllerComponents)
                                 (implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
-  val createBasketForm: Form[CreateBasketForm] = Form {
-    mapping(
-      "isBought" -> number
-    )(CreateBasketForm.apply)(CreateBasketForm.unapply)
-  }
-
   val updateBasketForm: Form[UpdateBasketForm] = Form {
     mapping(
       "basketId" -> nonEmptyText,
@@ -40,21 +34,12 @@ class BasketController @Inject()(basketRepository: BasketRepository, cc: Message
   }
 
   def createBasket: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    Ok(views.html.basket.basketadd(createBasketForm))
+    Ok(views.html.basket.basketadd())
   }
 
   def createBasketHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    createBasketForm.bindFromRequest().fold(
-      errorForm => {
-        Future.successful {
-          BadRequest(views.html.basket.basketadd(errorForm))
-        }
-      },
-      basket => {
-        basketRepository.createBasket(basket.isBought)
-          .map(_ => Redirect(routes.BasketController.createBasket()).flashing("success" -> "Basket created!"))
-      }
-    )
+    basketRepository.createBasket(0)
+      .map(_ => Redirect(routes.BasketController.createBasket()).flashing("success" -> "Basket created!"))
   }
 
   def updateBasket(basketId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
@@ -85,8 +70,6 @@ class BasketController @Inject()(basketRepository: BasketRepository, cc: Message
       .map(_ => Redirect(routes.BasketController.getBaskets()))
   }
 }
-
-case class CreateBasketForm(isBought: Int)
 
 case class UpdateBasketForm(
                              basketId: String,

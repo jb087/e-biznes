@@ -4,8 +4,8 @@
 <a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.basket.routes.BasketController.createBasket()">Create</a><br><br><br>
 @for(basket <- baskets) {
-    <b>@basket.id</b>
-    <p>@basket.isBought</p>
+    <a href="@controllers.basket.routes.BasketController.getBasketById(basket.id)"><b>Id: @basket.id</b></a>
+    <p>Is bought: @basket.isBought</p>
     <a href="@controllers.basket.routes.BasketController.updateBasket(basket.id)">Edit</a>
     <a href="@controllers.basket.routes.BasketController.deleteBasket(basket.id)">Delete</a>
     <br><br>
