@@ -1,6 +1,5 @@
 @import controllers.orders.UpdateShippingInformationForm
-@import models.orders.Order
-@(information: Form[UpdateShippingInformationForm], orders: Seq[Order])(implicit request: MessagesRequestHeader, flash: Flash)
+@(information: Form[UpdateShippingInformationForm])(implicit request: MessagesRequestHeader, flash: Flash)
 
 @import helper._
 
@@ -10,17 +9,6 @@
     @helper.CSRF.formField
     <input name="shippingInformationId" id="shippingInformationId" value="@information("shippingInformationId").value" type="hidden">
 
-    <label>OrderId:</label>
-    <select name="orderId" id="orderId">
-    @for(order <- orders) {
-        @if(order.id == information("shippingInformationId").value.getOrElse("")) {
-            <option value="@order.id" selected="selected">@order.id</option>
-        } else {
-            <option value="@order.id">@order.id</option>
-        }
-    }
-    </select>
-    <br>
     @inputText(information("firstName"))
     @inputText(information("lastName"))
     @inputText(information("email"))

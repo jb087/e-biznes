@@ -34,7 +34,7 @@ class OrderRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implic
   def createOrder(newOrder: Order): Future[Int] = db.run {
     val id = UUID.randomUUID().toString
 
-    order += Order(id, newOrder.basketId, newOrder.state)
+    order += Order(id, newOrder.basketId, newOrder.shippingInformationId, newOrder.state)
   }
 
   def deleteOrder(orderId: String): Future[Int] = db.run {

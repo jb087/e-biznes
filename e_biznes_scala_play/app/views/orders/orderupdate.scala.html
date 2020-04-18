@@ -1,6 +1,7 @@
 @import controllers.orders.UpdateOrderForm
 @import models.basket.Basket
-@(order: Form[UpdateOrderForm], baskets: Seq[Basket])(implicit request: MessagesRequestHeader, flash: Flash)
+@import models.orders.ShippingInformation
+@(order: Form[UpdateOrderForm], baskets: Seq[Basket], information: Seq[ShippingInformation])(implicit request: MessagesRequestHeader, flash: Flash)
 
 @import helper._
 
@@ -17,6 +18,17 @@
             <option value="@basket.id" selected="selected">@basket.id</option>
         } else {
             <option value="@basket.id">@basket.id</option>
+        }
+    }
+    </select>
+    <br>
+    <label>ShippingInformationId:</label>
+    <select name="shippingInformationId" id="shippingInformationId">
+    @for(info <- information) {
+        @if(info.id == order("shippingInformationId").value.getOrElse("")) {
+            <option value="@info.id" selected="selected">@info.id</option>
+        } else {
+            <option value="@info.id">@info.id</option>
         }
     }
     </select>

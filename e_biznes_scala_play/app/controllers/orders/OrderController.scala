@@ -2,23 +2,24 @@ package controllers.orders
 
 import javax.inject.{Inject, Singleton}
 import models.basket.Basket
-import models.orders.Order
+import models.orders.{Order, ShippingInformation}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
 import repositories.basket.BasketRepository
-import repositories.orders.OrderRepository
+import repositories.orders.{OrderRepository, ShippingInformationRepository}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
-class OrderController @Inject()(orderRepository: OrderRepository, basketRepository: BasketRepository, cc: MessagesControllerComponents)
-                               (implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
+class OrderController @Inject()(orderRepository: OrderRepository, basketRepository: BasketRepository, shippingInformationRepository: ShippingInformationRepository,
+                                cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
   val createOrderForm: Form[CreateOrderForm] = Form {
     mapping(
       "basketId" -> nonEmptyText,
+      "shippingInformationId" -> nonEmptyText,
       "state" -> nonEmptyText
     )(CreateOrderForm.apply)(CreateOrderForm.unapply)
   }
@@ -27,6 +28,7 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
     mapping(
       "orderId" -> nonEmptyText,
       "basketId" -> nonEmptyText,
+      "shippingInformationId" -> nonEmptyText,
       "state" -> nonEmptyText
     )(UpdateOrderForm.apply)(UpdateOrderForm.unapply)
   }
@@ -49,8 +51,10 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
     val basketIdsFromOrders: Seq[String] = Await.result(orderRepository.getOrders, Duration.Inf).map(_.basketId)
     val uniqueBaskets: Seq[Basket] = baskets.filter(basket => !basketIdsFromOrders.contains(basket.id))
 
+    val shippingInformation: Seq[ShippingInformation] = Await.result(shippingInformationRepository.getShippingInformation, Duration.Inf)
+
     Future.successful {
-      Ok(views.html.orders.orderadd(createOrderForm, uniqueBaskets))
+      Ok(views.html.orders.orderadd(createOrderForm, uniqueBaskets, shippingInformation))
     }
   }
 
@@ -62,11 +66,13 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
           val basketIdsFromOrders: Seq[String] = Await.result(orderRepository.getOrders, Duration.Inf).map(_.basketId)
           val uniqueBaskets: Seq[Basket] = baskets.filter(basket => !basketIdsFromOrders.contains(basket.id))
 
-          BadRequest(views.html.orders.orderadd(errorForm, uniqueBaskets))
+          val shippingInformation: Seq[ShippingInformation] = Await.result(shippingInformationRepository.getShippingInformation, Duration.Inf)
+
+          BadRequest(views.html.orders.orderadd(errorForm, uniqueBaskets, shippingInformation))
         }
       },
       order => {
-        orderRepository.createOrder(Order("", order.basketId, order.state))
+        orderRepository.createOrder(Order("", order.basketId, order.shippingInformationId, order.state))
           .map(_ => Redirect(routes.OrderController.createOrder()).flashing("success" -> "Order Created!"))
       }
     )
@@ -79,11 +85,13 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
     val basketIdsFromOrdersWithoutCurrent = basketIdsFromOrders.filter(id => !id.equals(order.basketId))
     val uniqueBaskets: Seq[Basket] = baskets.filter(basket => !basketIdsFromOrdersWithoutCurrent.contains(basket.id))
 
+    val shippingInformation: Seq[ShippingInformation] = Await.result(shippingInformationRepository.getShippingInformation, Duration.Inf)
+
     orderRepository.getOrderById(orderId)
       .map(order => {
-        val orderForm = updateOrderForm.fill(UpdateOrderForm(order.id, order.basketId, order.state))
+        val orderForm = updateOrderForm.fill(UpdateOrderForm(order.id, order.basketId, order.shippingInformationId, order.state))
 
-        Ok(views.html.orders.orderupdate(orderForm, uniqueBaskets))
+        Ok(views.html.orders.orderupdate(orderForm, uniqueBaskets, shippingInformation))
       })
   }
 
@@ -93,13 +101,17 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
         Future.successful {
           val baskets: Seq[Basket] = Await.result(basketRepository.getBaskets(0), Duration.Inf)
           val basketIdsFromOrders: Seq[String] = Await.result(orderRepository.getOrders, Duration.Inf).map(_.basketId)
-          val uniqueBaskets: Seq[Basket] = baskets.filter(basket => !basketIdsFromOrders.contains(basket.id))
+          val order: Order = Await.result(orderRepository.getOrderById(errorForm.data("orderId")), Duration.Inf)
+          val basketIdsFromOrdersWithoutCurrent = basketIdsFromOrders.filter(id => !id.equals(order.basketId))
+          val uniqueBaskets: Seq[Basket] = baskets.filter(basket => !basketIdsFromOrdersWithoutCurrent.contains(basket.id))
 
-          BadRequest(views.html.orders.orderupdate(errorForm, uniqueBaskets))
+          val shippingInformation: Seq[ShippingInformation] = Await.result(shippingInformationRepository.getShippingInformation, Duration.Inf)
+
+          BadRequest(views.html.orders.orderupdate(errorForm, uniqueBaskets, shippingInformation))
         }
       },
       order => {
-        orderRepository.updateOrder(Order(order.orderId, order.basketId, order.state))
+        orderRepository.updateOrder(Order(order.orderId, order.basketId, order.shippingInformationId, order.state))
           .map(_ => Redirect(routes.OrderController.updateOrder(order.orderId)).flashing("success" -> "Order Updated!"))
       }
     )
@@ -113,11 +125,13 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
 
 case class CreateOrderForm(
                             basketId: String,
+                            shippingInformationId: String,
                             state: String
                           )
 
 case class UpdateOrderForm(
                             orderId: String,
                             basketId: String,
+                            shippingInformationId: String,
                             state: String
                           )

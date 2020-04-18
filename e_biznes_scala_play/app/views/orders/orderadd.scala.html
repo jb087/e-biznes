@@ -1,6 +1,7 @@
 @import controllers.orders.CreateOrderForm
 @import models.basket.Basket
-@(order: Form[CreateOrderForm], baskets: Seq[Basket])(implicit request: MessagesRequestHeader, flash: Flash)
+@import models.orders.ShippingInformation
+@(order: Form[CreateOrderForm], baskets: Seq[Basket], information: Seq[ShippingInformation])(implicit request: MessagesRequestHeader, flash: Flash)
 
 @import helper._
 
@@ -13,6 +14,13 @@
     <select name="basketId" id="basketId">
     @for(basket <- baskets) {
         <option value="@basket.id">@basket.id</option>
+    }
+    </select>
+    <br>
+    <label>ShippingInformationId:</label>
+    <select name="shippingInformationId" id="shippingInformationId">
+    @for(info <- information) {
+        <option value="@info.id">@info.id</option>
     }
     </select>
     <br>

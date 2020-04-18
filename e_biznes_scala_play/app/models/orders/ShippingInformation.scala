@@ -5,7 +5,6 @@ import slick.jdbc.SQLiteProfile.api._
 
 case class ShippingInformation(
                                 id: String,
-                                orderId: String,
                                 firstName: String,
                                 lastName: String,
                                 email: String,
@@ -21,10 +20,6 @@ class ShippingInformationTable(tag: Tag) extends Table[ShippingInformation](tag,
 
   def id = column[String]("ID", O.PrimaryKey)
 
-  def orderId = column[String]("ORDER_ID")
-
-  def orderId_fk = foreignKey("ORDER_ID_FK", orderId, order)(_.id)
-
   def firstName = column[String]("FIRST_NAME")
 
   def lastName = column[String]("LAST_NAME")
@@ -39,7 +34,7 @@ class ShippingInformationTable(tag: Tag) extends Table[ShippingInformation](tag,
 
   def zipCode = column[String]("ZIP_CODE")
 
-  def * = (id, orderId, firstName, lastName, email, street, houseNumber, city, zipCode) <> ((ShippingInformation.apply _).tupled, ShippingInformation.unapply)
+  def * = (id, firstName, lastName, email, street, houseNumber, city, zipCode) <> ((ShippingInformation.apply _).tupled, ShippingInformation.unapply)
 }
 
 object ShippingInformation {

@@ -5,18 +5,16 @@ import models.orders.ShippingInformation
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import repositories.orders.{OrderRepository, ShippingInformationRepository}
+import repositories.orders.ShippingInformationRepository
 
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ShippingInformationController @Inject()(shippingInformationRepository: ShippingInformationRepository, orderRepository: OrderRepository,
-                                              cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
+class ShippingInformationController @Inject()(shippingInformationRepository: ShippingInformationRepository, cc: MessagesControllerComponents)
+                                             (implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
   val createShippingInformationForm: Form[CreateShippingInformationForm] = Form {
     mapping(
-      "orderId" -> nonEmptyText,
       "firstName" -> nonEmptyText,
       "lastName" -> nonEmptyText,
       "email" -> email,
@@ -30,7 +28,6 @@ class ShippingInformationController @Inject()(shippingInformationRepository: Shi
   val updateShippingInformationForm: Form[UpdateShippingInformationForm] = Form {
     mapping(
       "shippingInformationId" -> nonEmptyText,
-      "orderId" -> nonEmptyText,
       "firstName" -> nonEmptyText,
       "lastName" -> nonEmptyText,
       "email" -> email,
@@ -54,42 +51,37 @@ class ShippingInformationController @Inject()(shippingInformationRepository: Shi
       })
   }
 
-  def createShippingInformation: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    orderRepository.getOrders
-      .map(orders => Ok(views.html.shippingInformation.shippinginformationadd(createShippingInformationForm, orders)))
+  def createShippingInformation: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
+    Ok(views.html.shippingInformation.shippinginformationadd(createShippingInformationForm))
   }
 
   def createShippingInformationHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     createShippingInformationForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          val orders = Await.result(orderRepository.getOrders, Duration.Inf)
-
-          BadRequest(views.html.shippingInformation.shippinginformationadd(errorForm, orders))
+          BadRequest(views.html.shippingInformation.shippinginformationadd(errorForm))
         }
       },
       information => {
         shippingInformationRepository.createShippingInformation(
-          ShippingInformation("", information.orderId, information.firstName, information.lastName,
-          information.email, information.street, information.houseNumber, information.city, information.zipCode)
+          ShippingInformation("", information.firstName, information.lastName,
+            information.email, information.street, information.houseNumber, information.city, information.zipCode)
         )
           .map(_ => Redirect(routes.ShippingInformationController.createShippingInformation()).flashing("success" -> "Shipping Information Created!")
-        )
+          )
       }
     )
   }
 
   def updateShippingInformation(shippingInformationId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    val orders = Await.result(orderRepository.getOrders, Duration.Inf)
-
     shippingInformationRepository.getShippingInformationById(shippingInformationId)
       .map(information => {
         val shippingInformationForm = updateShippingInformationForm.fill(
-          UpdateShippingInformationForm(information.id, information.orderId, information.firstName, information.lastName,
+          UpdateShippingInformationForm(information.id, information.firstName, information.lastName,
             information.email, information.street, information.houseNumber, information.city, information.zipCode)
         )
 
-        Ok(views.html.shippingInformation.shippinginformationupdate(shippingInformationForm, orders))
+        Ok(views.html.shippingInformation.shippinginformationupdate(shippingInformationForm))
       })
   }
 
@@ -97,14 +89,12 @@ class ShippingInformationController @Inject()(shippingInformationRepository: Shi
     updateShippingInformationForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          val orders = Await.result(orderRepository.getOrders, Duration.Inf)
-
-          BadRequest(views.html.shippingInformation.shippinginformationupdate(errorForm, orders))
+          BadRequest(views.html.shippingInformation.shippinginformationupdate(errorForm))
         }
       },
       information => {
         shippingInformationRepository.updateShippingInformation(
-          ShippingInformation(information.shippingInformationId, information.orderId, information.firstName, information.lastName,
+          ShippingInformation(information.shippingInformationId, information.firstName, information.lastName,
             information.email, information.street, information.houseNumber, information.city, information.zipCode)
         )
           .map(_ => Redirect(routes.ShippingInformationController.updateShippingInformation(information.shippingInformationId))
@@ -121,7 +111,6 @@ class ShippingInformationController @Inject()(shippingInformationRepository: Shi
 }
 
 case class CreateShippingInformationForm(
-                                          orderId: String,
                                           firstName: String,
                                           lastName: String,
                                           email: String,
@@ -133,7 +122,6 @@ case class CreateShippingInformationForm(
 
 case class UpdateShippingInformationForm(
                                           shippingInformationId: String,
-                                          orderId: String,
                                           firstName: String,
                                           lastName: String,
                                           email: String,

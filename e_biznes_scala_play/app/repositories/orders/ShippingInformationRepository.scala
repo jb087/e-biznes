@@ -34,8 +34,8 @@ class ShippingInformationRepository @Inject()(dbConfigProvider: DatabaseConfigPr
   def createShippingInformation(newShippingInformation: ShippingInformation): Future[Int] = db.run {
     val id = UUID.randomUUID().toString
 
-    shippingInformation += ShippingInformation(id, newShippingInformation.orderId, newShippingInformation.firstName, newShippingInformation.lastName,
-      newShippingInformation.email, newShippingInformation.street, newShippingInformation.houseNumber, newShippingInformation.city, newShippingInformation.zipCode)
+    shippingInformation += ShippingInformation(id, newShippingInformation.firstName, newShippingInformation.lastName, newShippingInformation.email,
+      newShippingInformation.street, newShippingInformation.houseNumber, newShippingInformation.city, newShippingInformation.zipCode)
   }
 
   def deleteShippingInformation(shippingInformationId: String): Future[Int] = db.run {

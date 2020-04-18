@@ -1,6 +1,5 @@
 @import controllers.orders.CreateShippingInformationForm
-@import models.orders.Order
-@(information: Form[CreateShippingInformationForm], orders: Seq[Order])(implicit request: MessagesRequestHeader, flash: Flash)
+@(information: Form[CreateShippingInformationForm])(implicit request: MessagesRequestHeader, flash: Flash)
 
 @import helper._
 
@@ -8,14 +7,6 @@
 
 @form(controllers.orders.routes.ShippingInformationController.createShippingInformationHandler()) {
     @helper.CSRF.formField
-
-    <label>OrderId:</label>
-    <select name="orderId" id="orderId">
-    @for(order <- orders) {
-        <option value="@order.id">@order.id</option>
-    }
-    </select>
-    <br>
     @inputText(information("firstName"))
     @inputText(information("lastName"))
     @inputText(information("email"))
