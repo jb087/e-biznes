@@ -3,12 +3,13 @@
 
 <a href="@controllers.orders.routes.ShippingInformationController.getShippingInformation()">Shipping Information</a><br><br><br>
 
-<b>@information.firstName</b><br>
-<b>@information.lastName</b><br>
+<b>Id: @information.id</b><br><br>
 <p>
-    @information.email <br>
-    @information.street <br>
-    @information.houseNumber <br>
-    @information.city <br>
-    @information.zipCode <br>
+    First name: @information.firstName<br>
+    Last name: @information.lastName<br><br>
+
+    E-mail: @information.email <br>
+    Street: @information.street @information.houseNumber <br>
+    City: @information.city <br>
+    Zip Code: @information.zipCode <br>
 </p>

@@ -4,14 +4,13 @@
 <a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.orders.routes.ShippingInformationController.createShippingInformation()">Create</a><br><br><br>
 @for(information <- shippingInformation) {
-    <b>@information.firstName</b><br>
-    <b>@information.lastName</b><br>
+    <a href="@controllers.orders.routes.ShippingInformationController.getShippingInformationById(information.id)"><b>First name: @information.firstName</b></a><br>
+    <b>Last name: @information.lastName</b><br>
     <p>
-        @information.email <br>
-        @information.street <br>
-        @information.houseNumber <br>
-        @information.city <br>
-        @information.zipCode <br>
+        E-mail: @information.email <br>
+        Street: @information.street @information.houseNumber <br>
+        City: @information.city <br>
+        Zip Code: @information.zipCode <br>
     </p>
     <a href="@controllers.orders.routes.ShippingInformationController.updateShippingInformation(information.id)">Edit</a>
     <a href="@controllers.orders.routes.ShippingInformationController.deleteShippingInformation(information.id)">Delete</a>
