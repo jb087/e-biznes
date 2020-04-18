@@ -4,8 +4,7 @@
 <a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.basket.routes.OrderedProductsController.createOrderedProduct()">Create</a><br><br><br>
 @for(orderedProduct <- orderedProducts) {
-    <b>id: @orderedProduct.id</b>
-    <br>
+    <a href="@controllers.basket.routes.OrderedProductsController.getOrderedProductById(orderedProduct.id)"><b>id: @orderedProduct.id</b></a><br>
     <p>
         basketId: @orderedProduct.basketId <br>
         productId: @orderedProduct.productId <br>
