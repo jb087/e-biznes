@@ -67,8 +67,9 @@ class PaymentController @Inject()(orderRepository: OrderRepository, paymentRepos
 
   def updatePaymentHandler = TODO
 
-  def deletePayment(paymentId: String) = Action {
-    Ok("")
+  def deletePayment(paymentId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    paymentRepository.deletePayment(paymentId)
+      .map(_ => Redirect(routes.PaymentController.getPayments()))
   }
 }
 

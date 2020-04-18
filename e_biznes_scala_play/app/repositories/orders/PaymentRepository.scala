@@ -48,4 +48,8 @@ class PaymentRepository @Inject()(orderRepository: OrderRepository, dbConfigProv
       order <- order.filter(_.id === orderToUpdate.id).update(orderToUpdate)
     } yield ()
   }.transactionally
+
+  def deletePayment(paymentId: String): Future[Int] = db.run {
+    payment.filter(_.id === paymentId).delete
+  }
 }
