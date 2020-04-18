@@ -4,7 +4,10 @@
 <a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.products.routes.PhotoController.createPhoto()">Create</a><br><br><br>
 @for(photo <- photos) {
-    <img src=@{controllers.products.routes.PhotoController.getPhoto(photo.id)}>
+    <a href="@controllers.products.routes.PhotoController.getPhotoById(photo.id)">
+        <img src=@{controllers.products.routes.PhotoController.getPhoto(photo.id)}>
+    </a>
+
     <a href="@controllers.products.routes.PhotoController.updatePhoto(photo.id)">Edit</a>
     <a href="@controllers.products.routes.PhotoController.deletePhoto(photo.id)">Delete</a>
     <br>
