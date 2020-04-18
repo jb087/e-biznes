@@ -41,9 +41,10 @@ GET     /order/:orderId                                 controllers.orders.Order
 #DELETE  /order/:orderId                                 controllers.orders.OrderController.deleteOrder(orderId: String)
 
 GET     /payments                                       controllers.orders.PaymentController.getPayments
-POST    /payment                                        controllers.orders.PaymentController.createPayment
-PUT     /payment/:paymentId                             controllers.orders.PaymentController.updatePayment(paymentId: String)
-DELETE  /payment/:paymentId                             controllers.orders.PaymentController.deletePayment(paymentId: String)
+GET     /payment/:paymentId                             controllers.orders.PaymentController.getPaymentById(paymentId: String)
+#POST    /payment                                        controllers.orders.PaymentController.createPayment
+#PUT     /payment/:paymentId                             controllers.orders.PaymentController.updatePayment(paymentId: String)
+#DELETE  /payment/:paymentId                             controllers.orders.PaymentController.deletePayment(paymentId: String)
 
 GET     /shippingInformation                            controllers.orders.ShippingInformationController.getShippingInformation
 GET     /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.getShippingInformationById(shippingInformationId: String)
@@ -130,3 +131,9 @@ POST    /shippingInformationCreateHandler               controllers.orders.Shipp
 GET     /shippingInformationUp/:shippingInformationId   controllers.orders.ShippingInformationController.updateShippingInformation(shippingInformationId: String)
 POST    /shippingInformationUpHandler                   controllers.orders.ShippingInformationController.updateShippingInformationHandler
 GET     /shippingInformationDel/:shippingInformationId  controllers.orders.ShippingInformationController.deleteShippingInformation(shippingInformationId: String)
+
+GET     /paymentCreate                                  controllers.orders.PaymentController.createPayment
+POST    /paymentCreateHandler                           controllers.orders.PaymentController.createPaymentHandler
+GET     /paymentUpdate/:paymentId                       controllers.orders.PaymentController.updatePayment(paymentId: String)
+POST    /paymentUpdateHandler                           controllers.orders.PaymentController.updatePaymentHandler
+GET     /paymentDelete/:paymentId                       controllers.orders.PaymentController.deletePayment(paymentId: String)

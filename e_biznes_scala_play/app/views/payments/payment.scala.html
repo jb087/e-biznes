@@ -1,0 +1,9 @@
+@import models.orders.Payment
+@(payment: Payment)
+
+<b>Id: @payment.id</b><br>
+<p>
+    OrderId: @payment.orderId <br>
+    Is done: @payment.isDone <br>
+    Date: @payment.date <br>
+</p>
