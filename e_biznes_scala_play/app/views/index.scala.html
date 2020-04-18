@@ -1,20 +1,12 @@
-@*
- * This template takes a single argument, a String containing a
- * message to display.
- *@
-@(message: String)
+@()
 
-@*
- * Call the `main` template with two arguments. The first
- * argument is a `String` with the title of the page, the second
- * argument is an `Html` object containing the body of the page.
- *@
-@main("Welcome to Play") {
-
-    @*
-     * Get an `Html` object by calling the built-in Play welcome
-     * template and passing a `String` message.
-     *@
-    @welcome(message, style = "scala")
-
-}
+<a href="@controllers.categories.routes.CategoryController.getCategories()">Categories</a><br><br>
+<a href="@controllers.categories.routes.SubcategoryController.getSubcategories()">Subcategories</a><br><br>
+<a href="@controllers.products.routes.ProductController.getProducts()">Products</a><br><br>
+<a href="@controllers.products.routes.PhotoController.getPhotos()">Photos</a><br><br>
+<a href="@controllers.products.routes.OpinionController.getOpinions()">Opinions</a><br><br>
+<a href="@controllers.basket.routes.BasketController.getBaskets()">Baskets</a><br><br>
+<a href="@controllers.basket.routes.OrderedProductsController.getOrderedProducts()">Ordered Products</a><br><br>
+<a href="@controllers.orders.routes.OrderController.getOrders()">Orders</a><br><br>
+<a href="@controllers.orders.routes.ShippingInformationController.getShippingInformation()">Shipping Information</a><br><br>
+<a href="@controllers.orders.routes.PaymentController.getPayments()">Payments</a><br><br>
