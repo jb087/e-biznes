@@ -1,6 +1,7 @@
 @import models.orders.Payment
 @(payments: Seq[Payment])
 
+<a href="@controllers.orders.routes.PaymentController.createPayment()">Create</a><br><br><br>
 @for(payment <- payments) {
     <b>Id: @payment.id</b><br>
     <p>

@@ -1,6 +1,7 @@
 @import models.products.Photo
 @(photos: Seq[Photo])
 
+<a href="@controllers.products.routes.PhotoController.createPhoto()">Create</a><br><br><br>
 @for(photo <- photos) {
     <img src=@{controllers.products.routes.PhotoController.getPhoto(photo.id)}>
     <a href="@controllers.products.routes.PhotoController.updatePhoto(photo.id)">Edit</a>

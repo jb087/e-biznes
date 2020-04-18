@@ -1,6 +1,7 @@
 @import models.products.Opinion
 @(opinions: Seq[Opinion])
 
+<a href="@controllers.products.routes.OpinionController.createOpinion()">Create</a><br><br><br>
 @for(opinion <- opinions) {
     <p>
         @opinion.opinion

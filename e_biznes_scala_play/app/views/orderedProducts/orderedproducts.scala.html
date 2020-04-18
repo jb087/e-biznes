@@ -1,6 +1,7 @@
 @import models.basket.OrderedProduct
 @(orderedProducts: Seq[OrderedProduct])
 
+<a href="@controllers.basket.routes.OrderedProductsController.createOrderedProduct()">Create</a><br><br><br>
 @for(orderedProduct <- orderedProducts) {
     <b>id: @orderedProduct.id</b>
     <br>

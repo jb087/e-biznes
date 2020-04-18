@@ -1,6 +1,7 @@
 @import models.orders.ShippingInformation
 @(shippingInformation: Seq[ShippingInformation])
 
+<a href="@controllers.orders.routes.ShippingInformationController.createShippingInformation()">Create</a><br><br><br>
 @for(information <- shippingInformation) {
     <b>@information.firstName</b><br>
     <b>@information.lastName</b><br>
