@@ -1,8 +1,13 @@
 @import models.orders.Payment
-@(payments: Seq[Payment])
+@(payments: Seq[Payment])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
 
 <a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.orders.routes.PaymentController.createPayment()">Create</a><br><br><br>
+
+@flash.get("info").getOrElse("") <br>
+
 @for(payment <- payments) {
     <a href="@controllers.orders.routes.PaymentController.getPaymentById(payment.id)"><b>Id: @payment.id</b></a>
     <p>
@@ -11,9 +16,8 @@
         Date: @payment.date <br>
     </p>
     @if(payment.isDone == 0) {
-        <a href="@controllers.orders.routes.PaymentController.updatePayment(payment.id)">Edit</a>
         <a href="@controllers.orders.routes.PaymentController.finalizePayment(payment.id)">Pay</a>
+        <a href="@controllers.orders.routes.PaymentController.deletePayment(payment.id)">Delete</a>
     }
-    <a href="@controllers.orders.routes.PaymentController.deletePayment(payment.id)">Delete</a>
     <br><br>
 }

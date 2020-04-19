@@ -6,7 +6,7 @@
 
 <a href="@controllers.orders.routes.PaymentController.getPayments()">Back</a><br><br><br>
 
-@flash.get("info").getOrElse("")
+@flash.get("info").getOrElse("") <br>
 
 @form(controllers.orders.routes.PaymentController.createPaymentHandler()) {
     @helper.CSRF.formField

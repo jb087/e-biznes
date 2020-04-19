@@ -22,13 +22,6 @@ class PaymentController @Inject()(orderRepository: OrderRepository, paymentRepos
     )(CreatePaymentForm.apply)(CreatePaymentForm.unapply)
   }
 
-  val updatePaymentForm: Form[UpdatePaymentForm] = Form {
-    mapping(
-      "paymentId" -> nonEmptyText,
-      "orderId" -> nonEmptyText,
-    )(UpdatePaymentForm.apply)(UpdatePaymentForm.unapply)
-  }
-
   def getPayments: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     paymentRepository.getPayments
       .map(payments => Ok(views.html.payments.payments(payments)))
@@ -76,51 +69,23 @@ class PaymentController @Inject()(orderRepository: OrderRepository, paymentRepos
     )
   }
 
-  def updatePayment(paymentId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    val orders = Await.result(orderRepository.getOrders, Duration.Inf)
-    val ordersWithPayment = Await.result(paymentRepository.getPayments, Duration.Inf).map(_.orderId)
-    val payment = Await.result(paymentRepository.getPaymentById(paymentId), Duration.Inf)
-    val ordersWithPaymentWithoutCurrent = ordersWithPayment.filter(id => !id.equals(payment.orderId))
-    val ordersWithoutPayment = orders.filter(orders => !ordersWithPaymentWithoutCurrent.contains(orders.id))
-
-    Future.successful {
-      val paymentForm = updatePaymentForm.fill(UpdatePaymentForm(payment.id, payment.orderId))
-
-      Ok(views.html.payments.paymentupdate(paymentForm, ordersWithoutPayment))
-    }
-  }
-
-  def updatePaymentHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    updatePaymentForm.bindFromRequest().fold(
-      errorForm => {
-        Future.successful {
-          val orders = Await.result(orderRepository.getOrders, Duration.Inf)
-          val ordersWithPayment = Await.result(paymentRepository.getPayments, Duration.Inf).map(_.orderId)
-          val payment = Await.result(paymentRepository.getPaymentById(errorForm.data("paymentId")), Duration.Inf)
-          val ordersWithPaymentWithoutCurrent = ordersWithPayment.filter(id => !id.equals(payment.orderId))
-          val ordersWithoutPayment = orders.filter(orders => !ordersWithPaymentWithoutCurrent.contains(orders.id))
-
-          BadRequest(views.html.payments.paymentupdate(errorForm, ordersWithoutPayment))
-        }
-      },
-      payment => {
-        paymentRepository.updatePayment(Payment(payment.paymentId, payment.orderId, 0, LocalDate.now()))
-          .map(_ => Redirect(routes.PaymentController.updatePayment(payment.paymentId)).flashing("success" -> "Payment Updated!"))
-      }
-    )
-  }
-
   def deletePayment(paymentId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     paymentRepository.deletePayment(paymentId)
       .map(_ => Redirect(routes.PaymentController.getPayments()))
   }
 
-  def finalizePayment(paymentId: String): Action[AnyContent] = TODO
+  def finalizePayment(paymentId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    try {
+      Await.result(paymentRepository.finalizePayment(paymentId), Duration.Inf)
+      Future.successful {
+        Redirect(routes.PaymentController.getPayments())
+      }
+    } catch {
+      case e: IllegalStateException => Future.successful {
+        Redirect(routes.PaymentController.getPayments()).flashing("info" -> e.getMessage)
+      }
+    }
+  }
 }
 
 case class CreatePaymentForm(orderId: String)
-
-case class UpdatePaymentForm(
-                              paymentId: String,
-                              orderId: String
-                            )

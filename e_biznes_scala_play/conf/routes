@@ -129,7 +129,5 @@ GET     /shippingInformationDel/:shippingInformationId  controllers.orders.Shipp
 
 GET     /paymentCreate                                  controllers.orders.PaymentController.createPayment
 POST    /paymentCreateHandler                           controllers.orders.PaymentController.createPaymentHandler
-GET     /paymentUpdate/:paymentId                       controllers.orders.PaymentController.updatePayment(paymentId: String)
-POST    /paymentUpdateHandler                           controllers.orders.PaymentController.updatePaymentHandler
 GET     /paymentDelete/:paymentId                       controllers.orders.PaymentController.deletePayment(paymentId: String)
 GET     /pay/:paymentId                                 controllers.orders.PaymentController.finalizePayment(paymentId: String)

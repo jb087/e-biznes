@@ -1,5 +1,6 @@
 package repositories.orders
 
+import java.time.LocalDate
 import java.util.UUID
 
 import javax.inject.{Inject, Singleton}
@@ -108,18 +109,37 @@ class PaymentRepository @Inject()(
     payment.filter(_.id === paymentId).delete
   }
 
-  def updatePayment(paymentToUpdate: Payment): Future[Unit] = {
+  def finalizePayment(paymentId: String): Future[Unit] = {
+    val paymentToUpdate = Await.result(getPaymentById(paymentId), Duration.Inf)
     val order = Await.result(orderRepository.getOrderById(paymentToUpdate.orderId), Duration.Inf)
+    val basket = Await.result(basketRepository.getBasketById(order.basketId), Duration.Inf)
+
+    if (!order.state.equals("NOT_PAID")) {
+      throw new IllegalStateException("Could not finalize payment. Order with id: " + order.id + " is not in state NOT_PAID!")
+    }
+    if (basket.isBought != 1) {
+      throw new IllegalStateException("Could not finalize payment. Basket with id: " + basket.id + "is not bought!")
+    }
 
     db.run {
-      updatePayment(paymentToUpdate, Order(order.id, order.basketId, order.shippingInformationId, "NOT_PAID"))
+      finalizePayment(paymentToUpdate, order)
     }
   }
 
-  private val updatePayment = (paymentToUpdate: Payment, orderToUpdate: Order) => {
+  private val finalizePayment = (paymentToUpdate: Payment, orderToUpdate: Order) => {
+    def updateOrderState = {
+      val orderToModify = Order(orderToUpdate.id, orderToUpdate.basketId, orderToUpdate.shippingInformationId, "PAID")
+
+      order.filter(_.id === orderToUpdate.id).update(orderToModify)
+    }
+
+    def updatePayment = {
+      payment.filter(_.id === paymentToUpdate.id).update(Payment(paymentToUpdate.id, paymentToUpdate.orderId, 1, LocalDate.now()))
+    }
+
     for {
-      pay <- payment.filter(_.id === paymentToUpdate.id).update(paymentToUpdate)
-      order <- order.filter(_.id === orderToUpdate.id).update(orderToUpdate)
+      order <- updateOrderState
+      pay <- updatePayment
     } yield ()
     }.transactionally
 }
