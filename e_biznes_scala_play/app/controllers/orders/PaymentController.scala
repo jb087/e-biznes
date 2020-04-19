@@ -62,8 +62,16 @@ class PaymentController @Inject()(orderRepository: OrderRepository, paymentRepos
         }
       },
       payment => {
-        paymentRepository.createPayment(Payment("", payment.orderId, 0, LocalDate.now()))
-          .map(_ => Redirect(routes.PaymentController.createPayment()).flashing("success" -> "Payment Created!"))
+        try {
+          Await.result(paymentRepository.createPayment(Payment("", payment.orderId, 0, LocalDate.now())), Duration.Inf)
+          Future.successful {
+            Redirect(routes.PaymentController.createPayment()).flashing("info" -> "Payment Created!")
+          }
+        } catch {
+          case e: IllegalStateException => Future.successful {
+            Redirect(routes.PaymentController.createPayment()).flashing("info" -> e.getMessage)
+          }
+        }
       }
     )
   }
@@ -82,7 +90,7 @@ class PaymentController @Inject()(orderRepository: OrderRepository, paymentRepos
     }
   }
 
-  def updatePaymentHandler : Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def updatePaymentHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     updatePaymentForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
@@ -106,6 +114,8 @@ class PaymentController @Inject()(orderRepository: OrderRepository, paymentRepos
     paymentRepository.deletePayment(paymentId)
       .map(_ => Redirect(routes.PaymentController.getPayments()))
   }
+
+  def finalizePayment(paymentId: String): Action[AnyContent] = TODO
 }
 
 case class CreatePaymentForm(orderId: String)

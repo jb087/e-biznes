@@ -12,6 +12,7 @@
     </p>
     @if(payment.isDone == 0) {
         <a href="@controllers.orders.routes.PaymentController.updatePayment(payment.id)">Edit</a>
+        <a href="@controllers.orders.routes.PaymentController.finalizePayment(payment.id)">Pay</a>
     }
     <a href="@controllers.orders.routes.PaymentController.deletePayment(payment.id)">Delete</a>
     <br><br>

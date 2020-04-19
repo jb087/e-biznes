@@ -31,6 +31,10 @@ class OrderedProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvide
     orderedProduct.filter(_.id === orderedProductId).result.headOption
   }
 
+  def getOrderedProductByBasketId(basketId: String): Future[Seq[OrderedProduct]] = db.run {
+    orderedProduct.filter(_.basketId === basketId).result
+  }
+
   def createOrderedProduct(newOrderedProduct: OrderedProduct): Future[Int] = db.run {
     val id: String = UUID.randomUUID().toString
 

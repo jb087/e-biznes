@@ -132,3 +132,4 @@ POST    /paymentCreateHandler                           controllers.orders.Payme
 GET     /paymentUpdate/:paymentId                       controllers.orders.PaymentController.updatePayment(paymentId: String)
 POST    /paymentUpdateHandler                           controllers.orders.PaymentController.updatePaymentHandler
 GET     /paymentDelete/:paymentId                       controllers.orders.PaymentController.deletePayment(paymentId: String)
+GET     /pay/:paymentId                                 controllers.orders.PaymentController.finalizePayment(paymentId: String)
