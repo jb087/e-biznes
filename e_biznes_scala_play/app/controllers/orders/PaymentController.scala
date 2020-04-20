@@ -70,8 +70,14 @@ class PaymentController @Inject()(orderRepository: OrderRepository, paymentRepos
   }
 
   def deletePayment(paymentId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    paymentRepository.deletePayment(paymentId)
-      .map(_ => Redirect(routes.PaymentController.getPayments()))
+    try {
+      paymentRepository.deletePayment(paymentId)
+        .map(_ => Redirect(routes.PaymentController.getPayments()))
+    } catch {
+      case e: IllegalStateException => Future.successful {
+        Redirect(routes.PaymentController.getPayments()).flashing("info" -> e.getMessage)
+      }
+    }
   }
 
   def finalizePayment(paymentId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>

@@ -105,9 +105,58 @@ class PaymentRepository @Inject()(
     } yield ()
     }.transactionally
 
-  def deletePayment(paymentId: String): Future[Int] = db.run {
-    payment.filter(_.id === paymentId).delete
+  def deletePayment(paymentId: String): Future[Unit] = {
+    val payment = Await.result(getPaymentById(paymentId), Duration.Inf)
+    val order = Await.result(orderRepository.getOrderById(payment.orderId), Duration.Inf)
+    val basket = Await.result(basketRepository.getBasketById(order.basketId), Duration.Inf)
+    val orderedProducts = Await.result(orderedProductRepository.getOrderedProductByBasketId(basket.id), Duration.Inf)
+
+    if (!order.state.equals("NOT_PAID")) {
+      throw new IllegalStateException("Could not finalize payment. Order with id: " + order.id + " is not in state NOT_PAID!")
+    }
+    if (basket.isBought != 1) {
+      throw new IllegalStateException("Could not finalize payment. Basket with id: " + basket.id + "is not bought!")
+    }
+
+    db.run {
+      deletePayment(paymentId, order, basket, orderedProducts)
+    }
   }
+
+  private val deletePayment = (paymentId: String, orderToUpdate: Order, basketToDelete: Basket, orderedProducts: Seq[OrderedProduct]) => {
+    def deletePayment = {
+      payment.filter(_.id === paymentId).delete
+    }
+
+    def updateOrderForPaymentDeletion = {
+      val orderToModify = Order(orderToUpdate.id, orderToUpdate.basketId, orderToUpdate.shippingInformationId, "CANCELLED")
+
+      order.filter(_.id === orderToModify.id).update(orderToModify)
+    }
+
+    def updateProductsForPaymentDeletion = {
+      val productsToUpdate: Seq[Product] = orderedProducts
+        .map(_.productId)
+        .map(id => Await.result(productRepository.getProductById(id), Duration.Inf))
+
+      val productsToModify = ListBuffer[Product]()
+      for (orderedProduct <- orderedProducts) {
+        val productToUpdate = productsToUpdate.filter(_.id == orderedProduct.productId).head
+
+        productsToModify += Product(productToUpdate.id, productToUpdate.subcategoryId, productToUpdate.title, productToUpdate.price,
+          productToUpdate.description, productToUpdate.date, productToUpdate.quantity + orderedProduct.quantity)
+      }
+
+      productsToModify.toList
+        .map(productToModify => product.filter(_.id === productToModify.id).update(productToModify))
+    }
+
+    for {
+      pay <- deletePayment
+      order <- updateOrderForPaymentDeletion
+      product <- DBIO.sequence(updateProductsForPaymentDeletion)
+    } yield ()
+    }.transactionally
 
   def finalizePayment(paymentId: String): Future[Unit] = {
     val paymentToUpdate = Await.result(getPaymentById(paymentId), Duration.Inf)
