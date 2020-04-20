@@ -1,8 +1,14 @@
 @import models.basket.OrderedProduct
-@(orderedProducts: Seq[OrderedProduct])
+@import models.basket.Basket
+@(orderedProducts: Seq[OrderedProduct], baskets: Seq[Basket])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
 
 <a href="@controllers.routes.HomeController.index()">Back</a><br>
 <a href="@controllers.basket.routes.OrderedProductsController.createOrderedProduct()">Create</a><br><br><br>
+
+@flash.get("info").getOrElse("") <br>
+
 @for(orderedProduct <- orderedProducts) {
     <a href="@controllers.basket.routes.OrderedProductsController.getOrderedProductById(orderedProduct.id)"><b>id: @orderedProduct.id</b></a><br>
     <p>
@@ -10,7 +16,9 @@
         productId: @orderedProduct.productId <br>
         quantity: @orderedProduct.quantity <br>
     </p>
-    <a href="@controllers.basket.routes.OrderedProductsController.updateOrderedProduct(orderedProduct.id)">Edit</a>
-    <a href="@controllers.basket.routes.OrderedProductsController.deleteOrderedProduct(orderedProduct.id)">Delete</a>
+    @if(baskets.filter(basket => basket.id.equals(orderedProduct.basketId)).head.isBought == 0) {
+        <a href="@controllers.basket.routes.OrderedProductsController.updateOrderedProduct(orderedProduct.id)">Edit</a>
+        <a href="@controllers.basket.routes.OrderedProductsController.deleteOrderedProduct(orderedProduct.id)">Delete</a>
+    }
     <br><br>
 }

@@ -3,14 +3,15 @@ package repositories.basket
 import java.util.UUID
 
 import javax.inject.{Inject, Singleton}
-import models.basket.{OrderedProduct, OrderedProductTable}
+import models.basket.{BasketTable, OrderedProduct, OrderedProductTable}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
-class OrderedProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
+class OrderedProductRepository @Inject()(basketRepository: BasketRepository, dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 
@@ -42,10 +43,21 @@ class OrderedProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvide
   }
 
   def deleteOrderedProduct(orderedProductId: String): Future[Int] = db.run {
+    val product = Await.result(getOrderedProductById(orderedProductId), Duration.Inf)
+    val basket = Await.result(basketRepository.getBasketById(product.basketId), Duration.Inf)
+    if (basket.isBought != 0) {
+      throw new IllegalStateException("Cannot delete ordered product associated with bought basket!")
+    }
+
     orderedProduct.filter(_.id === orderedProductId).delete
   }
 
   def updateOrderedProduct(orderedProductToUpdate: OrderedProduct): Future[Int] = db.run {
+    val basket = Await.result(basketRepository.getBasketById(orderedProductToUpdate.basketId), Duration.Inf)
+    if (basket.isBought != 0) {
+      throw new IllegalStateException("Cannot update ordered product associated with bought basket!")
+    }
+
     orderedProduct.filter(_.id === orderedProductToUpdate.id).update(orderedProductToUpdate)
   }
 }

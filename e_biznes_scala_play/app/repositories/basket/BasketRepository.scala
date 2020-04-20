@@ -42,10 +42,10 @@ class BasketRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impli
   }
 
   def deleteBasket(basketId: String): Future[Int] = db.run {
-    basket.filter(_.id === basketId).delete
+    basket.filter(_.id === basketId).filter(_.isBought === 0).delete
   }
 
   def updateBasket(basketToUpdate: Basket): Future[Int] = db.run {
-    basket.filter(_.id === basketToUpdate.id).update(basketToUpdate)
+    basket.filter(_.id === basketToUpdate.id).filter(_.isBought === 0).update(basketToUpdate)
   }
 }

@@ -7,7 +7,7 @@
 
 <a href="@controllers.basket.routes.OrderedProductsController.getOrderedProducts()">Back</a><br><br><br>
 
-@flash.get("success").getOrElse("")
+@flash.get("info").getOrElse("")
 
 @form(controllers.basket.routes.OrderedProductsController.updateOrderedProductHandler()) {
     @helper.CSRF.formField
@@ -38,6 +38,6 @@
     @inputText(orderedProduct("quantity"))
     <br>
     <div class="buttons">
-        <input type="submit" value="Add Ordered Product"/>
+        <input type="submit" value="Update Ordered Product"/>
     </div>
 }

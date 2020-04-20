@@ -9,7 +9,8 @@ import play.api.mvc._
 import repositories.basket.{BasketRepository, OrderedProductRepository}
 import repositories.products.ProductRepository
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 @Singleton
@@ -35,8 +36,10 @@ class OrderedProductsController @Inject()(orderedProductRepository: OrderedProdu
   }
 
   def getOrderedProducts: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    val baskets = Await.result(basketRepository.getBaskets, Duration.Inf)
+
     orderedProductRepository.getOrderedProducts
-      .map(orderedProducts => Ok(views.html.orderedProducts.orderedproducts(orderedProducts)))
+      .map(orderedProducts => Ok(views.html.orderedProducts.orderedproducts(orderedProducts, baskets)))
   }
 
   def getOrderedProductById(orderedProductId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
@@ -127,17 +130,29 @@ class OrderedProductsController @Inject()(orderedProductRepository: OrderedProdu
         }
       },
       orderedProduct => {
-        orderedProductRepository.updateOrderedProduct(
-          OrderedProduct(orderedProduct.orderedProductId, orderedProduct.basketId, orderedProduct.productId, orderedProduct.quantity)
-        )
-          .map(_ => Redirect(routes.OrderedProductsController.updateOrderedProduct(orderedProduct.orderedProductId)).flashing("success" -> "Ordered Product Created!"))
+        try {
+          orderedProductRepository.updateOrderedProduct(
+            OrderedProduct(orderedProduct.orderedProductId, orderedProduct.basketId, orderedProduct.productId, orderedProduct.quantity)
+          )
+            .map(_ => Redirect(routes.OrderedProductsController.updateOrderedProduct(orderedProduct.orderedProductId)).flashing("info" -> "Ordered Product Updated!"))
+        } catch {
+          case e: IllegalStateException => Future.successful {
+            Redirect(routes.OrderedProductsController.updateOrderedProduct(orderedProduct.orderedProductId)).flashing("info" -> e.getMessage)
+          }
+        }
       }
     )
   }
 
   def deleteOrderedProduct(orderedProductId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    orderedProductRepository.deleteOrderedProduct(orderedProductId)
-      .map(_ => Redirect(routes.OrderedProductsController.getOrderedProducts()))
+    try {
+      orderedProductRepository.deleteOrderedProduct(orderedProductId)
+        .map(_ => Redirect(routes.OrderedProductsController.getOrderedProducts()))
+    } catch {
+      case e: IllegalStateException => Future.successful {
+        Redirect(routes.OrderedProductsController.getOrderedProducts()).flashing("info" -> e.getMessage)
+      }
+    }
   }
 }
 
