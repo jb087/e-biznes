@@ -86,7 +86,7 @@ class ProductController @Inject()(productRepository: ProductRepository, subcateg
       })
   }
 
-  def updateProductHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def updateProductHandler(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     updateProductForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {

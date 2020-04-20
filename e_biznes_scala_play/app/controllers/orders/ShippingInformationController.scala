@@ -85,7 +85,7 @@ class ShippingInformationController @Inject()(shippingInformationRepository: Shi
       })
   }
 
-  def updateShippingInformationHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def updateShippingInformationHandler(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     updateShippingInformationForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {

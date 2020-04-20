@@ -93,7 +93,7 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
     }
   }
 
-  def updateOrderHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def updateOrderHandler(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     updateOrderForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
