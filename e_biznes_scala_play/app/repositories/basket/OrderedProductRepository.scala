@@ -13,12 +13,12 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 @Singleton
 class OrderedProductRepository @Inject()(basketRepository: BasketRepository, dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
 
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  val orderedProduct = TableQuery[OrderedProductTable]
+  private val orderedProduct = TableQuery[OrderedProductTable]
 
   def getOrderedProducts: Future[Seq[OrderedProduct]] = db.run {
     orderedProduct.result

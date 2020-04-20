@@ -66,7 +66,7 @@ class CategoryController @Inject()(categoryRepository: CategoryRepository, cc: M
     })
   }
 
-  def updateCategoryHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def updateCategoryHandler(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     updateCategoryForm.bindFromRequest().fold(
       errorForm => {
         Future.successful(

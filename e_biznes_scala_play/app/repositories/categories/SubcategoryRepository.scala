@@ -12,12 +12,12 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class SubcategoryRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
 
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  val subcategory = TableQuery[SubcategoryTable]
+  private val subcategory = TableQuery[SubcategoryTable]
 
   def getSubcategories: Future[Seq[Subcategory]] = db.run {
     subcategory.result

@@ -12,12 +12,12 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class OpinionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
 
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  val opinion = TableQuery[OpinionTable]
+  private val opinion = TableQuery[OpinionTable]
 
   def getOpinions: Future[Seq[Opinion]] = db.run {
     opinion.result

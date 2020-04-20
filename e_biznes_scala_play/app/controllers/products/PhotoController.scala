@@ -1,16 +1,15 @@
 package controllers.products
 
-import java.nio.file.Files
-
 import javax.inject.{Inject, Singleton}
-import models.products.{Photo, Product}
+import models.products.Photo
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.libs.Files
 import play.api.mvc._
 import repositories.products.{PhotoRepository, ProductRepository}
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class PhotoController @Inject()(photoRepository: PhotoRepository, productRepository: ProductRepository, cc: MessagesControllerComponents)
@@ -49,12 +48,12 @@ class PhotoController @Inject()(photoRepository: PhotoRepository, productReposit
         .map(products => Ok(views.html.photos.photoadd(products)))
   }
 
-  def createPhotoHandler = Action(parse.multipartFormData) { request  =>
+  def createPhotoHandler: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request  =>
     request.body
       .file("picture")
       .map { picture =>
         val productId: String = request.body.dataParts("productId").head
-        val bytes = Files.readAllBytes(picture.ref.path)
+        val bytes = java.nio.file.Files.readAllBytes(picture.ref.path)
         photoRepository.createPhoto(Photo("", productId, bytes))
         Redirect(routes.PhotoController.createPhoto()).flashing("success" -> "Photo created!")
       }.getOrElse {
@@ -63,11 +62,7 @@ class PhotoController @Inject()(photoRepository: PhotoRepository, productReposit
   }
 
   def updatePhoto(photoId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    var products: Seq[Product] = Seq[Product]()
-    productRepository.getProducts.onComplete {
-      case Success(productsFromFuture) => products = productsFromFuture
-      case Failure(_) => print("Failed products download")
-    }
+    val products = Await.result(productRepository.getProducts, Duration.Inf)
 
     photoRepository.getPhotoById(photoId)
       .map(photo => {
@@ -77,15 +72,11 @@ class PhotoController @Inject()(photoRepository: PhotoRepository, productReposit
       })
   }
 
-  def updatePhotoHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def updatePhotoHandler(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     updatePhotoForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          var products: Seq[Product] = Seq[Product]()
-          productRepository.getProducts.onComplete {
-            case Success(productsFromFuture) => products = productsFromFuture
-            case Failure(_) => print("Failed products download")
-          }
+          val products = Await.result(productRepository.getProducts, Duration.Inf)
 
           BadRequest(views.html.photos.photoupdate(errorForm, products))
         }

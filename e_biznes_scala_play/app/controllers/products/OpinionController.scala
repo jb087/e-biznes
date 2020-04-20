@@ -1,14 +1,14 @@
 package controllers.products
 
 import javax.inject.{Inject, Singleton}
-import models.products.{Opinion, Product}
+import models.products.Opinion
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
 import repositories.products.{OpinionRepository, ProductRepository}
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class OpinionController @Inject()(opinionRepository: OpinionRepository, productRepository: ProductRepository, cc: MessagesControllerComponents)
@@ -53,11 +53,7 @@ class OpinionController @Inject()(opinionRepository: OpinionRepository, productR
     createOpinionForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          var products: Seq[Product] = Seq[Product]()
-          productRepository.getProducts.onComplete {
-            case Success(productsFromFuture) => products = productsFromFuture
-            case Failure(_) => print("Failed products download")
-          }
+          val products = Await.result(productRepository.getProducts, Duration.Inf)
 
           BadRequest(views.html.opinions.opinionadd(errorForm, products))
         }
@@ -70,11 +66,7 @@ class OpinionController @Inject()(opinionRepository: OpinionRepository, productR
   }
 
   def updateOpinion(opinionId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    var products: Seq[Product] = Seq[Product]()
-    productRepository.getProducts.onComplete {
-      case Success(productsFromFuture) => products = productsFromFuture
-      case Failure(_) => print("Failed products download")
-    }
+    val products = Await.result(productRepository.getProducts, Duration.Inf)
 
     opinionRepository.getOpinionById(opinionId)
       .map(opinion => {
@@ -84,15 +76,11 @@ class OpinionController @Inject()(opinionRepository: OpinionRepository, productR
       })
   }
 
-  def updateOpinionHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def updateOpinionHandler(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     updateOpinionForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          var products: Seq[Product] = Seq[Product]()
-          productRepository.getProducts.onComplete {
-            case Success(productsFromFuture) => products = productsFromFuture
-            case Failure(_) => print("Failed products download")
-          }
+          val products = Await.result(productRepository.getProducts, Duration.Inf)
 
           BadRequest(views.html.opinions.opinionupdate(errorForm, products))
         }

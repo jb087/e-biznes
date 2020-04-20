@@ -26,7 +26,7 @@ class PaymentRepository @Inject()(
                                  )
                                  (implicit ec: ExecutionContext) {
 
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._

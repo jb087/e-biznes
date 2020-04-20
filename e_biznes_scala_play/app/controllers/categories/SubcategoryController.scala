@@ -1,14 +1,14 @@
 package controllers.categories
 
 import javax.inject.{Inject, Singleton}
-import models.categories.{Category, Subcategory}
+import models.categories.Subcategory
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
 import repositories.categories.{CategoryRepository, SubcategoryRepository}
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class SubcategoryController @Inject()(categoryRepository: CategoryRepository, subcategoryRepository: SubcategoryRepository,
@@ -51,11 +51,7 @@ class SubcategoryController @Inject()(categoryRepository: CategoryRepository, su
     createSubcategoryForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          var categories: Seq[Category] = Seq[Category]()
-          categoryRepository.getCategories.onComplete {
-            case Success(categoriesFromFuture) => categories = categoriesFromFuture
-            case Failure(_) => print("Failed categories download")
-          }
+          val categories = Await.result(categoryRepository.getCategories, Duration.Inf)
 
           BadRequest(views.html.subcategories.subcategoryadd(errorForm, categories))
         }
@@ -69,11 +65,7 @@ class SubcategoryController @Inject()(categoryRepository: CategoryRepository, su
   }
 
   def updateSubcategory(subcategoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    var categories = Seq[Category]()
-    categoryRepository.getCategories.onComplete {
-      case Success(categoriesFromFuture) => categories = categoriesFromFuture
-      case Failure(_) => print("Failed categories download")
-    }
+    val categories = Await.result(categoryRepository.getCategories, Duration.Inf)
 
     val subcategory = subcategoryRepository.getSubcategoryById(subcategoryId)
     subcategory.map(subcategoryFromFuture => {
@@ -86,21 +78,17 @@ class SubcategoryController @Inject()(categoryRepository: CategoryRepository, su
   }
 
 
-  def updateSubcategoryHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def updateSubcategoryHandler(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     updateSubcategoryForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          var categories: Seq[Category] = Seq[Category]()
-          categoryRepository.getCategories.onComplete {
-            case Success(categoriesFromFuture) => categories = categoriesFromFuture
-            case Failure(_) => print("Failed categories download")
-          }
+          val categories = Await.result(categoryRepository.getCategories, Duration.Inf)
 
           BadRequest(views.html.subcategories.subcategoryupdate(errorForm, categories))
         }
       },
       subcategory => {
-        subcategoryRepository.updateSubcategory(Subcategory(subcategory.subcategoryId, subcategory.categoryId, subcategory.name)).map( _ =>
+        subcategoryRepository.updateSubcategory(Subcategory(subcategory.subcategoryId, subcategory.categoryId, subcategory.name)).map(_ =>
           Redirect(routes.SubcategoryController.updateSubcategory(subcategory.subcategoryId)).flashing("success" -> "Subcategory updated!")
         )
       }

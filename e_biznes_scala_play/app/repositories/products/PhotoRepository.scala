@@ -13,12 +13,12 @@ import scala.util.{Failure, Success}
 @Singleton
 class PhotoRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
 
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  val photo = TableQuery[PhotoTable]
+  private val photo = TableQuery[PhotoTable]
 
   def getPhotos: Future[Seq[Photo]] = db.run {
     photo.result

@@ -51,7 +51,7 @@ class BasketController @Inject()(basketRepository: BasketRepository, cc: Message
       })
   }
 
-  def updateBasketHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def updateBasketHandler(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     updateBasketForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {

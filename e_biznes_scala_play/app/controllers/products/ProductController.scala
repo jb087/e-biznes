@@ -3,7 +3,6 @@ package controllers.products
 import java.time.LocalDate
 
 import javax.inject.{Inject, Singleton}
-import models.categories.Subcategory
 import models.products.Product
 import play.api.data.Form
 import play.api.data.Forms._
@@ -12,8 +11,8 @@ import play.api.mvc._
 import repositories.categories.SubcategoryRepository
 import repositories.products.ProductRepository
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class ProductController @Inject()(productRepository: ProductRepository, subcategoryRepository: SubcategoryRepository,
@@ -62,28 +61,20 @@ class ProductController @Inject()(productRepository: ProductRepository, subcateg
     createProductForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          var subcategories: Seq[Subcategory] = Seq[Subcategory]()
-          subcategoryRepository.getSubcategories.onComplete {
-            case Success(subcategoriesFromFuture) => subcategories = subcategoriesFromFuture
-            case Failure(_) => print("Failed subcategories download")
-          }
+          val subcategories = Await.result(subcategoryRepository.getSubcategories, Duration.Inf)
 
           BadRequest(views.html.products.productadd(errorForm, subcategories))
         }
       },
       product => {
         productRepository.createProduct(Product("", product.subcategoryId, product.title, product.price, product.description, LocalDate.now(), product.quantity))
-          .map( _ => Redirect(routes.ProductController.createProduct()).flashing("success" -> "Product created!"))
+          .map(_ => Redirect(routes.ProductController.createProduct()).flashing("success" -> "Product created!"))
       }
     )
   }
 
   def updateProduct(productId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    var subcategories: Seq[Subcategory] = Seq[Subcategory]()
-    subcategoryRepository.getSubcategories.onComplete {
-      case Success(subcategoriesFromFuture) => subcategories = subcategoriesFromFuture
-      case Failure(_) => print("Failed subcategories download")
-    }
+    val subcategories = Await.result(subcategoryRepository.getSubcategories, Duration.Inf)
 
     productRepository.getProductById(productId)
       .map(product => {
@@ -99,17 +90,15 @@ class ProductController @Inject()(productRepository: ProductRepository, subcateg
     updateProductForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          var subcategories: Seq[Subcategory] = Seq[Subcategory]()
-          subcategoryRepository.getSubcategories.onComplete {
-            case Success(subcategoriesFromFuture) => subcategories = subcategoriesFromFuture
-            case Failure(_) => print("Failed subcategories download")
-          }
+          val subcategories = Await.result(subcategoryRepository.getSubcategories, Duration.Inf)
 
           BadRequest(views.html.products.productupdate(errorForm, subcategories))
         }
       },
       product => {
-        productRepository.updateProduct(Product(product.productId, product.subcategoryId, product.title, product.price, product.description, LocalDate.now(), product.quantity))
+        productRepository.updateProduct(
+          Product(product.productId, product.subcategoryId, product.title, product.price, product.description, LocalDate.now(), product.quantity)
+        )
           .map(_ => Redirect(routes.ProductController.updateProduct(product.productId)).flashing("success" -> "Product updated!"))
       }
     )

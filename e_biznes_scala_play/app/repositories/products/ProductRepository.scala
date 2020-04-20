@@ -13,12 +13,12 @@ import scala.util.{Failure, Success}
 @Singleton
 class ProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
 
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  val product = TableQuery[ProductTable]
+  private val product = TableQuery[ProductTable]
 
   def getProducts: Future[Seq[Product]] = db.run {
     product.result

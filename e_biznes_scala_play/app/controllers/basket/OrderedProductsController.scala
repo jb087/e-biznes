@@ -1,8 +1,7 @@
 package controllers.basket
 
 import javax.inject.{Inject, Singleton}
-import models.basket.{Basket, OrderedProduct}
-import models.products.Product
+import models.basket.OrderedProduct
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
@@ -11,7 +10,6 @@ import repositories.products.ProductRepository
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.util.{Failure, Success}
 
 @Singleton
 class OrderedProductsController @Inject()(orderedProductRepository: OrderedProductRepository, basketRepository: BasketRepository,
@@ -51,11 +49,7 @@ class OrderedProductsController @Inject()(orderedProductRepository: OrderedProdu
   }
 
   def createOrderedProduct: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    var products: Seq[Product] = Seq[Product]()
-    productRepository.getProducts.onComplete {
-      case Success(productsFromFuture) => products = productsFromFuture
-      case Failure(_) => print("Failed products download")
-    }
+    val products = Await.result(productRepository.getProducts, Duration.Inf)
 
     basketRepository.getBaskets(0)
       .map(baskets => Ok(views.html.orderedProducts.orderedproductadd(createOrderedProductForm, baskets, products)))
@@ -65,17 +59,8 @@ class OrderedProductsController @Inject()(orderedProductRepository: OrderedProdu
     createOrderedProductForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          var products: Seq[Product] = Seq[Product]()
-          productRepository.getProducts.onComplete {
-            case Success(productsFromFuture) => products = productsFromFuture
-            case Failure(_) => print("Failed products download")
-          }
-
-          var baskets: Seq[Basket] = Seq[Basket]()
-          basketRepository.getBaskets(0).onComplete {
-            case Success(basketsFromFuture) => baskets = basketsFromFuture
-            case Failure(_) => print("Failed baskets download")
-          }
+          val products = Await.result(productRepository.getProducts, Duration.Inf)
+          val baskets = Await.result(basketRepository.getBaskets(0), Duration.Inf)
 
           BadRequest(views.html.orderedProducts.orderedproductadd(errorForm, baskets, products))
         }
@@ -88,17 +73,8 @@ class OrderedProductsController @Inject()(orderedProductRepository: OrderedProdu
   }
 
   def updateOrderedProduct(orderedProductId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    var products: Seq[Product] = Seq[Product]()
-    productRepository.getProducts.onComplete {
-      case Success(productsFromFuture) => products = productsFromFuture
-      case Failure(_) => print("Failed products download")
-    }
-
-    var baskets: Seq[Basket] = Seq[Basket]()
-    basketRepository.getBaskets(0).onComplete {
-      case Success(basketsFromFuture) => baskets = basketsFromFuture
-      case Failure(_) => print("Failed baskets download")
-    }
+    val products = Await.result(productRepository.getProducts, Duration.Inf)
+    val baskets = Await.result(basketRepository.getBaskets(0), Duration.Inf)
 
     orderedProductRepository.getOrderedProductById(orderedProductId)
       .map(orderedProduct => {
@@ -110,21 +86,12 @@ class OrderedProductsController @Inject()(orderedProductRepository: OrderedProdu
       })
   }
 
-  def updateOrderedProductHandler: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def updateOrderedProductHandler(): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     updateOrderedProductForm.bindFromRequest().fold(
       errorForm => {
         Future.successful {
-          var products: Seq[Product] = Seq[Product]()
-          productRepository.getProducts.onComplete {
-            case Success(productsFromFuture) => products = productsFromFuture
-            case Failure(_) => print("Failed products download")
-          }
-
-          var baskets: Seq[Basket] = Seq[Basket]()
-          basketRepository.getBaskets(0).onComplete {
-            case Success(basketsFromFuture) => baskets = basketsFromFuture
-            case Failure(_) => print("Failed baskets download")
-          }
+          val products = Await.result(productRepository.getProducts, Duration.Inf)
+          val baskets = Await.result(basketRepository.getBaskets(0), Duration.Inf)
 
           BadRequest(views.html.orderedProducts.orderedproductupdate(errorForm, baskets, products))
         }
