@@ -1,11 +1,13 @@
 package api.categories
 
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.Json
+import models.categories.Category
+import play.api.libs.json.{JsSuccess, JsValue, Json}
 import play.api.mvc._
 import repositories.categories.CategoryRepository
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class CategoryResource @Inject()(categoryRepository: CategoryRepository, cc: MessagesControllerComponents)
@@ -17,26 +19,42 @@ class CategoryResource @Inject()(categoryRepository: CategoryRepository, cc: Mes
   }
 
   def getCategoryById(categoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    Future.successful {
-      Ok("")
+    categoryRepository.getCategoryByIdOption(categoryId)
+      .map({
+        case Some(category) => Ok(Json.toJson(category))
+        case None => NotFound
+      })
+  }
+
+  def createCategory: Action[JsValue] = Action.async(parse.json) {
+    _.body.validate[Category] match {
+      case JsSuccess(category, _) => categoryRepository.createCategory(category.name).map(_ => Ok("Category Created!"))
+      case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
     }
   }
 
-  def createCategory: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    Future.successful {
-      Ok("")
-    }
-  }
-
-  def updateCategory(categoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    Future.successful {
-      Ok("")
+  def updateCategory(categoryId: String): Action[JsValue] = Action.async(parse.json) {
+    _.body.validate[Category] match {
+      case JsSuccess(category, _) =>
+        categoryRepository.getCategoryByIdOption(categoryId)
+          .map({
+            case Some(value) =>
+              val categoryToUpdate = Category(categoryId, category.name)
+              Await.result(categoryRepository.updateCategory(categoryToUpdate)
+                .map(_ => Ok("Category Updated!")), Duration.Inf)
+            case None => InternalServerError("Category with id: " + categoryId + " does not exist!")
+          })
+      case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
     }
   }
 
   def deleteCategory(categoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    Future.successful {
-      Ok("")
-    }
+    categoryRepository.getCategoryByIdOption(categoryId)
+      .map({
+        case Some(category) =>
+          Await.result(categoryRepository.deleteCategory(categoryId)
+            .map(_ => Ok("Removed category with id: " + categoryId)), Duration.Inf)
+        case None => InternalServerError("Category with id: " + categoryId + " does not exist!")
+      })
   }
 }
