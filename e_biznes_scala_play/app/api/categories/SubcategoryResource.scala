@@ -4,14 +4,14 @@ import javax.inject.{Inject, Singleton}
 import models.categories.Subcategory
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import play.api.mvc._
-import repositories.categories.{CategoryRepository, SubcategoryRepository}
+import repositories.categories.SubcategoryRepository
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
-class SubcategoryResource @Inject()(categoryRepository: CategoryRepository, subcategoryRepository: SubcategoryRepository,
-                                    cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
+class SubcategoryResource @Inject()(subcategoryRepository: SubcategoryRepository, cc: MessagesControllerComponents)
+                                   (implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
   def getSubcategories: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     subcategoryRepository.getSubcategories
@@ -44,7 +44,7 @@ class SubcategoryResource @Inject()(categoryRepository: CategoryRepository, subc
                 Await.result(subcategoryRepository.updateSubcategory(subcategoryToUpdate), Duration.Inf)
                 Ok("Subcategory Updated!")
               } catch {
-                case e: IllegalArgumentException =>InternalServerError(e.getMessage)
+                case e: IllegalArgumentException => InternalServerError(e.getMessage)
               }
             case None => InternalServerError("Subcategory with id: " + subcategoryId + " does not exist!")
           })
@@ -57,7 +57,7 @@ class SubcategoryResource @Inject()(categoryRepository: CategoryRepository, subc
       .map({
         case Some(subcategory) =>
           Await.result(subcategoryRepository.deleteSubcategory(subcategoryId)
-          .map(_ => Ok("Removed subcategory with id: " + subcategoryId)), Duration.Inf)
+            .map(_ => Ok("Removed subcategory with id: " + subcategoryId)), Duration.Inf)
         case None => InternalServerError("Subcategory with id: " + subcategoryId + " does not exist!")
       })
   }
