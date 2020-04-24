@@ -1,42 +1,64 @@
 package api.categories
 
 import javax.inject.{Inject, Singleton}
+import models.categories.Subcategory
+import play.api.libs.json.{JsSuccess, JsValue, Json}
 import play.api.mvc._
 import repositories.categories.{CategoryRepository, SubcategoryRepository}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class SubcategoryResource @Inject()(categoryRepository: CategoryRepository, subcategoryRepository: SubcategoryRepository,
                                     cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
   def getSubcategories: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    Future.successful {
-      Ok("")
-    }
+    subcategoryRepository.getSubcategories
+      .map(subcategories => Ok(Json.toJson(subcategories)))
   }
 
   def getSubcategoryById(subcategoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    Future.successful {
-      Ok("")
+    subcategoryRepository.getSubcategoryByIdOption(subcategoryId)
+      .map({
+        case Some(subcategory) => Ok(Json.toJson(subcategory))
+        case None => NotFound
+      })
+  }
+
+  def createSubcategory: Action[JsValue] = Action.async(parse.json) {
+    _.body.validate[Subcategory] match {
+      case JsSuccess(subcategory, _) => subcategoryRepository.createSubcategory(subcategory.parentId, subcategory.name).map(_ => Ok("Subcategory Created!"))
+      case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
     }
   }
 
-  def createSubcategory: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    Future.successful {
-      Ok("")
-    }
-  }
-
-  def updateSubcategory(subcategoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    Future.successful {
-      Ok("")
+  def updateSubcategory(subcategoryId: String): Action[JsValue] = Action.async(parse.json) {
+    _.body.validate[Subcategory] match {
+      case JsSuccess(subcategory, _) =>
+        subcategoryRepository.getSubcategoryByIdOption(subcategoryId)
+          .map({
+            case Some(value) =>
+              val subcategoryToUpdate = Subcategory(subcategoryId, subcategory.parentId, subcategory.name)
+              try {
+                Await.result(subcategoryRepository.updateSubcategory(subcategoryToUpdate), Duration.Inf)
+                Ok("Subcategory Updated!")
+              } catch {
+                case e: IllegalArgumentException =>InternalServerError(e.getMessage)
+              }
+            case None => InternalServerError("Subcategory with id: " + subcategoryId + " does not exist!")
+          })
+      case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
     }
   }
 
   def deleteSubcategory(subcategoryId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    Future.successful {
-      Ok("")
-    }
+    subcategoryRepository.getSubcategoryByIdOption(subcategoryId)
+      .map({
+        case Some(subcategory) =>
+          Await.result(subcategoryRepository.deleteSubcategory(subcategoryId)
+          .map(_ => Ok("Removed subcategory with id: " + subcategoryId)), Duration.Inf)
+        case None => InternalServerError("Subcategory with id: " + subcategoryId + " does not exist!")
+      })
   }
 }

@@ -7,10 +7,11 @@ import models.categories.{Subcategory, SubcategoryTable}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
-class SubcategoryRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
+class SubcategoryRepository @Inject()(categoryRepository: CategoryRepository, dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
 
   private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
@@ -37,8 +38,16 @@ class SubcategoryRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(
     subcategory += Subcategory(id, parentId, name)
   }
 
-  def updateSubcategory(subcategoryToUpdate: Subcategory): Future[Int] = db.run {
-    subcategory.filter(_.id === subcategoryToUpdate.id).update(subcategoryToUpdate)
+  def updateSubcategory(subcategoryToUpdate: Subcategory): Future[Int] = {
+    Await.result(categoryRepository.getCategoryByIdOption(subcategoryToUpdate.parentId)
+      .map({
+        case Some(value) => value
+        case None => throw new IllegalArgumentException("Provided parentId does not exist in Category table!")
+      }), Duration.Inf)
+
+    db.run {
+      subcategory.filter(_.id === subcategoryToUpdate.id).update(subcategoryToUpdate)
+    }
   }
 
   def deleteSubcategory(subcategoryId: String): Future[Int] = db.run {
