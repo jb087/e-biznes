@@ -41,12 +41,8 @@ class ProductResource @Inject()(productRepository: ProductRepository, subcategor
           .map({
             case Some(value) =>
               val productToUpdate = Product(productId, product.subcategoryId, product.title, product.price, product.description, product.date, product.quantity)
-              try {
-                Await.result(productRepository.updateProduct(productToUpdate)
-                  .map(_ => Ok("Product Updated!")), Duration.Inf)
-              } catch {
-                case e: IllegalArgumentException => InternalServerError(e.getMessage)
-              }
+              Await.result(productRepository.updateProduct(productToUpdate)
+                .map(_ => Ok("Product Updated!")), Duration.Inf)
             case None => InternalServerError("Product with id: " + productId + " does not exist!")
           })
       case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))

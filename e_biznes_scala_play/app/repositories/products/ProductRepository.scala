@@ -5,14 +5,12 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import models.products.{Product, ProductTable}
 import play.api.db.slick.DatabaseConfigProvider
-import repositories.categories.SubcategoryRepository
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ProductRepository @Inject()(subcategoryRepository: SubcategoryRepository, dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
+class ProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
 
   private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
@@ -43,14 +41,7 @@ class ProductRepository @Inject()(subcategoryRepository: SubcategoryRepository, 
     product.filter(_.id === productId).delete
   }
 
-  def updateProduct(productToUpdate: Product): Future[Int] = {
-    Await.result(subcategoryRepository.getSubcategoryByIdOption(productToUpdate.subcategoryId)
-      .map({
-        case None => throw new IllegalArgumentException("Provided subcategoryId does not exist in Subcategory table!")
-      }), Duration.Inf)
-
-    db.run {
-      product.filter(_.id === productToUpdate.id).update(productToUpdate)
-    }
+  def updateProduct(productToUpdate: Product): Future[Int] = db.run {
+    product.filter(_.id === productToUpdate.id).update(productToUpdate)
   }
 }

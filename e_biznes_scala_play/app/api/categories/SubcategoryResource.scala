@@ -40,12 +40,8 @@ class SubcategoryResource @Inject()(subcategoryRepository: SubcategoryRepository
           .map({
             case Some(value) =>
               val subcategoryToUpdate = Subcategory(subcategoryId, subcategory.parentId, subcategory.name)
-              try {
-                Await.result(subcategoryRepository.updateSubcategory(subcategoryToUpdate), Duration.Inf)
-                Ok("Subcategory Updated!")
-              } catch {
-                case e: IllegalArgumentException => InternalServerError(e.getMessage)
-              }
+                Await.result(subcategoryRepository.updateSubcategory(subcategoryToUpdate)
+                  .map(_ => Ok("Subcategory Updated!")), Duration.Inf)
             case None => InternalServerError("Subcategory with id: " + subcategoryId + " does not exist!")
           })
       case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
