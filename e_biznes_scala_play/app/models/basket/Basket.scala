@@ -18,5 +18,5 @@ class BasketTable(tag: Tag) extends Table[Basket](tag, "BASKET") {
 }
 
 object Basket {
-  val basketFormat = Json.format[Basket]
+  implicit val basketFormat = Json.format[Basket]
 }

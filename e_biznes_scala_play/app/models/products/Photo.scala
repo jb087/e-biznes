@@ -26,5 +26,5 @@ class PhotoTable(tag: Tag) extends Table[Photo](tag, "PHOTO") {
 }
 
 object Photo {
-  val photoFormat = Json.format[Photo]
+  implicit val photoFormat = Json.format[Photo]
 }

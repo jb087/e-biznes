@@ -30,5 +30,5 @@ class PaymentTable(tag: Tag) extends Table[Payment](tag, "PAYMENT") {
 }
 
 object Payment {
-  val paymentFormat = Json.format[Payment]
+  implicit val paymentFormat = Json.format[Payment]
 }

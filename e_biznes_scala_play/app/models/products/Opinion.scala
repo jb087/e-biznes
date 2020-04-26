@@ -28,5 +28,5 @@ class OpinionTable(tag: Tag) extends Table[Opinion](tag, "OPINION") {
 }
 
 object Opinion {
-  val opinionFormat = Json.format[Opinion]
+  implicit val opinionFormat = Json.format[Opinion]
 }
