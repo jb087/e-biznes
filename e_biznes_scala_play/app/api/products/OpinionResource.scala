@@ -6,7 +6,8 @@ import play.api.libs.json.{JsSuccess, JsValue, Json}
 import play.api.mvc._
 import repositories.products.OpinionRepository
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class OpinionResource @Inject()(opinionRepository: OpinionRepository, cc: MessagesControllerComponents)
@@ -32,15 +33,28 @@ class OpinionResource @Inject()(opinionRepository: OpinionRepository, cc: Messag
     }
   }
 
-  def updateOpinion(opinionId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    Future.successful {
-      Ok("")
+  def updateOpinion(opinionId: String): Action[JsValue] = Action.async(parse.json) {
+    _.body.validate[Opinion] match {
+      case JsSuccess(opinion, _) =>
+        opinionRepository.getOpinionByIdOption(opinionId)
+          .map({
+            case Some(value) =>
+              val opinionToUpdate = Opinion(opinionId, opinion.productId, opinion.opinion, opinion.rating)
+              Await.result(opinionRepository.updateOpinion(opinionToUpdate)
+                .map(_ => Ok("Opinion Updated!")), Duration.Inf)
+            case None => InternalServerError("Opinion with id: " + opinionId + " does not exist!")
+          })
+      case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
     }
   }
 
   def deleteOpinion(opinionId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    Future.successful {
-      Ok("")
-    }
+    opinionRepository.getOpinionByIdOption(opinionId)
+      .map({
+        case Some(value) =>
+          Await.result(opinionRepository.deleteOpinion(opinionId)
+            .map(_ => Ok("Removed opinion with id: " + opinionId)), Duration.Inf)
+        case None => InternalServerError("Opinion with id: " + opinionId + " does not exist!")
+      })
   }
 }
