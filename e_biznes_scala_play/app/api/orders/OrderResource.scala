@@ -57,4 +57,14 @@ class OrderResource @Inject()(orderRepository: OrderRepository, cc: MessagesCont
         case None => InternalServerError("Order with id: " + orderId + " does not exist!")
       })
   }
+
+  def deliverOrder(orderId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    orderRepository.getOrderByIdOption(orderId)
+      .map({
+        case Some(value) =>
+          Await.result(orderRepository.deliverOrder(orderId)
+            .map(_ => Ok("Delivered order with id: " + orderId)), Duration.Inf)
+        case None => InternalServerError("Order with id: " + orderId + " does not exist!")
+      })
+  }
 }
