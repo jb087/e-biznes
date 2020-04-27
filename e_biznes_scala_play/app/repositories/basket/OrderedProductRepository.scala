@@ -3,7 +3,7 @@ package repositories.basket
 import java.util.UUID
 
 import javax.inject.{Inject, Singleton}
-import models.basket.{BasketTable, OrderedProduct, OrderedProductTable}
+import models.basket.{OrderedProduct, OrderedProductTable}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -53,8 +53,10 @@ class OrderedProductRepository @Inject()(basketRepository: BasketRepository, dbC
   }
 
   def updateOrderedProduct(orderedProductToUpdate: OrderedProduct): Future[Int] = db.run {
-    val basket = Await.result(basketRepository.getBasketById(orderedProductToUpdate.basketId), Duration.Inf)
-    if (basket.isBought != 0) {
+    val orderedProductFromDB = Await.result(getOrderedProductById(orderedProductToUpdate.id), Duration.Inf)
+    val fromBasket = Await.result(basketRepository.getBasketById(orderedProductFromDB.basketId), Duration.Inf)
+    val toBasket = Await.result(basketRepository.getBasketById(orderedProductToUpdate.basketId), Duration.Inf)
+    if (fromBasket.isBought != 0 || toBasket.isBought != 0) {
       throw new IllegalStateException("Cannot update ordered product associated with bought basket!")
     }
 
