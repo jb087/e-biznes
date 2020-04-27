@@ -7,7 +7,8 @@ import models.orders.{Order, OrderTable}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class OrderRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
@@ -34,14 +35,37 @@ class OrderRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implic
   def createOrder(newOrder: Order): Future[Int] = db.run {
     val id = UUID.randomUUID().toString
 
-    order += Order(id, newOrder.basketId, newOrder.shippingInformationId, newOrder.state)
+    order += Order(id, newOrder.basketId, newOrder.shippingInformationId, "CANCELLED")
   }
 
   def deleteOrder(orderId: String): Future[Int] = db.run {
+    val orderFromDB = Await.result(getOrderById(orderId), Duration.Inf)
+    if (!orderFromDB.state.equals("CANCELLED")) {
+      throw new IllegalStateException("Could not delete order in state PAID or DELIVERED!")
+    }
+
     order.filter(_.id === orderId).delete
   }
 
   def updateOrder(orderToUpdate: Order): Future[Int] = db.run {
-    order.filter(_.id === orderToUpdate.id).update(orderToUpdate)
+    val orderFromDB = Await.result(getOrderById(orderToUpdate.id), Duration.Inf)
+    if (orderFromDB.state.equals("PAID") || orderFromDB.state.equals("DELIVERED")) {
+      throw new IllegalStateException("Could not update order in state PAID or DELIVERED!")
+    }
+
+    val orderToModify = Order(orderToUpdate.id, orderToUpdate.basketId, orderToUpdate.shippingInformationId, orderFromDB.state)
+
+    order.filter(_.id === orderToModify.id).update(orderToModify)
+  }
+
+  def deliverOrder(orderId: String): Future[Int] = db.run {
+    val orderFromDB = Await.result(getOrderById(orderId), Duration.Inf)
+    if (!orderFromDB.state.equals("PAID")) {
+      throw new IllegalStateException("Could not deliver order in other than PAID!")
+    }
+
+    val orderToDeliver = Order(orderId, orderFromDB.basketId, orderFromDB.shippingInformationId, "DELIVERED")
+
+    order.filter(_.id === orderId).update(orderToDeliver)
   }
 }

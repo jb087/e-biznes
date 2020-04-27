@@ -14,16 +14,20 @@
     <input name="orderId" id="orderId" value="@order("orderId").value" type="hidden">
     <input name="state" id="state" value="@order("state").value" type="hidden">
 
-    <label>BasketId:</label>
-    <select name="basketId" id="basketId">
-    @for(basket <- baskets) {
-        @if(basket.id == order("basketId").value.getOrElse("")) {
-            <option value="@basket.id" selected="selected">@basket.id</option>
-        } else {
-            <option value="@basket.id">@basket.id</option>
+    @if(order("state").value.getOrElse("").equals("CANCELLED")) {
+        <label>BasketId:</label>
+        <select name="basketId" id="basketId">
+        @for(basket <- baskets) {
+            @if(basket.id == order("basketId").value.getOrElse("")) {
+                <option value="@basket.id" selected="selected">@basket.id</option>
+            } else {
+                <option value="@basket.id">@basket.id</option>
+            }
         }
+        </select>
+    } else {
+        <input name="basketId" id="basketId" value="@order("basketId").value" type="hidden">
     }
-    </select>
     <br>
     <label>ShippingInformationId:</label>
     <select name="shippingInformationId" id="shippingInformationId">

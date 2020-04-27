@@ -112,10 +112,10 @@ class PaymentRepository @Inject()(
     val orderedProducts = Await.result(orderedProductRepository.getOrderedProductByBasketId(basket.id), Duration.Inf)
 
     if (!order.state.equals("NOT_PAID")) {
-      throw new IllegalStateException("Could not finalize payment. Order with id: " + order.id + " is not in state NOT_PAID!")
+      throw new IllegalStateException("Could not delete payment. Order with id: " + order.id + " is not in state NOT_PAID!")
     }
     if (basket.isBought != 1) {
-      throw new IllegalStateException("Could not finalize payment. Basket with id: " + basket.id + "is not bought!")
+      throw new IllegalStateException("Could not delete payment. Basket with id: " + basket.id + "is not bought!")
     }
 
     db.run {

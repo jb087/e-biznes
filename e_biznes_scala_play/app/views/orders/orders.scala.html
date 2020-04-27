@@ -10,7 +10,14 @@
         ShippingInformationId: @order.shippingInformationId <br>
         State: @order.state <br>
     </p>
-    <a href="@controllers.orders.routes.OrderController.updateOrder(order.id)">Edit</a>
-    <a href="@controllers.orders.routes.OrderController.deleteOrder(order.id)">Delete</a>
+    @if(order.state.equals("CANCELLED") || order.state.equals("NOT_PAID")) {
+        <a href="@controllers.orders.routes.OrderController.updateOrder(order.id)">Edit</a>
+    }
+    @if(order.state.equals("CANCELLED")) {
+        <a href="@controllers.orders.routes.OrderController.deleteOrder(order.id)">Delete</a>
+    }
+    @if(order.state.equals("PAID")) {
+        <a href="@controllers.orders.routes.OrderController.deliverOrder(order.id)">Delivered</a>
+    }
     <br><br>
 }

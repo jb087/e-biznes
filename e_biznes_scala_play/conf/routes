@@ -136,6 +136,7 @@ POST    /orderCreateHandler                                 controllers.orders.O
 GET     /orderUpadte/:orderId                               controllers.orders.OrderController.updateOrder(orderId: String)
 POST    /orderUpadteHandler                                 controllers.orders.OrderController.updateOrderHandler
 GET     /orderDelete/:orderId                               controllers.orders.OrderController.deleteOrder(orderId: String)
+GET     /orderDeliver/:orderId                              controllers.orders.OrderController.deliverOrder(orderId: String)
 
 GET     /shippingInformation                                controllers.orders.ShippingInformationController.getShippingInformation
 GET     /shippingInformation/:shippingInformationId         controllers.orders.ShippingInformationController.getShippingInformationById(shippingInformationId: String)

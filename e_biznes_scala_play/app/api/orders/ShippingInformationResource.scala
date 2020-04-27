@@ -54,7 +54,7 @@ class ShippingInformationResource @Inject()(shippingInformationRepository: Shipp
       .map({
         case Some(value) =>
           Await.result(shippingInformationRepository.deleteShippingInformation(shippingInformationId)
-          .map(_ => Ok("Removed shipping information with id: " + shippingInformationId)), Duration.Inf)
+            .map(_ => Ok("Removed shipping information with id: " + shippingInformationId)), Duration.Inf)
         case None => InternalServerError("Shipping Information with id: " + shippingInformationId + " does not exist!")
       })
   }
