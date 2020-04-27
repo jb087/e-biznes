@@ -56,7 +56,7 @@ class PaymentController @Inject()(orderRepository: OrderRepository, paymentRepos
       },
       payment => {
         try {
-          Await.result(paymentRepository.createPayment(Payment("", payment.orderId, 0, LocalDate.now())), Duration.Inf)
+          Await.result(paymentRepository.createPayment(payment.orderId), Duration.Inf)
           Future.successful {
             Redirect(routes.PaymentController.createPayment()).flashing("info" -> "Payment Created!")
           }

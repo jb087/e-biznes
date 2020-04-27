@@ -34,10 +34,11 @@ GET     /api/order/:orderId                                 api.orders.OrderReso
 POST    /api/order                                          api.orders.OrderResource.createOrder
 PUT     /api/order/:orderId                                 api.orders.OrderResource.updateOrder(orderId: String)
 DELETE  /api/order/:orderId                                 api.orders.OrderResource.deleteOrder(orderId: String)
+#PUT     /api/orderDeliver/:orderId                          api.orders.OrderResource.deliverOrder(orderId: String)
 
 GET     /api/payments                                       api.orders.PaymentResource.getPayments
 GET     /api/payment/:paymentId                             api.orders.PaymentResource.getPaymentById(paymentId: String)
-POST    /api/payment                                        api.orders.PaymentResource.createPayment
+POST    /api/payment/:orderId                               api.orders.PaymentResource.createPayment(orderId: String)
 PUT     /api/payment/:paymentId                             api.orders.PaymentResource.finalizePayment(paymentId: String)
 DELETE  /api/payment/:paymentId                             api.orders.PaymentResource.deletePayment(paymentId: String)
 

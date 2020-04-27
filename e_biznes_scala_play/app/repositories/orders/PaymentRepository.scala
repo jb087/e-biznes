@@ -48,21 +48,21 @@ class PaymentRepository @Inject()(
     payment.filter(_.id === paymentId).result.headOption
   }
 
-  def createPayment(newPayment: Payment): Future[Unit] = {
+  def createPayment(orderId: String): Future[Unit] = {
     val id = UUID.randomUUID().toString
-    val order = Await.result(orderRepository.getOrderById(newPayment.orderId), Duration.Inf)
+    val order = Await.result(orderRepository.getOrderById(orderId), Duration.Inf)
     val basket = Await.result(basketRepository.getBasketById(order.basketId), Duration.Inf)
     val orderedProducts = Await.result(orderedProductRepository.getOrderedProductByBasketId(basket.id), Duration.Inf)
 
 
     db.run {
-      createPayment(id, newPayment, order, basket, orderedProducts)
+      createPayment(id, order, basket, orderedProducts)
     }
   }
 
-  private val createPayment = (id: String, newPayment: Payment, orderToUpdate: Order, basketToUpdate: Basket, orderedProducts: Seq[OrderedProduct]) => {
+  private val createPayment = (id: String, orderToUpdate: Order, basketToUpdate: Basket, orderedProducts: Seq[OrderedProduct]) => {
     def createPayment = {
-      payment += Payment(id, newPayment.orderId, newPayment.isDone, newPayment.date)
+      payment += Payment(id, orderToUpdate.id, 0, LocalDate.now())
     }
 
     def updateOrderForPaymentCreation = {
