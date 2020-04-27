@@ -119,6 +119,11 @@ class OrderController @Inject()(orderRepository: OrderRepository, basketReposito
     orderRepository.deleteOrder(orderId)
       .map(_ => Redirect(routes.OrderController.getOrders()))
   }
+
+  def deliverOrder(orderId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    orderRepository.deliverOrder(orderId)
+      .map(_ => Redirect(routes.OrderController.getOrders()))
+  }
 }
 
 case class CreateOrderForm(

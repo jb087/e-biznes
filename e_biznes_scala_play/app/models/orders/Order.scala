@@ -32,5 +32,5 @@ class OrderTable(tag: Tag) extends Table[Order](tag, "ORDER") {
 }
 
 object Order {
-  val orderFormat = Json.format[Order]
+  implicit val orderFormat = Json.format[Order]
 }

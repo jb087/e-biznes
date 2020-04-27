@@ -1,133 +1,148 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
+GET     /                                                   controllers.HomeController.index
 
-# An example controller showing a sample home page
-GET     /                                               controllers.HomeController.index
+GET     /api/categories                                     api.categories.CategoryResource.getCategories
+GET     /api/category/:categoryId                           api.categories.CategoryResource.getCategoryById(categoryId: String)
+POST    /api/category                                       api.categories.CategoryResource.createCategory
+PUT     /api/category/:categoryId                           api.categories.CategoryResource.updateCategory(categoryId: String)
+DELETE  /api/category/:categoryId                           api.categories.CategoryResource.deleteCategory(categoryId: String)
 
-GET     /categories                                     controllers.categories.CategoryController.getCategories
-GET     /category/:categoryId                           controllers.categories.CategoryController.getCategoryById(categoryId: String)
-#POST    /category                                       controllers.categories.CategoryController.createCategory
-#PUT     /category/:categoryId                           controllers.categories.CategoryController.updateCategory(categoryId: String)
-#DELETE  /category/:categoryId                           controllers.categories.CategoryController.deleteCategory(categoryId: String)
+GET     /api/subcategories                                  api.categories.SubcategoryResource.getSubcategories
+GET     /api/subcategory/:subcategoryId                     api.categories.SubcategoryResource.getSubcategoryById(subcategoryId: String)
+POST    /api/subcategory                                    api.categories.SubcategoryResource.createSubcategory
+PUT     /api/subcategory/:subcategoryId                     api.categories.SubcategoryResource.updateSubcategory(subcategoryId: String)
+DELETE  /api/subcategory/:subcategoryId                     api.categories.SubcategoryResource.deleteSubcategory(subcategoryId: String)
 
-GET     /subcategories                                  controllers.categories.SubcategoryController.getSubcategories
-GET     /subcategory/:subcategoryId                     controllers.categories.SubcategoryController.getSubcategoryById(subcategoryId: String)
-#POST    /subcategory                                    controllers.categories.SubcategoryController.createSubcategory
-#PUT     /subcategory/:subcategoryId                     controllers.categories.SubcategoryController.updateSubcategory(subcategoryId: String)
-#DELETE  /subcategory/:subcategoryId                     controllers.categories.SubcategoryController.deleteSubcategory(subcategoryId: String)
+GET     /api/baskets                                        api.basket.BasketResource.getBaskets
+GET     /api/basket/:basketId                               api.basket.BasketResource.getBasketById(basketId: String)
+POST    /api/basket                                         api.basket.BasketResource.createBasket
+PUT     /api/basket/:basketId                               api.basket.BasketResource.updateBasket(basketId: String)
+DELETE  /api/basket/:basketId                               api.basket.BasketResource.deleteBasket(basketId: String)
 
-GET     /baskets                                        controllers.basket.BasketController.getBaskets
-GET     /basket/:basketId                               controllers.basket.BasketController.getBasketById(basketId: String)
-#POST    /basket                                         controllers.basket.BasketController.createBasket
-#PUT     /basket/:basketId                               controllers.basket.BasketController.updateBasket(basketId: String)
-#DELETE  /basket/:basketId                               controllers.basket.BasketController.deleteBasket(basketId: String)
+GET     /api/orderedProducts                                api.basket.OrderedProductsResource.getOrderedProducts
+GET     /api/orderedProduct/:orderedProductId               api.basket.OrderedProductsResource.getOrderedProductById(orderedProductId: String)
+POST    /api/orderedProduct                                 api.basket.OrderedProductsResource.createOrderedProduct
+PUT     /api/orderedProduct/:orderedProductId               api.basket.OrderedProductsResource.updateOrderedProduct(orderedProductId: String)
+DELETE  /api/orderedProduct/:orderedProductId               api.basket.OrderedProductsResource.deleteOrderedProduct(orderedProductId: String)
 
-GET     /orderedProducts                                controllers.basket.OrderedProductsController.getOrderedProducts
-GET     /orderedProduct/:orderedProductId               controllers.basket.OrderedProductsController.getOrderedProductById(orderedProductId: String)
-#POST    /orderedProduct                                 controllers.basket.OrderedProductsController.createOrderedProduct
-#PUT     /orderedProduct/:orderedProductId               controllers.basket.OrderedProductsController.updateOrderedProduct(orderedProductId: String)
-#DELETE  /orderedProduct/:orderedProductId               controllers.basket.OrderedProductsController.deleteOrderedProduct(orderedProductId: String)
+GET     /api/orders                                         api.orders.OrderResource.getOrders
+GET     /api/order/:orderId                                 api.orders.OrderResource.getOrderById(orderId: String)
+POST    /api/order                                          api.orders.OrderResource.createOrder
+PUT     /api/order/:orderId                                 api.orders.OrderResource.updateOrder(orderId: String)
+DELETE  /api/order/:orderId                                 api.orders.OrderResource.deleteOrder(orderId: String)
+PUT     /api/orderDeliver/:orderId                          api.orders.OrderResource.deliverOrder(orderId: String)
 
-GET     /orders                                         controllers.orders.OrderController.getOrders
-GET     /order/:orderId                                 controllers.orders.OrderController.getOrderById(orderId: String)
-#POST    /order                                          controllers.orders.OrderController.createOrder
-#PUT     /order/:orderId                                 controllers.orders.OrderController.updateOrder(orderId: String)
-#DELETE  /order/:orderId                                 controllers.orders.OrderController.deleteOrder(orderId: String)
+GET     /api/payments                                       api.orders.PaymentResource.getPayments
+GET     /api/payment/:paymentId                             api.orders.PaymentResource.getPaymentById(paymentId: String)
+POST    /api/payment/:orderId                               api.orders.PaymentResource.createPayment(orderId: String)
+PUT     /api/payment/:paymentId                             api.orders.PaymentResource.finalizePayment(paymentId: String)
+DELETE  /api/payment/:paymentId                             api.orders.PaymentResource.deletePayment(paymentId: String)
 
-GET     /payments                                       controllers.orders.PaymentController.getPayments
-GET     /payment/:paymentId                             controllers.orders.PaymentController.getPaymentById(paymentId: String)
-#POST    /payment                                        controllers.orders.PaymentController.createPayment
-#PUT     /payment/:paymentId                             controllers.orders.PaymentController.updatePayment(paymentId: String)
-#DELETE  /payment/:paymentId                             controllers.orders.PaymentController.deletePayment(paymentId: String)
+GET     /api/shippingInformation                            api.orders.ShippingInformationResource.getShippingInformation
+GET     /api/shippingInformation/:shippingInformationId     api.orders.ShippingInformationResource.getShippingInformationById(shippingInformationId: String)
+POST    /api/shippingInformation                            api.orders.ShippingInformationResource.createShippingInformation
+PUT     /api/shippingInformation/:shippingInformationId     api.orders.ShippingInformationResource.updateShippingInformation(shippingInformationId: String)
+DELETE  /api/shippingInformation/:shippingInformationId     api.orders.ShippingInformationResource.deleteShippingInformation(shippingInformationId: String)
 
-GET     /shippingInformation                            controllers.orders.ShippingInformationController.getShippingInformation
-GET     /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.getShippingInformationById(shippingInformationId: String)
-#POST    /shippingInformation                            controllers.orders.ShippingInformationController.createShippingInformation
-#PUT     /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.updateShippingInformation(shippingInformationId: String)
-#DELETE  /shippingInformation/:shippingInformationId     controllers.orders.ShippingInformationController.deleteShippingInformation(shippingInformationId: String)
+GET     /api/opinions                                       api.products.OpinionResource.getOpinions
+GET     /api/opinion/:opinionId                             api.products.OpinionResource.getOpinionById(opinionId: String)
+POST    /api/opinion                                        api.products.OpinionResource.createOpinion
+PUT     /api/opinion/:opinionId                             api.products.OpinionResource.updateOpinion(opinionId: String)
+DELETE  /api/opinion/:opinionId                             api.products.OpinionResource.deleteOpinion(opinionId: String)
 
-GET     /opinions                                       controllers.products.OpinionController.getOpinions
-GET     /opinion/:opinionId                             controllers.products.OpinionController.getOpinionById(opinionId: String)
-#POST    /opinion                                        controllers.products.OpinionController.createOpinion
-#PUT     /opinion/:opinionId                             controllers.products.OpinionController.updateOpinion(opinionId: String)
-#DELETE  /opinion/:opinionId                             controllers.products.OpinionController.deleteOpinion(opinionId: String)
+GET     /api/photos                                         api.products.PhotoResource.getPhotos
+GET     /api/photo/:photoId                                 api.products.PhotoResource.getPhotoById(photoId: String)
+POST    /api/photo                                          api.products.PhotoResource.createPhoto
+PUT     /api/photo/:photoId/:productId                      api.products.PhotoResource.updatePhoto(photoId: String, productId: String)
+DELETE  /api/photo/:photoId                                 api.products.PhotoResource.deletePhoto(photoId: String)
 
-GET     /photos                                       controllers.products.PhotoController.getPhotos
-GET     /photo/:photoId                                controllers.products.PhotoController.getPhotoById(photoId: String)
-#POST    /photo                                        controllers.products.PhotoController.createPhoto
-#PUT     /photo/:photoId                               controllers.products.PhotoController.updatePhoto(photoId: String)
-#DELETE  /photo/:photoId                               controllers.products.PhotoController.deletePhoto(photoId: String)
-
-GET     /products                                     controllers.products.ProductController.getProducts
-GET     /product/:productId                           controllers.products.ProductController.getProductById(productId: String)
-#POST    /product                                      controllers.products.ProductController.createProduct
-#PUT     /product/:productId                           controllers.products.ProductController.updateProduct(productId: String)
-#DELETE  /product/:productId                           controllers.products.ProductController.deleteProduct(productId: String)
+GET     /api/products                                       api.products.ProductResource.getProducts
+GET     /api/product/:productId                             api.products.ProductResource.getProductById(productId: String)
+POST    /api/product                                        api.products.ProductResource.createProduct
+PUT     /api/product/:productId                             api.products.ProductResource.updateProduct(productId: String)
+DELETE  /api/product/:productId                             api.products.ProductResource.deleteProduct(productId: String)
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file                                   controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file                                       controllers.Assets.versioned(path="/public", file: Asset)
 
 
-#TODO remove endpoints below, when react implementation will be done
+GET     /categories                                         controllers.categories.CategoryController.getCategories
+GET     /category/:categoryId                               controllers.categories.CategoryController.getCategoryById(categoryId: String)
+GET     /categoryCreate                                     controllers.categories.CategoryController.createCategory
+POST    /categoryCreateHandler                              controllers.categories.CategoryController.createCategoryHandler
+GET     /categoryDelete/:categoryId                         controllers.categories.CategoryController.deleteCategory(categoryId: String)
+GET     /categoryUpdate/:categoryId                         controllers.categories.CategoryController.updateCategory(categoryId: String)
+POST    /categoryUpdateHandler                              controllers.categories.CategoryController.updateCategoryHandler
 
-GET     /categoryCreate                                 controllers.categories.CategoryController.createCategory
-POST    /categoryCreateHandler                          controllers.categories.CategoryController.createCategoryHandler
-GET     /categoryDelete/:categoryId                     controllers.categories.CategoryController.deleteCategory(categoryId: String)
-GET     /categoryUpdate/:categoryId                     controllers.categories.CategoryController.updateCategory(categoryId: String)
-POST    /categoryUpdateHandler                          controllers.categories.CategoryController.updateCategoryHandler
+GET     /subcategories                                      controllers.categories.SubcategoryController.getSubcategories
+GET     /subcategory/:subcategoryId                         controllers.categories.SubcategoryController.getSubcategoryById(subcategoryId: String)
+GET     /subcategoryCreate                                  controllers.categories.SubcategoryController.createSubcategory
+POST    /subcategoryCreateHandler                           controllers.categories.SubcategoryController.createSubcategoryHandler
+GET     /subcategoryDelete/:subcategoryId                   controllers.categories.SubcategoryController.deleteSubcategory(subcategoryId: String)
+GET     /subcategoryUpdate/:subcategoryId                   controllers.categories.SubcategoryController.updateSubcategory(subcategoryId: String)
+POST    /subcategoryUpdateHandler                           controllers.categories.SubcategoryController.updateSubcategoryHandler
 
-GET     /subcategoryCreate                              controllers.categories.SubcategoryController.createSubcategory
-POST    /subcategoryCreateHandler                       controllers.categories.SubcategoryController.createSubcategoryHandler
-GET     /subcategoryDelete/:subcategoryId               controllers.categories.SubcategoryController.deleteSubcategory(subcategoryId: String)
-GET     /subcategoryUpdate/:subcategoryId               controllers.categories.SubcategoryController.updateSubcategory(subcategoryId: String)
-POST    /subcategoryUpdateHandler                       controllers.categories.SubcategoryController.updateSubcategoryHandler
+GET     /products                                           controllers.products.ProductController.getProducts
+GET     /product/:productId                                 controllers.products.ProductController.getProductById(productId: String)
+GET     /productCreate                                      controllers.products.ProductController.createProduct
+POST    /productCreateHandler                               controllers.products.ProductController.createProductHandler
+GET     /productDelete/:productId                           controllers.products.ProductController.deleteProduct(productId: String)
+GET     /productUpdate/:productId                           controllers.products.ProductController.updateProduct(productId: String)
+POST    /productUpdateHandler                               controllers.products.ProductController.updateProductHandler
 
-GET     /productCreate                                  controllers.products.ProductController.createProduct
-POST    /productCreateHandler                           controllers.products.ProductController.createProductHandler
-GET     /productDelete/:productId                       controllers.products.ProductController.deleteProduct(productId: String)
-GET     /productUpdate/:productId                       controllers.products.ProductController.updateProduct(productId: String)
-POST    /productUpdateHandler                           controllers.products.ProductController.updateProductHandler
+GET     /opinions                                           controllers.products.OpinionController.getOpinions
+GET     /opinion/:opinionId                                 controllers.products.OpinionController.getOpinionById(opinionId: String)
+GET     /opinionCreate                                      controllers.products.OpinionController.createOpinion
+POST    /opinionCreateHandler                               controllers.products.OpinionController.createOpinionHandler
+GET     /opinionUpdate/:opinionId                           controllers.products.OpinionController.updateOpinion(opinionId: String)
+POST    /opinionUpdateHandler                               controllers.products.OpinionController.updateOpinionHandler
+GET     /opinionDelete/:opinionId                           controllers.products.OpinionController.deleteOpinion(opinionId: String)
 
-GET     /opinionCreate                                  controllers.products.OpinionController.createOpinion
-POST    /opinionCreateHandler                           controllers.products.OpinionController.createOpinionHandler
-GET     /opinionUpdate/:opinionId                       controllers.products.OpinionController.updateOpinion(opinionId: String)
-POST    /opinionUpdateHandler                           controllers.products.OpinionController.updateOpinionHandler
-GET     /opinionDelete/:opinionId                       controllers.products.OpinionController.deleteOpinion(opinionId: String)
+GET     /photos                                             controllers.products.PhotoController.getPhotos
+GET     /photo/:photoId                                     controllers.products.PhotoController.getPhotoById(photoId: String)
+GET     /photoCreate                                        controllers.products.PhotoController.createPhoto
+POST    /photoCreateHandler                                 controllers.products.PhotoController.createPhotoHandler
+GET     /photoJPG/:photoId                                  controllers.products.PhotoController.getPhoto(photoId: String)
+GET     /photoDelete/:photoId                               controllers.products.PhotoController.deletePhoto(photoId: String)
+GET     /photoUpdate/:photoId                               controllers.products.PhotoController.updatePhoto(photoId: String)
+POST    /photoUpdateHandler                                 controllers.products.PhotoController.updatePhotoHandler
 
-GET     /photoCreate                                    controllers.products.PhotoController.createPhoto
-POST    /photoCreateHandler                             controllers.products.PhotoController.createPhotoHandler
-GET     /photoJPG/:photoId                              controllers.products.PhotoController.getPhoto(photoId: String)
-GET     /photoDelete/:photoId                           controllers.products.PhotoController.deletePhoto(photoId: String)
-GET     /photoUpdate/:photoId                           controllers.products.PhotoController.updatePhoto(photoId: String)
-POST    /photoUpdateHandler                             controllers.products.PhotoController.updatePhotoHandler
+GET     /baskets                                            controllers.basket.BasketController.getBaskets
+GET     /basket/:basketId                                   controllers.basket.BasketController.getBasketById(basketId: String)
+GET     /basketCreate                                       controllers.basket.BasketController.createBasket
+POST    /basketCreateHandler                                controllers.basket.BasketController.createBasketHandler
+GET     /basketDelete/:basketId                             controllers.basket.BasketController.deleteBasket(basketId: String)
+GET     /basketUpdate/:basketId                             controllers.basket.BasketController.updateBasket(basketId: String)
+POST    /basketUpdateHandler                                controllers.basket.BasketController.updateBasketHandler
 
-GET     /basketCreate                                   controllers.basket.BasketController.createBasket
-POST    /basketCreateHandler                            controllers.basket.BasketController.createBasketHandler
-GET     /basketDelete/:basketId                         controllers.basket.BasketController.deleteBasket(basketId: String)
-GET     /basketUpdate/:basketId                         controllers.basket.BasketController.updateBasket(basketId: String)
-POST    /basketUpdateHandler                            controllers.basket.BasketController.updateBasketHandler
+GET     /orderedProducts                                    controllers.basket.OrderedProductsController.getOrderedProducts
+GET     /orderedProduct/:orderedProductId                   controllers.basket.OrderedProductsController.getOrderedProductById(orderedProductId: String)
+GET     /orderedProductCreate                               controllers.basket.OrderedProductsController.createOrderedProduct
+POST    /orderedProductCreateHandler                        controllers.basket.OrderedProductsController.createOrderedProductHandler
+GET     /orderedProductDelete/:orderedProductId             controllers.basket.OrderedProductsController.deleteOrderedProduct(orderedProductId: String)
+GET     /orderedProductUpdate/:orderedProductId             controllers.basket.OrderedProductsController.updateOrderedProduct(orderedProductId: String)
+POST    /orderedProductUpdateHandler                        controllers.basket.OrderedProductsController.updateOrderedProductHandler
 
-GET     /orderedProductCreate                           controllers.basket.OrderedProductsController.createOrderedProduct
-POST    /orderedProductCreateHandler                    controllers.basket.OrderedProductsController.createOrderedProductHandler
-GET     /orderedProductDelete/:orderedProductId         controllers.basket.OrderedProductsController.deleteOrderedProduct(orderedProductId: String)
-GET     /orderedProductUpdate/:orderedProductId         controllers.basket.OrderedProductsController.updateOrderedProduct(orderedProductId: String)
-POST    /orderedProductUpdateHandler                    controllers.basket.OrderedProductsController.updateOrderedProductHandler
+GET     /orders                                             controllers.orders.OrderController.getOrders
+GET     /order/:orderId                                     controllers.orders.OrderController.getOrderById(orderId: String)
+GET     /orderCreate                                        controllers.orders.OrderController.createOrder
+POST    /orderCreateHandler                                 controllers.orders.OrderController.createOrderHandler
+GET     /orderUpadte/:orderId                               controllers.orders.OrderController.updateOrder(orderId: String)
+POST    /orderUpadteHandler                                 controllers.orders.OrderController.updateOrderHandler
+GET     /orderDelete/:orderId                               controllers.orders.OrderController.deleteOrder(orderId: String)
+GET     /orderDeliver/:orderId                              controllers.orders.OrderController.deliverOrder(orderId: String)
 
-GET     /orderCreate                                    controllers.orders.OrderController.createOrder
-POST    /orderCreateHandler                             controllers.orders.OrderController.createOrderHandler
-GET     /orderUpadte/:orderId                           controllers.orders.OrderController.updateOrder(orderId: String)
-POST    /orderUpadteHandler                             controllers.orders.OrderController.updateOrderHandler
-GET     /orderDelete/:orderId                           controllers.orders.OrderController.deleteOrder(orderId: String)
+GET     /shippingInformation                                controllers.orders.ShippingInformationController.getShippingInformation
+GET     /shippingInformation/:shippingInformationId         controllers.orders.ShippingInformationController.getShippingInformationById(shippingInformationId: String)
+GET     /shippingInformationCreate                          controllers.orders.ShippingInformationController.createShippingInformation
+POST    /shippingInformationCreateHandler                   controllers.orders.ShippingInformationController.createShippingInformationHandler
+GET     /shippingInformationUp/:shippingInformationId       controllers.orders.ShippingInformationController.updateShippingInformation(shippingInformationId: String)
+POST    /shippingInformationUpHandler                       controllers.orders.ShippingInformationController.updateShippingInformationHandler
+GET     /shippingInformationDel/:shippingInformationId      controllers.orders.ShippingInformationController.deleteShippingInformation(shippingInformationId: String)
 
-GET     /shippingInformationCreate                      controllers.orders.ShippingInformationController.createShippingInformation
-POST    /shippingInformationCreateHandler               controllers.orders.ShippingInformationController.createShippingInformationHandler
-GET     /shippingInformationUp/:shippingInformationId   controllers.orders.ShippingInformationController.updateShippingInformation(shippingInformationId: String)
-POST    /shippingInformationUpHandler                   controllers.orders.ShippingInformationController.updateShippingInformationHandler
-GET     /shippingInformationDel/:shippingInformationId  controllers.orders.ShippingInformationController.deleteShippingInformation(shippingInformationId: String)
-
-GET     /paymentCreate                                  controllers.orders.PaymentController.createPayment
-POST    /paymentCreateHandler                           controllers.orders.PaymentController.createPaymentHandler
-GET     /paymentDelete/:paymentId                       controllers.orders.PaymentController.deletePayment(paymentId: String)
-GET     /pay/:paymentId                                 controllers.orders.PaymentController.finalizePayment(paymentId: String)
+GET     /payments                                           controllers.orders.PaymentController.getPayments
+GET     /payment/:paymentId                                 controllers.orders.PaymentController.getPaymentById(paymentId: String)
+GET     /paymentCreate                                      controllers.orders.PaymentController.createPayment
+POST    /paymentCreateHandler                               controllers.orders.PaymentController.createPaymentHandler
+GET     /paymentDelete/:paymentId                           controllers.orders.PaymentController.deletePayment(paymentId: String)
+GET     /pay/:paymentId                                     controllers.orders.PaymentController.finalizePayment(paymentId: String)

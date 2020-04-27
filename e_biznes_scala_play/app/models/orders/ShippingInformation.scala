@@ -38,5 +38,5 @@ class ShippingInformationTable(tag: Tag) extends Table[ShippingInformation](tag,
 }
 
 object ShippingInformation {
-  val shippingInformationFormat = Json.format[ShippingInformation]
+  implicit val shippingInformationFormat = Json.format[ShippingInformation]
 }

@@ -65,9 +65,9 @@ class BasketController @Inject()(basketRepository: BasketRepository, cc: Message
     )
   }
 
-  def deleteBasket(basketId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+  def deleteBasket(basketId: String): Action[AnyContent] = Action {
     basketRepository.deleteBasket(basketId)
-      .map(_ => Redirect(routes.BasketController.getBaskets()))
+    Redirect(routes.BasketController.getBaskets())
   }
 }
 
