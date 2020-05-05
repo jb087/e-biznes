@@ -42,11 +42,12 @@ class OrderResource @Inject()(orderRepository: OrderRepository, cc: MessagesCont
               val orderToUpdate = Order(orderId, order.basketId, order.shippingInformationId, order.state)
               Await.result(orderRepository.updateOrder(orderToUpdate)
                 .map(_ => Ok("Order Updated!")), Duration.Inf)
-            case None => InternalServerError("Order with id: " + orderId + " does not exist!")
+            case None => InternalServerError(getOrderNotFoundMessage(orderId))
           })
       case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
     }
   }
+
 
   def deleteOrder(orderId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     orderRepository.getOrderByIdOption(orderId)
@@ -54,7 +55,7 @@ class OrderResource @Inject()(orderRepository: OrderRepository, cc: MessagesCont
         case Some(value) =>
           Await.result(orderRepository.deleteOrder(orderId)
             .map(_ => Ok("Removed order with id: " + orderId)), Duration.Inf)
-        case None => InternalServerError("Order with id: " + orderId + " does not exist!")
+        case None => InternalServerError(getOrderNotFoundMessage(orderId))
       })
   }
 
@@ -64,7 +65,11 @@ class OrderResource @Inject()(orderRepository: OrderRepository, cc: MessagesCont
         case Some(value) =>
           Await.result(orderRepository.deliverOrder(orderId)
             .map(_ => Ok("Delivered order with id: " + orderId)), Duration.Inf)
-        case None => InternalServerError("Order with id: " + orderId + " does not exist!")
+        case None => InternalServerError(getOrderNotFoundMessage(orderId))
       })
+  }
+
+  private def getOrderNotFoundMessage(orderId: String) = {
+    "Order with id: " + orderId + " does not exist!"
   }
 }
