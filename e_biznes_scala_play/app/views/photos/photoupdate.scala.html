@@ -12,6 +12,7 @@
     @helper.CSRF.formField
     <input name="photoId" id="photoId" value="@photo("photoId").value" type="hidden">
 
+    <label for="productId">Product</label><br>
     <select name="productId" id="productId">
     @for(product <- products) {
         @if(product.id == photo("productId").value.getOrElse("")) {
@@ -25,7 +26,7 @@
     <br>
     <br>
 
-    <img src=@{controllers.products.routes.PhotoController.getPhoto(photo("photoId").value.orNull)}>
+    <img alt="Photo" src=@{controllers.products.routes.PhotoController.getPhoto(photo("photoId").value.orNull)}>
 
     <br>
     <br>

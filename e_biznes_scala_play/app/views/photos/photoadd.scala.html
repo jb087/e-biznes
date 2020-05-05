@@ -9,6 +9,7 @@
 
 @form(action = controllers.products.routes.PhotoController.createPhotoHandler(), 'enctype -> "multipart/form-data") {
     @helper.CSRF.formField
+    <label for="productId">Product</label><br>
     <select name="productId" id="productId">
     @for(product <- products) {
         <option value="@product.id">@product.title</option>
