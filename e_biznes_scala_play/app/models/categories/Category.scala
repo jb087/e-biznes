@@ -1,6 +1,6 @@
 package models.categories
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import slick.jdbc.SQLiteProfile.api._
 
 case class Category(
@@ -18,5 +18,5 @@ class CategoryTable(tag: Tag) extends Table[Category](tag, "CATEGORY") {
 }
 
 object Category {
-  implicit val categoryFormat = Json.format[Category]
+  implicit val categoryFormat: OFormat[Category] = Json.format[Category]
 }

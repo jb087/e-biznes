@@ -2,7 +2,7 @@ package models.orders
 
 import java.time.LocalDate
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import slick.jdbc.SQLiteProfile.api._
 
 case class Payment(
@@ -20,7 +20,7 @@ class PaymentTable(tag: Tag) extends Table[Payment](tag, "PAYMENT") {
 
   def orderId = column[String]("ORDER_ID", O.Unique)
 
-  def orderId_fk = foreignKey("ORDER_ID_FK", orderId, order)(_.id)
+  def orderIdFK = foreignKey("ORDER_ID_FK", orderId, order)(_.id)
 
   def isDone = column[Int]("IS_DONE")
 
@@ -30,5 +30,5 @@ class PaymentTable(tag: Tag) extends Table[Payment](tag, "PAYMENT") {
 }
 
 object Payment {
-  implicit val paymentFormat = Json.format[Payment]
+  implicit val paymentFormat: OFormat[Payment] = Json.format[Payment]
 }

@@ -3,7 +3,7 @@ package models.products
 import java.time.LocalDate
 
 import models.categories.SubcategoryTable
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import slick.jdbc.SQLiteProfile.api._
 
 case class Product(
@@ -24,7 +24,7 @@ class ProductTable(tag: Tag) extends Table[Product](tag, "PRODUCT") {
 
   def subcategoryId = column[String]("SUBCATEGORY_ID")
 
-  def subcategoryId_fk = foreignKey("SUBCATEGORY_ID_FK", subcategoryId, subcategory)(_.id)
+  def subcategoryIdFK = foreignKey("SUBCATEGORY_ID_FK", subcategoryId, subcategory)(_.id)
 
   def title = column[String]("TITLE")
 
@@ -40,5 +40,5 @@ class ProductTable(tag: Tag) extends Table[Product](tag, "PRODUCT") {
 }
 
 object Product {
-  implicit val productFormat = Json.format[Product]
+  implicit val productFormat: OFormat[Product] = Json.format[Product]
 }

@@ -1,7 +1,7 @@
 package models.basket
 
 import models.products.ProductTable
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import slick.jdbc.SQLiteProfile.api._
 
 case class OrderedProduct(
@@ -20,11 +20,11 @@ class OrderedProductTable(tag: Tag) extends Table[OrderedProduct](tag, "ORDERED_
 
   def basketId = column[String]("BASKET_ID")
 
-  def basketId_fk = foreignKey("BASKET_ID_FK", basketId, basket)(_.id)
+  def basketIdFK = foreignKey("BASKET_ID_FK", basketId, basket)(_.id)
 
   def productId = column[String]("PRODUCT_ID")
 
-  def productId_fk = foreignKey("PRODUCT_ID_FK", productId, product)(_.id)
+  def productIdFK = foreignKey("PRODUCT_ID_FK", productId, product)(_.id)
 
   def quantity = column[Int]("QUANTITY")
 
@@ -32,5 +32,5 @@ class OrderedProductTable(tag: Tag) extends Table[OrderedProduct](tag, "ORDERED_
 }
 
 object OrderedProduct {
-  implicit val orderedProductFormat = Json.format[OrderedProduct]
+  implicit val orderedProductFormat: OFormat[OrderedProduct] = Json.format[OrderedProduct]
 }

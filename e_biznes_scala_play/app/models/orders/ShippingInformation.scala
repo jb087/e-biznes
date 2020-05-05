@@ -1,6 +1,6 @@
 package models.orders
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import slick.jdbc.SQLiteProfile.api._
 
 case class ShippingInformation(
@@ -38,5 +38,5 @@ class ShippingInformationTable(tag: Tag) extends Table[ShippingInformation](tag,
 }
 
 object ShippingInformation {
-  implicit val shippingInformationFormat = Json.format[ShippingInformation]
+  implicit val shippingInformationFormat: OFormat[ShippingInformation] = Json.format[ShippingInformation]
 }

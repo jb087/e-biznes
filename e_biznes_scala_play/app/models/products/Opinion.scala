@@ -1,6 +1,6 @@
 package models.products
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import slick.jdbc.SQLiteProfile.api._
 
 case class Opinion(
@@ -18,7 +18,7 @@ class OpinionTable(tag: Tag) extends Table[Opinion](tag, "OPINION") {
 
   def productId = column[String]("PRODUCT_ID")
 
-  def productId_fk = foreignKey("PRODUCT_ID_FK", productId, product)(_.id)
+  def productIdFK = foreignKey("PRODUCT_ID_FK", productId, product)(_.id)
 
   def opinion = column[String]("OPINION")
 
@@ -28,5 +28,5 @@ class OpinionTable(tag: Tag) extends Table[Opinion](tag, "OPINION") {
 }
 
 object Opinion {
-  implicit val opinionFormat = Json.format[Opinion]
+  implicit val opinionFormat: OFormat[Opinion] = Json.format[Opinion]
 }

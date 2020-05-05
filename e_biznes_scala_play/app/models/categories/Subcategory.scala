@@ -1,6 +1,6 @@
 package models.categories
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import slick.jdbc.SQLiteProfile.api._
 
 case class Subcategory(
@@ -17,7 +17,7 @@ class SubcategoryTable(tag: Tag) extends Table[Subcategory](tag, "SUBCATEGORY") 
 
   def parentId = column[String]("PARENT_ID")
 
-  def parentId_fk = foreignKey("PARENT_ID_FK", parentId, category)(_.id)
+  def parentIdFK = foreignKey("PARENT_ID_FK", parentId, category)(_.id)
 
   def name = column[String]("NAME", O.Unique)
 
@@ -25,5 +25,5 @@ class SubcategoryTable(tag: Tag) extends Table[Subcategory](tag, "SUBCATEGORY") 
 }
 
 object Subcategory {
-  implicit val subcategoryFormat = Json.format[Subcategory]
+  implicit val subcategoryFormat: OFormat[Subcategory] = Json.format[Subcategory]
 }

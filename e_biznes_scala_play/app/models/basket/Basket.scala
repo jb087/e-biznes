@@ -1,6 +1,6 @@
 package models.basket
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import slick.jdbc.SQLiteProfile.api._
 
 case class Basket(
@@ -18,5 +18,5 @@ class BasketTable(tag: Tag) extends Table[Basket](tag, "BASKET") {
 }
 
 object Basket {
-  implicit val basketFormat = Json.format[Basket]
+  implicit val basketFormat: OFormat[Basket] = Json.format[Basket]
 }
