@@ -3,6 +3,6 @@
 
 <a href="@controllers.products.routes.PhotoController.getPhotos()">Photos</a><br><br><br>
 
-<b>Id: @photo.id</b>
+<strong>Id: @photo.id</strong>
 <p>ProductId: @photo.productId</p>
-<img src=@{controllers.products.routes.PhotoController.getPhoto(photo.id)}>
+<img alt="Photo" src=@{controllers.products.routes.PhotoController.getPhoto(photo.id)}>

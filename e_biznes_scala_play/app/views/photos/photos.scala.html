@@ -5,7 +5,7 @@
 <a href="@controllers.products.routes.PhotoController.createPhoto()">Create</a><br><br><br>
 @for(photo <- photos) {
     <a href="@controllers.products.routes.PhotoController.getPhotoById(photo.id)">
-        <img src=@{controllers.products.routes.PhotoController.getPhoto(photo.id)}>
+        <img alt="Photo" src=@{controllers.products.routes.PhotoController.getPhoto(photo.id)}>
     </a>
 
     <a href="@controllers.products.routes.PhotoController.updatePhoto(photo.id)">Edit</a>

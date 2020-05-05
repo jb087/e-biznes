@@ -9,7 +9,7 @@
 @flash.get("info").getOrElse("") <br>
 
 @for(payment <- payments) {
-    <a href="@controllers.orders.routes.PaymentController.getPaymentById(payment.id)"><b>Id: @payment.id</b></a>
+    <a href="@controllers.orders.routes.PaymentController.getPaymentById(payment.id)"><strong>Id: @payment.id</strong></a>
     <p>
         OrderId: @payment.orderId <br>
         Is done: @payment.isDone <br>

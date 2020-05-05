@@ -10,7 +10,7 @@
 @flash.get("info").getOrElse("") <br>
 
 @for(orderedProduct <- orderedProducts) {
-    <a href="@controllers.basket.routes.OrderedProductsController.getOrderedProductById(orderedProduct.id)"><b>id: @orderedProduct.id</b></a><br>
+    <a href="@controllers.basket.routes.OrderedProductsController.getOrderedProductById(orderedProduct.id)"><strong>id: @orderedProduct.id</strong></a><br>
     <p>
         basketId: @orderedProduct.basketId <br>
         productId: @orderedProduct.productId <br>
