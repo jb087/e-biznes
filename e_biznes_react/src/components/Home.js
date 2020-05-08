@@ -1,15 +1,21 @@
 import React, {Component} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Categories from "./Categories";
 import Products from "./Products";
-
+import Product from "./Product";
+import {getProductById} from "../services/ProductService";
+import {getPhotosByProductId, photoJPGById} from '../services/PhotoService'
+import {getOpinionsByProductId} from '../services/OpinionsService'
 
 class Home extends Component {
 
     state = {
-        selectedSubcategoryId: ""
+        selectedSubcategoryId: "",
+        selectedProduct: null,
+        productOpinions: null,
+        productPhotos: null
     };
 
     useStyles = makeStyles((theme) => ({
@@ -34,7 +40,18 @@ class Home extends Component {
                     </Grid>
                     <Grid item xs={9}>
                         <Paper className={this.useStyles.paper}>
-                            <Products selectedSubcategoryId={this.state.selectedSubcategoryId}/>
+                            {
+                                this.state.selectedProduct === null ?
+                                    <Products
+                                        selectedSubcategoryId={this.state.selectedSubcategoryId}
+                                        selectProduct={this.selectProduct}
+                                    /> :
+                                    <Product
+                                        product={this.state.selectedProduct}
+                                        opinions={this.state.productOpinions}
+                                        photos={this.state.productPhotos}
+                                    />
+                            }
                         </Paper>
                     </Grid>
                 </Grid>
@@ -43,7 +60,31 @@ class Home extends Component {
     }
 
     selectSubcategory = (subcategoryId) => {
-        this.setState({selectedSubcategoryId: subcategoryId});
+        this.setState({
+            selectedSubcategoryId: subcategoryId,
+            selectedProduct: null,
+            productOpinions: null,
+            productPhotos: null
+        });
+    };
+
+    selectProduct = async (productId) => {
+        const product = await getProductById(productId);
+        const opinions = await getOpinionsByProductId(productId);
+        const photos = await getPhotosByProductId(productId);
+        const images = [];
+        photos.forEach(photo => {
+            images.push({
+                original: photoJPGById + photo.id
+            })
+        });
+
+        this.setState({
+            selectedSubcategoryId: "",
+            selectedProduct: product,
+            productOpinions: opinions,
+            productPhotos: images
+        });
     }
 }
 

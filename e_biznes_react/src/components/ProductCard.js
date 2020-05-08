@@ -18,7 +18,7 @@ class ProductCard extends Component {
         return (
             <div>
                 <Card className={this.useStyles.root}>
-                    <CardActionArea>
+                    <CardActionArea onClick={() => this.props.selectProduct(this.props.product.id)}>
                         {
                             this.props.getPhoto(this.props.product.id) ?
                             this.getImage() :

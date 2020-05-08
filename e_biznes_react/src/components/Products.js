@@ -21,6 +21,7 @@ class Products extends Component {
                                 key={product.id}
                                 product={product}
                                 getPhoto={this.getFirstPhotoByProductId}
+                                selectProduct={this.props.selectProduct}
                             />
                         )
                 }
