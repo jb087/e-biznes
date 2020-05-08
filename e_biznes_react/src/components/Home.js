@@ -7,6 +7,17 @@ import Categories from "./Categories";
 
 class Home extends Component {
 
+    useStyles = makeStyles((theme) => ({
+        root: {
+            flexGrow: 1,
+        },
+        paper: {
+            padding: theme.spacing(2),
+            textAlign: 'center',
+            color: theme.palette.text.secondary,
+        },
+    }));
+
     render() {
         return (
             <div className={this.useStyles.root}>
@@ -23,17 +34,6 @@ class Home extends Component {
             </div>
         );
     }
-
-    useStyles = makeStyles((theme) => ({
-        root: {
-            flexGrow: 1,
-        },
-        paper: {
-            padding: theme.spacing(2),
-            textAlign: 'center',
-            color: theme.palette.text.secondary,
-        },
-    }));
 }
 
 export default Home;

@@ -1,38 +1,18 @@
 import React, {Component} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TreeItem from '@material-ui/lab/TreeItem';
+import {getCategories} from '../services/CategoryService'
+import {getSubcategories} from '../services/subcategoryService'
 
 class Categories extends Component {
 
-    render() {
-        return (
-            <div>
-                <TreeView
-                    className={this.useStyles.root}
-                    defaultCollapseIcon={<ExpandMoreIcon />}
-                    defaultExpandIcon={<ChevronRightIcon />}
-                >
-                    <TreeItem nodeId="1" label="Applications">
-                        <TreeItem nodeId="2" label="Calendar" />
-                        <TreeItem nodeId="3" label="Chrome" />
-                        <TreeItem nodeId="4" label="Webstorm" />
-                    </TreeItem>
-                    <TreeItem nodeId="5" label="Documents">
-                        <TreeItem nodeId="10" label="OSS" />
-                        <TreeItem nodeId="6" label="Material-UI">
-                            <TreeItem nodeId="7" label="src">
-                                <TreeItem nodeId="8" label="index.js" />
-                                <TreeItem nodeId="9" label="tree-view.js" />
-                            </TreeItem>
-                        </TreeItem>
-                    </TreeItem>
-                </TreeView>
-            </div>
-        );
-    }
+    state = {
+        categories: [],
+        subcategories: []
+    };
 
     useStyles = makeStyles({
         root: {
@@ -41,6 +21,42 @@ class Categories extends Component {
             maxWidth: 400,
         },
     });
+
+    render() {
+        return (
+            <div>
+                <TreeView
+                    className={this.useStyles.root}
+                    defaultCollapseIcon={<ExpandMoreIcon/>}
+                    defaultExpandIcon={<ChevronRightIcon/>}
+                >
+                    {
+                        this.state.categories
+                            .map(category =>
+                                <TreeItem nodeId={category.id} label={category.name}>
+                                    {
+                                        this.state.subcategories
+                                            .filter(subcategory => subcategory.parentId === category.id)
+                                            .map(subcategory =>
+                                                <TreeItem nodeId={subcategory.id} label={subcategory.name}/>
+                                            )
+                                    }
+                                </TreeItem>
+                            )
+                    }
+                </TreeView>
+            </div>
+        );
+    }
+
+    async componentDidMount() {
+        const categories = await getCategories();
+        const subcategories = await getSubcategories();
+        this.setState({
+            categories: categories,
+            subcategories: subcategories
+        })
+    }
 }
 
 export default Categories;
