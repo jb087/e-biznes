@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TreeItem from '@material-ui/lab/TreeItem';
 import {getCategories} from '../services/CategoryService'
-import {getSubcategories} from '../services/subcategoryService'
+import {getSubcategories} from '../services/SubcategoryService'
 
 class Categories extends Component {
 
@@ -33,12 +33,12 @@ class Categories extends Component {
                     {
                         this.state.categories
                             .map(category =>
-                                <TreeItem nodeId={category.id} label={category.name}>
+                                <TreeItem key={category.id} nodeId={category.id} label={category.name}>
                                     {
                                         this.state.subcategories
                                             .filter(subcategory => subcategory.parentId === category.id)
                                             .map(subcategory =>
-                                                <TreeItem nodeId={subcategory.id} label={subcategory.name}/>
+                                                <TreeItem key={subcategory.id} nodeId={subcategory.id} label={subcategory.name}/>
                                             )
                                     }
                                 </TreeItem>

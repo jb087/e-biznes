@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Categories from "./Categories";
+import Products from "./Products";
 
 
 class Home extends Component {
@@ -28,7 +29,9 @@ class Home extends Component {
                         </Paper>
                     </Grid>
                     <Grid item xs={9}>
-                        <Paper className={this.useStyles.paper}>xs=9</Paper>
+                        <Paper className={this.useStyles.paper}>
+                            <Products/>
+                        </Paper>
                     </Grid>
                 </Grid>
             </div>
