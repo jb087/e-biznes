@@ -38,7 +38,12 @@ class Categories extends Component {
                                         this.state.subcategories
                                             .filter(subcategory => subcategory.parentId === category.id)
                                             .map(subcategory =>
-                                                <TreeItem key={subcategory.id} nodeId={subcategory.id} label={subcategory.name}/>
+                                                <TreeItem
+                                                    key={subcategory.id}
+                                                    nodeId={subcategory.id}
+                                                    label={subcategory.name}
+                                                    onLabelClick={() => this.props.onLabelClick(subcategory.id)}
+                                                />
                                             )
                                     }
                                 </TreeItem>

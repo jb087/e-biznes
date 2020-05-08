@@ -8,6 +8,10 @@ import Products from "./Products";
 
 class Home extends Component {
 
+    state = {
+        selectedSubcategoryId: ""
+    };
+
     useStyles = makeStyles((theme) => ({
         root: {
             flexGrow: 1,
@@ -25,17 +29,21 @@ class Home extends Component {
                 <Grid container spacing={3}>
                     <Grid item xs={3}>
                         <Paper className={this.useStyles.paper}>
-                            <Categories/>
+                            <Categories onLabelClick={this.selectSubcategory}/>
                         </Paper>
                     </Grid>
                     <Grid item xs={9}>
                         <Paper className={this.useStyles.paper}>
-                            <Products/>
+                            <Products selectedSubcategoryId={this.state.selectedSubcategoryId}/>
                         </Paper>
                     </Grid>
                 </Grid>
             </div>
         );
+    }
+
+    selectSubcategory = (subcategoryId) => {
+        this.setState({selectedSubcategoryId: subcategoryId});
     }
 }
 

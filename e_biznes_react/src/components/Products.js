@@ -12,8 +12,8 @@ class Products extends Component {
         return (
             <div>
                 {
-                    //TODO filter by selected subcategory
                     this.state.products
+                        .filter(product => product.subcategoryId === this.props.selectedSubcategoryId)
                         .map(product =>
                             <ProductCard key={product.id} product={product}/>
                         )
