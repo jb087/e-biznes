@@ -19,6 +19,11 @@ class PhotoResource @Inject()(photoRepository: PhotoRepository, cc: MessagesCont
       .map(photos => Ok(Json.toJson(photos)))
   }
 
+  def getPhotosByProductId(productId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    photoRepository.getPhotoByProductId(productId)
+      .map(photos => Ok(Json.toJson(photos)))
+  }
+
   def getPhotoById(photoId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     photoRepository.getPhotoByIdOption(photoId)
       .map({
