@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import '../css/ProductCard.css'
 import ProductCard from "./ProductCard";
 import {getProducts} from '../services/ProductService'
 import {getPhotos} from '../services/PhotoService'
@@ -12,7 +13,7 @@ class Products extends Component {
 
     render() {
         return (
-            <div>
+            <div className={"Products"}>
                 {
                     this.state.products
                         .filter(product => product.subcategoryId === this.props.selectedSubcategoryId)

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import '../css/ProductCard.css'
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
@@ -16,7 +17,7 @@ class ProductCard extends Component {
 
     render() {
         return (
-            <div>
+            <div className={"ProductCard"}>
                 <Card className={this.useStyles.root}>
                     <CardActionArea onClick={() => this.props.selectProduct(this.props.product.id)}>
                         {
