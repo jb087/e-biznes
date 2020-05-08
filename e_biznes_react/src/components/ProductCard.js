@@ -2,11 +2,9 @@ import React, {Component} from 'react';
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import CardActions from "@material-ui/core/CardActions";
-import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-import logo from "../logo-e-biznes.png";
 import {makeStyles} from "@material-ui/core/styles";
+import {photoJPGById} from '../services/PhotoService'
 
 class ProductCard extends Component {
 
@@ -21,28 +19,35 @@ class ProductCard extends Component {
             <div>
                 <Card className={this.useStyles.root}>
                     <CardActionArea>
-                        <img
-                            src={logo} //TODO logo
-                            alt="logo"
-                            className="d-inline-block align-top logo mr-4"
-                        />
+                        {
+                            this.props.getPhoto(this.props.product.id) ?
+                            this.getImage() :
+                                this.getNoImage()
+                        }
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="h2">
                                 {this.props.product.title}
                             </Typography>
                         </CardContent>
                     </CardActionArea>
-                    <CardActions>
-                        <Button size="small" color="primary">
-                            Share
-                        </Button>
-                        <Button size="small" color="primary">
-                            Learn More
-                        </Button>
-                    </CardActions>
                 </Card>
             </div>
         );
+    }
+
+    getImage() {
+        return <img
+            src={photoJPGById + this.props.getPhoto(this.props.product.id).id}
+            alt={"logo"}
+            height={"150"}
+            width={"150"}
+        />;
+    }
+
+    getNoImage() {
+        return <img
+            alt={"logo"}
+        />;
     }
 }
 

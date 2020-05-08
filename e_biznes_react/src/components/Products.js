@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import ProductCard from "./ProductCard";
-import { getProducts } from '../services/ProductService'
+import {getProducts} from '../services/ProductService'
+import {getPhotos} from '../services/PhotoService'
 
 class Products extends Component {
 
     state = {
-        products: []
+        products: [],
+        photos: []
     };
 
     render() {
@@ -15,7 +17,11 @@ class Products extends Component {
                     this.state.products
                         .filter(product => product.subcategoryId === this.props.selectedSubcategoryId)
                         .map(product =>
-                            <ProductCard key={product.id} product={product}/>
+                            <ProductCard
+                                key={product.id}
+                                product={product}
+                                getPhoto={this.getFirstPhotoByProductId}
+                            />
                         )
                 }
             </div>
@@ -24,7 +30,16 @@ class Products extends Component {
 
     async componentDidMount() {
         const products = await getProducts();
-        this.setState({products: products});
+        const photos = await getPhotos();
+        this.setState({
+            products: products,
+            photos: photos
+        });
+    }
+
+    getFirstPhotoByProductId = (productId) => {
+        return this.state.photos
+            .find(photo => photo.productId === productId)
     }
 }
 
