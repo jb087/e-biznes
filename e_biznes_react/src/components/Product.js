@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ImageGallery from 'react-image-gallery';
 import '../css/Product.css'
 import Opinion from "./Opinion";
+import Button from "react-bootstrap/Button";
 
 class Product extends Component {
 
@@ -14,7 +15,13 @@ class Product extends Component {
                 <br/><br/>
                 <ImageGallery items={this.props.photos} showThumbnails={false}/>
                 <br/><br/>
-
+                <Button
+                    variant="primary"
+                    onClick={() => this.addProductToBasket()}
+                >
+                    Add to Basket
+                </Button>
+                <br/><br/>
                 <h3>Description:</h3>
                 <p>{this.props.product.description}</p>
                 <br/><br/>
@@ -25,6 +32,12 @@ class Product extends Component {
                 }
             </div>
         );
+    }
+
+    addProductToBasket = () => {
+        this.props.addOrderedProduct(this.props.product.id);
+
+        alert("Pomyślnie dodano produkt do koszyka!")
     }
 }
 

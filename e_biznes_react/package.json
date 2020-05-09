@@ -14,7 +14,8 @@
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-image-gallery": "^1.0.7",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "underscore": "^1.10.2"
   },
   "scripts": {
     "start": "react-scripts start",

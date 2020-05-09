@@ -19,8 +19,8 @@ class Panel extends Component {
                 />
                 {
                     this.state.showBasket ?
-                        <Basket/> :
-                        <Home addOrderedProduct={this.addOrderedProduct} />
+                        <Basket orderedProducts={this.state.orderedProducts}/> :
+                        <Home addOrderedProduct={this.addOrderedProduct}/>
                 }
             </div>
         );
@@ -34,11 +34,14 @@ class Panel extends Component {
         this.setState({showBasket: false});
     };
 
-    addOrderedProduct = (productId, quantity) => {
-        const orderedProducts = this.state.orderedProducts;
+    addOrderedProduct = (productId) => {
+        let orderedProducts = this.state.orderedProducts;
+        if (orderedProducts.filter(orderedProduct => orderedProduct.productId === productId).length) {
+            orderedProducts = orderedProducts.filter(orderedProduct => orderedProduct.productId !== productId)
+        }
+
         orderedProducts.push({
             productId: productId,
-            quantity: quantity
         });
 
         this.setState({orderedProducts: orderedProducts});
