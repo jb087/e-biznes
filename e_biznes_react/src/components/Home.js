@@ -50,6 +50,7 @@ class Home extends Component {
                                         product={this.state.selectedProduct}
                                         opinions={this.state.productOpinions}
                                         photos={this.state.productPhotos}
+                                        addOrderedProduct={this.props.addOrderedProduct}
                                     />
                             }
                         </Paper>

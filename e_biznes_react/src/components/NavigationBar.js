@@ -7,7 +7,7 @@ class NavigationBar extends Component {
     render() {
         return (
             <nav className="navbar navbar-light bg-light">
-                <div className={"Logo"} onMouseOver="" onClick={this.props.hideBasket}>
+                <div className={"Logo"} onClick={this.props.hideBasket}>
                     <img
                         src={logo}
                         alt="logo"

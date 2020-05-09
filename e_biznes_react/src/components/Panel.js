@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import NavigationBar from "./NavigationBar";
 import Basket from "./Basket";
+import Home from "./Home";
 
 class Panel extends Component {
 
     state = {
-        showBasket: false
+        showBasket: false,
+        orderedProducts: []
     };
 
     render() {
@@ -18,7 +20,7 @@ class Panel extends Component {
                 {
                     this.state.showBasket ?
                         <Basket/> :
-                        this.props.children
+                        <Home addOrderedProduct={this.addOrderedProduct} />
                 }
             </div>
         );
@@ -30,6 +32,16 @@ class Panel extends Component {
 
     hideBasket = () => {
         this.setState({showBasket: false});
+    };
+
+    addOrderedProduct = (productId, quantity) => {
+        const orderedProducts = this.state.orderedProducts;
+        orderedProducts.push({
+            productId: productId,
+            quantity: quantity
+        });
+
+        this.setState({orderedProducts: orderedProducts});
     }
 }
 

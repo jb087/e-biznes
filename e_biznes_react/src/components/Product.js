@@ -14,6 +14,7 @@ class Product extends Component {
                 <br/><br/>
                 <ImageGallery items={this.props.photos} showThumbnails={false}/>
                 <br/><br/>
+
                 <h3>Description:</h3>
                 <p>{this.props.product.description}</p>
                 <br/><br/>
