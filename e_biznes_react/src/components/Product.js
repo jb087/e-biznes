@@ -15,12 +15,19 @@ class Product extends Component {
                 <br/><br/>
                 <ImageGallery items={this.props.photos} showThumbnails={false}/>
                 <br/><br/>
-                <Button
-                    variant="primary"
-                    onClick={() => this.addProductToBasket()}
-                >
-                    Add to Basket
-                </Button>
+                <div className="d-flex justify-content-between">
+                    <div>
+                        <Button
+                            variant="primary"
+                            onClick={() => this.addProductToBasket()}
+                        >
+                            Add to Basket
+                        </Button>
+                    </div>
+                    <div>
+                        <h5>Quantity: {this.props.product.quantity}</h5>
+                    </div>
+                </div>
                 <br/><br/>
                 <h3>Description:</h3>
                 <p>{this.props.product.description}</p>
@@ -35,9 +42,13 @@ class Product extends Component {
     }
 
     addProductToBasket = () => {
-        this.props.addOrderedProduct(this.props.product.id);
+        if (this.props.product.quantity > 0) {
+            this.props.addOrderedProduct(this.props.product.id);
 
-        alert("Pomyślnie dodano produkt do koszyka!")
+            alert("Pomyślnie dodano produkt do koszyka!")
+        } else {
+            alert("Niewystarczająca ilość produktu. Nie można dodać produktu do koszyka!")
+        }
     }
 }
 

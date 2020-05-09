@@ -19,6 +19,7 @@ class OrderedProducts extends Component {
                         <Form onSubmit={this.handleSubmit}>
                             {
                                 this.state.products
+                                    .filter(product => product.product.quantity > 0)
                                     .map(product =>
                                         <OrderedProduct key={product.product.id} product={product}/>
                                     )

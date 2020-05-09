@@ -27,7 +27,7 @@ class OrderedProduct extends Component {
                         <Form.Label>Quantity</Form.Label>
                         <Form.Control as="select" custom>
                             {
-                                _.range(1, this.props.product.product.quantity)
+                                _.range(1, this.props.product.product.quantity + 1)
                                     .map(option =>
                                         <option key={option}>{option}</option>
                                     )
