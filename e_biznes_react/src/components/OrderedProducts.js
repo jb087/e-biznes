@@ -4,16 +4,22 @@ import Button from "react-bootstrap/Button";
 import OrderedProduct from "./OrderedProduct";
 import {getProductById} from "../services/ProductService";
 import {getPhotosByProductId} from "../services/PhotoService";
+import PurchaseModal from "./PurchaseModal";
 
 class OrderedProducts extends Component {
 
     state = {
-        products: null
+        products: null,
+        showPurchaseModal: false
     };
 
     render() {
         return (
             <div>
+                <PurchaseModal
+                    show={this.state.showPurchaseModal}
+                    onHide={this.hidePurchaseModal}
+                />
                 {
                     this.state.products && (
                         <Form onSubmit={this.handleSubmit}>
@@ -70,9 +76,17 @@ class OrderedProducts extends Component {
     handleSubmit = event => {
         event.preventDefault();
 
-        this.props.addOrderedProduct(this.props.product.id, event.target.elements.addProductToBasket.value);
+        //this.props.addOrderedProduct(this.props.product.id, event.target.elements.addProductToBasket.value);
 
-        alert("Pomyślnie dodano produkt do koszyka!")
+        this.showPurchaseModal();
+    };
+
+    showPurchaseModal = () => {
+        this.setState({showPurchaseModal: true});
+    };
+
+    hidePurchaseModal = () => {
+        this.setState({showPurchaseModal: false});
     }
 }
 
