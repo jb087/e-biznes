@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Modal} from 'react-bootstrap'
-import PurchaseStepWizard from "./PurchaseStepWizard";
 
 class PurchaseModal extends Component {
     render() {
@@ -10,7 +9,7 @@ class PurchaseModal extends Component {
                     <h3>Purchase Process</h3>
                 </Modal.Header>
                 <Modal.Body>
-                    <PurchaseStepWizard/>
+                    Woohoo, you're reading this text in a modal!
                 </Modal.Body>
             </Modal>
         );
