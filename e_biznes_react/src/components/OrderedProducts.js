@@ -19,6 +19,7 @@ class OrderedProducts extends Component {
                 <PurchaseModal
                     show={this.state.showPurchaseModal}
                     onHide={this.hidePurchaseModal}
+                    orderedProducts={this.state.products}
                 />
                 {
                     this.state.products && (
