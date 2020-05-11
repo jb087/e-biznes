@@ -26,6 +26,8 @@ class Product extends Component {
                     </div>
                     <div>
                         <h5>Quantity: {this.props.product.quantity}</h5>
+                        <h5>Price: {this.props.product.price}</h5>
+                        <h6>Create date: {this.props.product.date}</h6>
                     </div>
                 </div>
                 <br/><br/>

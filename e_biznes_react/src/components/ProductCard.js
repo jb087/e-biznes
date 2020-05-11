@@ -29,6 +29,7 @@ class ProductCard extends Component {
                             <Typography gutterBottom variant="h5" component="h2">
                                 {this.props.product.title}
                             </Typography>
+                            <h6>Price: {this.props.product.price}</h6>
                         </CardContent>
                     </CardActionArea>
                 </Card>
