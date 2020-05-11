@@ -27,17 +27,26 @@ class OrderedProducts extends Component {
                                 this.state.products
                                     .filter(product => product.product.quantity > 0)
                                     .map(product =>
-                                        <OrderedProduct key={product.product.id} product={product}/>
+                                        <OrderedProduct
+                                            key={product.product.id}
+                                            product={product}
+                                            setQuantity={this.setQuantity}
+                                        />
                                     )
                             }
                             <br/><br/>
-                            <div className="row justify-content-center">
-                                <Button
-                                    variant="primary"
-                                    type="submit"
-                                >
-                                    Buy
-                                </Button>
+                            <div className="d-flex justify-content-between">
+                                <div>
+                                    <h4>Total price: {this.totalPrice()}</h4>
+                                </div>
+                                <div>
+                                    <Button
+                                        variant="primary"
+                                        type="submit"
+                                    >
+                                        Buy
+                                    </Button>
+                                </div>
                             </div>
                             <br/>
                         </Form>
@@ -56,15 +65,19 @@ class OrderedProducts extends Component {
             if (photos.length > 0) {
                 products.push({
                     product: product,
+                    quantity: 1,
                     photoId: photos[0].id
                 })
             } else {
                 products.push({
                     product: product,
+                    quantity: 1,
                     photoId: null
                 })
             }
         }
+
+        products = products.sort(this.compareProducts);
 
         if (products.length === 0) {
             products = null
@@ -72,6 +85,34 @@ class OrderedProducts extends Component {
 
         this.setState({products: products})
     }
+
+    totalPrice = () => {
+        return this.state.products
+            .reduce((sum, product) => sum + (product.quantity * product.product.price), 0)
+    };
+
+    setQuantity = (event) => {
+        event.preventDefault();
+
+        let productToUpdate = this.state.products.filter(product => product.product.id === event.target.id.replace("group:", ""))[0];
+        productToUpdate.quantity = event.target.value;
+
+        let products = this.state.products.filter(product => product.product.id !== event.target.id.replace("group:", ""));
+        products.push(productToUpdate);
+        products = products.sort(this.compareProducts);
+
+        this.setState({products: products});
+    };
+
+    compareProducts = (product1, product2) => {
+        if (product1.product.title < product2.product.title) {
+            return -1;
+        }
+        if (product1.product.title > product2.product.title) {
+            return 1;
+        }
+        return 0;
+    };
 
     handleSubmit = event => {
         event.preventDefault();

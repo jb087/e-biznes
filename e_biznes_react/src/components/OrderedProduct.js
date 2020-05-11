@@ -23,9 +23,14 @@ class OrderedProduct extends Component {
                     </div>
                 </Col>
                 <Col>
-                    <Form.Group controlId="">
+                    <Form.Group controlId={"group:" + this.props.product.product.id}>
                         <Form.Label>Quantity</Form.Label>
-                        <Form.Control as="select" custom>
+                        <Form.Control
+                            as="select"
+                            size={"sm"}
+                            onChange={this.props.setQuantity}
+                            custom
+                        >
                             {
                                 _.range(1, this.props.product.product.quantity + 1)
                                     .map(option =>
