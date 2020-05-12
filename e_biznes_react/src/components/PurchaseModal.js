@@ -5,7 +5,8 @@ import {createBasket} from "../services/BasketService";
 import {createOrderedProduct} from "../services/OrderedProductsService";
 import {createShippingInformation} from "../services/ShippingInformationService";
 import {createOrder} from "../services/OrderService";
-import {createPayment} from "../services/PaymentService";
+import {createPayment, deletePayment, finalizePayment} from "../services/PaymentService";
+import {wasPaid} from "../services/PaymentServiceMock";
 
 class PurchaseModal extends Component {
 
@@ -112,6 +113,14 @@ class PurchaseModal extends Component {
         const orderId = await createOrder(this.getOrder(basketId, shippingInformationId));
 
         const paymentId = await createPayment(orderId, this.onError);
+        if (wasPaid()) {
+            await finalizePayment(paymentId, this.onError);
+        } else {
+            alert("Problem with payment. Probably You do not have enough money on account!");
+            await deletePayment(paymentId, this.onError);
+        }
+
+        //TODO Redirect to main page. Should clear all states.
     };
 
     getBasket = () => {
