@@ -48,7 +48,7 @@ class PaymentRepository @Inject()(
     payment.filter(_.id === paymentId).result.headOption
   }
 
-  def createPayment(orderId: String): Future[Unit] = {
+  def createPayment(orderId: String): Future[String] = {
     val id = UUID.randomUUID().toString
     val order = Await.result(orderRepository.getOrderById(orderId), Duration.Inf)
     val basket = Await.result(basketRepository.getBasketById(order.basketId), Duration.Inf)
@@ -57,7 +57,7 @@ class PaymentRepository @Inject()(
 
     db.run {
       createPayment(id, order, basket, orderedProducts)
-    }
+    }.map(_ => id)
   }
 
   private val createPayment = (id: String, orderToUpdate: Order, basketToUpdate: Basket, orderedProducts: Seq[OrderedProduct]) => {
