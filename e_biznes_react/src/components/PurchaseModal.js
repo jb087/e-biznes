@@ -5,6 +5,7 @@ import {createBasket} from "../services/BasketService";
 import {createOrderedProduct} from "../services/OrderedProductsService";
 import {createShippingInformation} from "../services/ShippingInformationService";
 import {createOrder} from "../services/OrderService";
+import {createPayment} from "../services/PaymentService";
 
 class PurchaseModal extends Component {
 
@@ -109,6 +110,8 @@ class PurchaseModal extends Component {
 
         const shippingInformationId = await createShippingInformation(this.getShippingInformation(event));
         const orderId = await createOrder(this.getOrder(basketId, shippingInformationId));
+
+        const paymentId = await createPayment(orderId, this.onError);
     };
 
     getBasket = () => {
@@ -149,6 +152,11 @@ class PurchaseModal extends Component {
             state: ""
         }
     };
+
+    onError = (errorMessage) => {
+        alert(errorMessage);
+        this.props.onHide();
+    }
 }
 
 export default PurchaseModal;
