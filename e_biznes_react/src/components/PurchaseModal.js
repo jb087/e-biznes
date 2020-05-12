@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import {createBasket} from "../services/BasketService";
 import {createOrderedProduct} from "../services/OrderedProductsService";
 import {createShippingInformation} from "../services/ShippingInformationService";
+import {createOrder} from "../services/OrderService";
 
 class PurchaseModal extends Component {
 
@@ -107,6 +108,7 @@ class PurchaseModal extends Component {
         }
 
         const shippingInformationId = await createShippingInformation(this.getShippingInformation(event));
+        const orderId = await createOrder(this.getOrder(basketId, shippingInformationId));
     };
 
     getBasket = () => {
@@ -137,7 +139,16 @@ class PurchaseModal extends Component {
             city: elements.city.value,
             zipCode: elements.zipCode.value
         }
-    }
+    };
+
+    getOrder = (basketId, shippingInformationId) => {
+        return {
+            id: "",
+            basketId: basketId,
+            shippingInformationId: shippingInformationId,
+            state: ""
+        }
+    };
 }
 
 export default PurchaseModal;
