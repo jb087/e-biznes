@@ -3,6 +3,7 @@ import {Form, Modal} from 'react-bootstrap'
 import Button from "react-bootstrap/Button";
 import {createBasket} from "../services/BasketService";
 import {createOrderedProduct} from "../services/OrderedProductsService";
+import {createShippingInformation} from "../services/ShippingInformationService";
 
 class PurchaseModal extends Component {
 
@@ -98,14 +99,14 @@ class PurchaseModal extends Component {
 
     finalizePurchase = async (event) => {
         event.preventDefault();
-
-        // TODO           console.log(event.target.elements.firstName.value);
+        event.persist();
 
         const basketId = await createBasket(this.getBasket());
         for (let i = 0; i < this.props.orderedProducts.length; i++) {
             await createOrderedProduct(this.getOrderedProduct(basketId, this.props.orderedProducts[i]));
         }
 
+        const shippingInformationId = await createShippingInformation(this.getShippingInformation(event));
     };
 
     getBasket = () => {
@@ -123,6 +124,20 @@ class PurchaseModal extends Component {
             quantity: product.quantity
         }
     };
+
+    getShippingInformation = (event) => {
+        let elements = event.target.elements;
+        return {
+            id: "",
+            firstName: elements.firstName.value,
+            lastName: elements.lastName.value,
+            email: elements.email.value,
+            street: elements.street.value,
+            houseNumber: elements.houseNumber.value,
+            city: elements.city.value,
+            zipCode: elements.zipCode.value
+        }
+    }
 }
 
 export default PurchaseModal;
