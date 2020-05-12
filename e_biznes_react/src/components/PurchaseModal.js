@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Form, Modal} from 'react-bootstrap'
 import Button from "react-bootstrap/Button";
+import {createBasket} from "../services/BasketService";
+import {createOrderedProduct} from "../services/OrderedProductsService";
 
 class PurchaseModal extends Component {
 
@@ -94,11 +96,33 @@ class PurchaseModal extends Component {
         );
     }
 
-    finalizePurchase = (event) => {
+    finalizePurchase = async (event) => {
         event.preventDefault();
 
         // TODO           console.log(event.target.elements.firstName.value);
-    }
+
+        const basketId = await createBasket(this.getBasket());
+        for (let i = 0; i < this.props.orderedProducts.length; i++) {
+            await createOrderedProduct(this.getOrderedProduct(basketId, this.props.orderedProducts[i]));
+        }
+
+    };
+
+    getBasket = () => {
+        return {
+            id: "",
+            isBought: 0
+        }
+    };
+
+    getOrderedProduct = (basketId, product) => {
+        return {
+            id: "",
+            basketId: basketId,
+            productId: product.product.id,
+            quantity: product.quantity
+        }
+    };
 }
 
 export default PurchaseModal;
