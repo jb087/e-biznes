@@ -28,7 +28,7 @@ class BasketResource @Inject()(basketRepository: BasketRepository, cc: MessagesC
 
   def createBasket: Action[JsValue] = Action.async(parse.json) {
     _.body.validate[Basket] match {
-      case JsSuccess(basket, _) => basketRepository.createBasket(basket.isBought).map(_ => Ok("Basket Created!"))
+      case JsSuccess(basket, _) => basketRepository.createBasket(basket.isBought).map(basketId => Ok(basketId))
       case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
     }
   }

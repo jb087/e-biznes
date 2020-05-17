@@ -44,12 +44,14 @@ PUT     /api/shippingInformation/:shippingInformationId     api.orders.ShippingI
 DELETE  /api/shippingInformation/:shippingInformationId     api.orders.ShippingInformationResource.deleteShippingInformation(shippingInformationId: String)
 
 GET     /api/opinions                                       api.products.OpinionResource.getOpinions
+GET     /api/opinions/:productId                            api.products.OpinionResource.getOpinionsByProductId(productId: String)
 GET     /api/opinion/:opinionId                             api.products.OpinionResource.getOpinionById(opinionId: String)
 POST    /api/opinion                                        api.products.OpinionResource.createOpinion
 PUT     /api/opinion/:opinionId                             api.products.OpinionResource.updateOpinion(opinionId: String)
 DELETE  /api/opinion/:opinionId                             api.products.OpinionResource.deleteOpinion(opinionId: String)
 
 GET     /api/photos                                         api.products.PhotoResource.getPhotos
+GET     /api/photos/:productId                              api.products.PhotoResource.getPhotosByProductId(productId: String)
 GET     /api/photo/:photoId                                 api.products.PhotoResource.getPhotoById(photoId: String)
 POST    /api/photo                                          api.products.PhotoResource.createPhoto
 PUT     /api/photo/:photoId/:productId                      api.products.PhotoResource.updatePhoto(photoId: String, productId: String)

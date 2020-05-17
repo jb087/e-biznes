@@ -28,7 +28,7 @@ class OrderResource @Inject()(orderRepository: OrderRepository, cc: MessagesCont
 
   def createOrder: Action[JsValue] = Action.async(parse.json) {
     _.body.validate[Order] match {
-      case JsSuccess(order, _) => orderRepository.createOrder(order).map(_ => Ok("Order Created!"))
+      case JsSuccess(order, _) => orderRepository.createOrder(order).map(orderId => Ok(orderId))
       case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
     }
   }

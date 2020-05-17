@@ -35,10 +35,11 @@ class BasketRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impli
     basket.filter(_.id === basketId).result.headOption
   }
 
-  def createBasket(isBought: Int): Future[Int] = db.run {
+  def createBasket(isBought: Int): Future[String] = {
     val id: String = UUID.randomUUID().toString
-
-    basket += Basket(id, isBought)
+    db.run {
+      basket += Basket(id, isBought)
+    }.map(_ => id)
   }
 
   def deleteBasket(basketId: String): Future[Int] = db.run {

@@ -24,6 +24,10 @@ class PhotoRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implic
     photo.result
   }
 
+  def getPhotoByProductId(productId: String): Future[Seq[Photo]] = db.run {
+    photo.filter(_.productId === productId).result
+  }
+
   def getPhotoById(photoId: String): Future[Photo] = db.run {
     photo.filter(_.id === photoId).result.head
   }

@@ -32,10 +32,11 @@ class OrderRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implic
     order.filter(_.id === orderId).result.headOption
   }
 
-  def createOrder(newOrder: Order): Future[Int] = db.run {
+  def createOrder(newOrder: Order): Future[String] = {
     val id = UUID.randomUUID().toString
-
-    order += Order(id, newOrder.basketId, newOrder.shippingInformationId, "CANCELLED")
+    db.run {
+      order += Order(id, newOrder.basketId, newOrder.shippingInformationId, "CANCELLED")
+    }.map(_ => id)
   }
 
   def deleteOrder(orderId: String): Future[Int] = db.run {

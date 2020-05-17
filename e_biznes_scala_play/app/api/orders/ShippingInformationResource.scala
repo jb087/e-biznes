@@ -28,7 +28,8 @@ class ShippingInformationResource @Inject()(shippingInformationRepository: Shipp
 
   def createShippingInformation: Action[JsValue] = Action.async(parse.json) {
     _.body.validate[ShippingInformation] match {
-      case JsSuccess(shippingInformation, _) => shippingInformationRepository.createShippingInformation(shippingInformation).map(_ => Ok("Shipping Information Created!"))
+      case JsSuccess(shippingInformation, _) => shippingInformationRepository.createShippingInformation(shippingInformation)
+        .map(informationId => Ok(informationId))
       case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
     }
   }

@@ -18,6 +18,11 @@ class OpinionResource @Inject()(opinionRepository: OpinionRepository, cc: Messag
       .map(opinions => Ok(Json.toJson(opinions)))
   }
 
+  def getOpinionsByProductId(productId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    opinionRepository.getOpinionsByProductId(productId)
+      .map(opinions => Ok(Json.toJson(opinions)))
+  }
+
   def getOpinionById(opinionId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     opinionRepository.getOpinionByIdOption(opinionId)
       .map({

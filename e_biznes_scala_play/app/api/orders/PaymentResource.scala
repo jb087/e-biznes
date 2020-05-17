@@ -5,7 +5,8 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import repositories.orders.PaymentRepository
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class PaymentResource @Inject()(paymentRepository: PaymentRepository, cc: MessagesControllerComponents)
@@ -25,17 +26,29 @@ class PaymentResource @Inject()(paymentRepository: PaymentRepository, cc: Messag
   }
 
   def createPayment(orderId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    paymentRepository.createPayment(orderId)
-      .map(_ => Ok("Payment Created!"))
+    try {
+      val paymentId = Await.result(paymentRepository.createPayment(orderId), Duration.Inf)
+      Future.successful(Ok(paymentId))
+    } catch {
+      case e: IllegalStateException => Future.successful(InternalServerError(e.getMessage))
+    }
   }
 
   def deletePayment(paymentId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    paymentRepository.deletePayment(paymentId)
-      .map(_ => Ok("Payment Delete!"))
+    try {
+      Await.result(paymentRepository.deletePayment(paymentId), Duration.Inf)
+        Future.successful(Ok("Payment Delete!"))
+    } catch {
+      case e: IllegalStateException => Future.successful(InternalServerError(e.getMessage))
+    }
   }
 
   def finalizePayment(paymentId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    paymentRepository.finalizePayment(paymentId)
-      .map(_ => Ok("Payment Finalized!"))
+    try {
+      Await.result(paymentRepository.finalizePayment(paymentId), Duration.Inf)
+      Future.successful(Ok("Payment Finalized!"))
+    } catch {
+      case e: IllegalStateException => Future.successful(InternalServerError(e.getMessage))
+    }
   }
 }

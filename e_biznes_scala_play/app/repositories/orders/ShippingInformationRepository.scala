@@ -31,11 +31,12 @@ class ShippingInformationRepository @Inject()(dbConfigProvider: DatabaseConfigPr
     shippingInformation.filter(_.id === shippingInformationId).result.headOption
   }
 
-  def createShippingInformation(newShippingInformation: ShippingInformation): Future[Int] = db.run {
+  def createShippingInformation(newShippingInformation: ShippingInformation): Future[String] = {
     val id = UUID.randomUUID().toString
-
-    shippingInformation += ShippingInformation(id, newShippingInformation.firstName, newShippingInformation.lastName, newShippingInformation.email,
-      newShippingInformation.street, newShippingInformation.houseNumber, newShippingInformation.city, newShippingInformation.zipCode)
+    db.run {
+      shippingInformation += ShippingInformation(id, newShippingInformation.firstName, newShippingInformation.lastName, newShippingInformation.email,
+        newShippingInformation.street, newShippingInformation.houseNumber, newShippingInformation.city, newShippingInformation.zipCode)
+    }.map(_ => id)
   }
 
   def deleteShippingInformation(shippingInformationId: String): Future[Int] = db.run {
