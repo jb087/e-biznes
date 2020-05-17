@@ -115,12 +115,12 @@ class PurchaseModal extends Component {
         const paymentId = await createPayment(orderId, this.onError);
         if (wasPaid()) {
             await finalizePayment(paymentId, this.onError);
+
+            window.location.reload(false);
         } else {
             alert("Problem with payment. Probably You do not have enough money on account!");
             await deletePayment(paymentId, this.onError);
         }
-
-        //TODO Redirect to main page. Should clear all states.
     };
 
     getBasket = () => {
