@@ -1,14 +1,26 @@
 import React, {Component} from 'react';
 import {Col, Row} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import _ from "underscore";
 import {photoJPGById} from "../services/PhotoService";
+import '../css/OrderedProduct.css'
 
 class OrderedProduct extends Component {
 
     render() {
         return (
             <Row>
+                <Col>
+                    <div className="row justify-content-center">
+                        <DeleteForeverIcon
+                            fontSize={"large"}
+                            color={"error"}
+                            className={"Delete"}
+                            onClick={() => this.props.deleteProduct(this.props.product.product.id)}
+                        />
+                    </div>
+                </Col>
                 <Col>
                     <div className="row justify-content-center">
                         {

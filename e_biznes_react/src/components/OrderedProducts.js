@@ -32,6 +32,7 @@ class OrderedProducts extends Component {
                                             key={product.product.id}
                                             product={product}
                                             setQuantity={this.setQuantity}
+                                            deleteProduct={this.deleteProduct}
                                         />
                                     )
                             }
@@ -118,8 +119,6 @@ class OrderedProducts extends Component {
     handleSubmit = event => {
         event.preventDefault();
 
-        //this.props.addOrderedProduct(this.props.product.id, event.target.elements.addProductToBasket.value);
-
         this.showPurchaseModal();
     };
 
@@ -129,7 +128,18 @@ class OrderedProducts extends Component {
 
     hidePurchaseModal = () => {
         this.setState({showPurchaseModal: false});
-    }
+    };
+
+    deleteProduct = (productId) => {
+        const products = this.state.products
+            .filter(product => product.product.id !== productId);
+
+        if (products.length === 0) {
+            this.setState({products: null});
+        } else {
+            this.setState({products: products});
+        }
+    };
 }
 
 export default OrderedProducts;
