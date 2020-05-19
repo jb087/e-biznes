@@ -19,6 +19,4 @@ trait UserService extends IdentityService[User] {
                      firstName: Option[String],
                      lastName: Option[String],
                      avatarURL: Option[String]): Future[User]
-
-  def setEmailActivated(user: User): Future[User]
 }

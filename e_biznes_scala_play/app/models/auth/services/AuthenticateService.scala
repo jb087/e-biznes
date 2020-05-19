@@ -34,7 +34,7 @@ class AuthenticateService @Inject()(credentialsProvider: CredentialsProvider,
                 profile.lastName,
                 profile.avatarURL
               )
-              _ <- addAuthenticateMethod(user.userID, profile.loginInfo, authInfo)
+              _ <- addAuthenticateMethod(UUID.fromString(user.userID), profile.loginInfo, authInfo)
             } yield AccountBound(user)
           } else {
             Future.successful(EmailIsBeingUsed(providers))

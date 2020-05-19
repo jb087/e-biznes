@@ -40,19 +40,14 @@ class UserServiceImpl @Inject()(userDAO: UserDAO,
           ))
         case None =>
           userDAO.save(User(
-            userID = UUID.randomUUID(),
+            userID = UUID.randomUUID().toString,
             firstName = firstName,
             lastName = lastName,
             email = Some(email),
             avatarURL = avatarURL,
-            activated = false,
             role = UserRoles.User
           ))
       }
     }
-  }
-
-  override def setEmailActivated(user: User): Future[User] = {
-    userDAO.save(user.copy(activated = true))
   }
 }

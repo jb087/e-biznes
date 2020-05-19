@@ -33,7 +33,7 @@ class LoginInfoDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
 
     val actions = (for {
       dbLoginInfo <- loginInfoAction
-      userLoginInfo = DBUserLoginInfo(userID, dbLoginInfo.id.get)
+      userLoginInfo = DBUserLoginInfo(userID.toString, dbLoginInfo.id.get)
       exists <- existsUserLoginInfo(userLoginInfo)
       _ <- if (exists) DBIO.successful(()) else slickUserLoginInfos += userLoginInfo
     } yield ()).transactionally
@@ -47,7 +47,7 @@ class LoginInfoDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
 
   def find(userId: UUID, providerId: String): Future[Option[(User, LoginInfo)]] = {
     val action = for {
-      ((_, li), u) <- slickUserLoginInfos.filter(_.userID === userId)
+      ((_, li), u) <- slickUserLoginInfos.filter(_.userID === userId.toString)
         .join(slickLoginInfos).on(_.loginInfoId === _.id)
         .join(slickUsers).on(_._1.userID === _.id)
 

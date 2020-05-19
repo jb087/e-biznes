@@ -1,13 +1,10 @@
 package models.auth
 
-import java.util.UUID
-
 import com.mohiva.play.silhouette.api.Identity
 
-case class User(userID: UUID,
+case class User(userID: String,
                 firstName: Option[String],
                 lastName: Option[String],
                 email: Option[String],
                 avatarURL: Option[String],
-                activated: Boolean,
                 role: UserRoles.UserRole) extends Identity

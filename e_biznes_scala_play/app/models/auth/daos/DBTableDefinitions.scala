@@ -21,31 +21,27 @@ trait DBTableDefinitions {
     def * = (id, name) <> (DBUserRole.tupled, DBUserRole.unapply)
   }
 
-  case class DBUser(userID: UUID,
+  case class DBUser(userID: String,
                     firstName: Option[String],
                     lastName: Option[String],
                     email: Option[String],
                     avatarURL: Option[String],
-                    activated: Boolean,
-                    roleId: Int,
-                    signedUpAt: ZonedDateTime)
+                    roleId: Int)
 
   object DBUser {
-    def toUser(u: DBUser): User = User(u.userID, u.firstName, u.lastName, u.email, u.avatarURL, u.activated, UserRoles(u.roleId))
-    def fromUser(u: User): DBUser = DBUser(u.userID, u.firstName, u.lastName, u.email, u.avatarURL, u.activated, u.role.id, ZonedDateTime.now)
+    def toUser(u: DBUser): User = User(u.userID, u.firstName, u.lastName, u.email, u.avatarURL, UserRoles(u.roleId))
+    def fromUser(u: User): DBUser = DBUser(u.userID, u.firstName, u.lastName, u.email, u.avatarURL, u.role.id)
   }
 
   class Users(tag: Tag) extends Table[DBUser](tag, "user") {
 
-    def id = column[UUID]("id", O.PrimaryKey)
+    def id = column[String]("id", O.PrimaryKey)
     def firstName = column[Option[String]]("first_name")
     def lastName = column[Option[String]]("last_name")
     def email = column[Option[String]]("email")
     def avatarURL = column[Option[String]]("avatar_url")
-    def activated = column[Boolean]("activated")
     def roleId = column[Int]("role_id")
-    def signedUpAt = column[ZonedDateTime]("signed_up_at")
-    def * = (id, firstName, lastName, email, avatarURL, activated, roleId, signedUpAt) <> ((DBUser.apply _).tupled, DBUser.unapply)
+    def * = (id, firstName, lastName, email, avatarURL, roleId) <> ((DBUser.apply _).tupled, DBUser.unapply)
   }
 
   case class DBLoginInfo(id: Option[Long], providerID: String, providerKey: String)
@@ -62,12 +58,12 @@ trait DBTableDefinitions {
   }
 
   case class DBUserLoginInfo(
-    userID: UUID,
+    userID: String,
     loginInfoId: Long
   )
 
   class UserLoginInfos(tag: Tag) extends Table[DBUserLoginInfo](tag, "user_login_info") {
-    def userID = column[UUID]("user_id")
+    def userID = column[String]("user_id")
     def loginInfoId = column[Long]("login_info_id")
     def * = (userID, loginInfoId) <> (DBUserLoginInfo.tupled, DBUserLoginInfo.unapply)
   }

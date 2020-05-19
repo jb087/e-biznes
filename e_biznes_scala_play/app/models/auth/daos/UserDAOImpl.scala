@@ -24,13 +24,13 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     } yield dbUser
     db.run(userQuery.result.headOption).map { dbUserOption =>
       dbUserOption.map { user =>
-        User(user.userID, user.firstName, user.lastName, user.email, user.avatarURL, user.activated, UserRoles(user.roleId))
+        User(user.userID, user.firstName, user.lastName, user.email, user.avatarURL, UserRoles(user.roleId))
       }
     }
   }
 
   def find(userID: UUID) = {
-    val query = slickUsers.filter(_.id === userID)
+    val query = slickUsers.filter(_.id === userID.toString)
 
     db.run(query.result.headOption).map { resultOption =>
       resultOption.map(DBUser.toUser)
@@ -40,7 +40,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   def save(user: User) = {
     val actions = (for {
       userRoleId <- userRoleDAO.getUserRole()
-      dbUser = DBUser(user.userID, user.firstName, user.lastName, user.email, user.avatarURL, user.activated, userRoleId, ZonedDateTime.now())
+      dbUser = DBUser(user.userID, user.firstName, user.lastName, user.email, user.avatarURL, userRoleId)
       _ <- slickUsers.insertOrUpdate(dbUser)
     } yield ()).transactionally
 
@@ -48,7 +48,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   }
 
   override def updateUserRole(userId: UUID, role: UserRoles.UserRole): Future[Boolean] = {
-    db.run(slickUsers.filter(_.id === userId).map(_.roleId).update(role.id)).map(_ > 0)
+    db.run(slickUsers.filter(_.id === userId.toString).map(_.roleId).update(role.id)).map(_ > 0)
   }
 
   def findByEmail(email: String): Future[Option[User]] = {

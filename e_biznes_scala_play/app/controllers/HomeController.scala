@@ -27,9 +27,11 @@ class HomeController @Inject()(components: ControllerComponents,
     Ok(views.html.index())
   }
 
-  def reactApp(path: String): Action[AnyContent] = silhouette.UserAwareAction.async { implicit request =>
+  def reactApp(path: String): Action[AnyContent] = TODO
+
+    /*silhouette.UserAwareAction.async { implicit request =>
     fetchWebpackServer(path)
-  }
+  }*/
 
   private def fetchWebpackServer(path: String)(implicit request: RequestHeader): Future[Result] = {
     ws.url(s"http://localhost:3000/$path").get().map { r =>
