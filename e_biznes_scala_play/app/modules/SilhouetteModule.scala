@@ -82,12 +82,11 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   }
 
   @Provides
-  def provideSocialProviderRegistry(facebook: FacebookProvider,
-                                    google: GoogleProvider): SocialProviderRegistry = {
-
+  def provideSocialProviderRegistry(gitHubProvider: GitHubProvider,
+                                    googleProvider: GoogleProvider): SocialProviderRegistry = {
     SocialProviderRegistry(Seq(
-      google,
-      facebook
+      googleProvider,
+      gitHubProvider
     ))
   }
 
@@ -125,7 +124,6 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
 
   @Provides
   def provideAuthInfoRepository(oauth2InfoDAO: DelegableAuthInfoDAO[OAuth2Info]): AuthInfoRepository = {
-
     new DelegableAuthInfoRepository(oauth2InfoDAO)
   }
 
@@ -134,7 +132,6 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
                                   idGenerator: IDGenerator,
                                   configuration: Configuration,
                                   clock: Clock): AuthenticatorService[JWTAuthenticator] = {
-
     val config = configuration.underlying.as[JWTAuthenticatorSettings]("silhouette.authenticator")
     val encoder = new CrypterAuthenticatorEncoder(crypter)
 
@@ -155,7 +152,6 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   @Provides
   def provideSocialStateHandler(@Named("social-state-signer") signer: Signer,
                                 csrfStateItemHandler: CsrfStateItemHandler): SocialStateHandler = {
-
     new DefaultSocialStateHandler(Set(csrfStateItemHandler), signer)
   }
 
@@ -165,19 +161,16 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   }
 
   @Provides
-  def provideFacebookProvider(
-                               httpLayer: HTTPLayer,
-                               socialStateHandler: SocialStateHandler,
-                               configuration: Configuration): FacebookProvider = {
-
-    new FacebookProvider(httpLayer, socialStateHandler, configuration.underlying.as[OAuth2Settings]("silhouette.facebook"))
+  def provideGitHubProvider(httpLayer: HTTPLayer,
+                            socialStateHandler: SocialStateHandler,
+                            configuration: Configuration): GitHubProvider = {
+    new GitHubProvider(httpLayer, socialStateHandler, configuration.underlying.as[OAuth2Settings]("silhouette.github"))
   }
 
   @Provides
   def provideGoogleProvider(httpLayer: HTTPLayer,
                             socialStateHandler: SocialStateHandler,
                             configuration: Configuration): GoogleProvider = {
-
     new GoogleProvider(httpLayer, socialStateHandler, configuration.underlying.as[OAuth2Settings]("silhouette.google"))
   }
 }
