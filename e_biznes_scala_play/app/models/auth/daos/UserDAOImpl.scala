@@ -1,6 +1,5 @@
 package models.auth.daos
 
-import java.time.ZonedDateTime
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
@@ -37,15 +36,11 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     }
   }
 
-  def save(user: User) = {
-    val actions = (for {
-      userRoleId <- userRoleDAO.getUserRole()
-      dbUser = DBUser(user.userID, user.firstName, user.lastName, user.email, user.avatarURL, userRoleId)
-      _ <- slickUsers.insertOrUpdate(dbUser)
-    } yield ()).transactionally
+  def save(user: User) = db.run {
+    val dbUser = DBUser(user.userID, user.firstName, user.lastName, user.email, user.avatarURL, user.role.id)
+    slickUsers.insertOrUpdate(dbUser)
 
-    db.run(actions).map(_ => user)
-  }
+  }.map(_ => user)
 
   override def updateUserRole(userId: UUID, role: UserRoles.UserRole): Future[Boolean] = {
     db.run(slickUsers.filter(_.id === userId.toString).map(_.roleId).update(role.id)).map(_ > 0)
