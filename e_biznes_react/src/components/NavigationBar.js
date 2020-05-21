@@ -31,6 +31,11 @@ export default function NavigationBar({hideBasket, showBasket}) {
                     Basket
                 </button>
                 {
+                    user && user.role === "Admin" && (
+                        <a href="http://localhost:9000/" className="btn btn-outline-primary my-2 my-sm-0 mr-2">Administration Panel</a>
+                    )
+                }
+                {
                     user ? (
                         <button
                             className="btn btn-outline-danger my-2 my-sm-0 mr-2"
