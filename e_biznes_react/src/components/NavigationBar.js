@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import logo from '../logo-e-biznes.png'
 import '../css/NavigationBar.css'
+import SocialLoginButton from "./SocialLoginButton";
 
 class NavigationBar extends Component {
 
@@ -22,6 +23,7 @@ class NavigationBar extends Component {
                     >
                         Basket
                     </button>
+                    <SocialLoginButton provider={"google"} title={"Login with Google"}/>
                 </form>
             </nav>
         );
