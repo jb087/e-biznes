@@ -24,6 +24,7 @@ class NavigationBar extends Component {
                         Basket
                     </button>
                     <SocialLoginButton provider={"google"} title={"Login with Google"}/>
+                    <SocialLoginButton provider={"github"} title={"Login with GitHub"}/>
                 </form>
             </nav>
         );
