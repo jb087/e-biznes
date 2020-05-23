@@ -1,4 +1,4 @@
-package authentication
+package auth
 
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api._
@@ -40,24 +40,6 @@ abstract class AbstractAuthController(silhouette: Silhouette[DefaultEnv],
           "role" -> user.role,
           "email" -> user.email
         )))
-      }
-    }
-  }
-
-  protected def authenticateAdminPanelUser(user: User, loginInfo: LoginInfo, rememberMe: Boolean)(implicit request: Request[_]): Future[AuthenticatorResult] = {
-    val c = configuration.underlying
-    silhouette.env.authenticatorService.create(loginInfo).map {
-      case authenticator if rememberMe =>
-        authenticator.copy(
-          expirationDateTime = clock.now + c.as[FiniteDuration]("silhouette.authenticator.rememberMe.authenticatorExpiry"),
-          idleTimeout = c.getAs[FiniteDuration]("silhouette.authenticator.rememberMe.authenticatorIdleTimeout")
-        )
-      case authenticator => authenticator
-    }.flatMap { authenticator =>
-      silhouette.env.eventBus.publish(LoginEvent(user, request))
-      silhouette.env.authenticatorService.init(authenticator).flatMap { token =>
-        System.out.println(token)
-        silhouette.env.authenticatorService.embed(token, Redirect(controllers.routes.HomeController.index()))
       }
     }
   }

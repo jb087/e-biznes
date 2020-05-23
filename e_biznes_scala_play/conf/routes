@@ -150,11 +150,9 @@ GET     /paymentDelete/:paymentId                           controllers.orders.P
 GET     /pay/:paymentId                                     controllers.orders.PaymentController.finalizePayment(paymentId: String)
 
 #Auth
-GET     /authenticate/:provider                  authentication.SocialAuthController.authenticate(provider)
-GET     /authenticateAdminPanel/:provider        authentication.SocialAuthController.authenticateAdminPanel(provider)
-GET     /signIn                                  controllers.HomeController.signIn()
-GET     /api/signOut                             controllers.HomeController.signOut()
-GET     /api/user/role                           authentication.UserManagerController.userRoles()
-POST    /api/user/:userId/role                   authentication.UserManagerController.changeUserRole(userId: java.util.UUID)
+GET     /authenticate/:provider                             auth.SocialAuthController.authenticate(provider)
+GET     /api/signOut                                        controllers.HomeController.signOut()
+GET     /api/user/role                                      auth.UserManagerController.userRoles()
+POST    /api/user/:userId/role                              auth.UserManagerController.changeUserRole(userId: java.util.UUID)
 
-GET     /$any<.*>                                controllers.HomeController.reactApp(any)
+GET     /$any<.*>                                           controllers.HomeController.reactApp(any)
