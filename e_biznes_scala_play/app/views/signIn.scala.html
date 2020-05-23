@@ -1,0 +1,6 @@
+@()(implicit flash: Flash)
+
+@flash.get("error").getOrElse("")
+
+<a href="@authentication.routes.SocialAuthController.authenticateAdminPanel("google")">Login with Google</a> <br>
+<a href="@authentication.routes.SocialAuthController.authenticateAdminPanel("github")">Login with GitHub</a>
