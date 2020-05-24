@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
 import logo from "../../../../logo-e-biznes.png";
 import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {editCategory, getCategoryById} from "../../../../services/CategoryService";
+import {UserContext} from "../../../../providers/UserProvider";
 
 function CategoryEdit() {
-
+    const {user} = useContext(UserContext);
     const {categoryId} = useParams();
     const [category, setCategory] = useState(null);
 
@@ -21,7 +22,7 @@ function CategoryEdit() {
         editCategory({
             id: categoryId,
             name: event.target.elements.name.value
-        })
+        }, user)
     }
 
     function getNav() {

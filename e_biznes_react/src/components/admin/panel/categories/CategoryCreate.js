@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {createCategory} from "../../../../services/CategoryService";
 import {Link} from "react-router-dom";
 import logo from "../../../../logo-e-biznes.png";
+import {UserContext} from "../../../../providers/UserProvider";
 
 function CategoryCreate() {
+    const {user} = useContext(UserContext);
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -13,7 +15,7 @@ function CategoryCreate() {
         createCategory({
             id: "",
             name: event.target.elements.name.value
-        })
+        }, user)
     }
 
     function getNav() {
