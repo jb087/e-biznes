@@ -20,6 +20,11 @@ function AdminPanel() {
                             Categories
                         </button>
                     </Link>
+                    <Link to={"/adminPanel/subcategories"}>
+                        <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
+                            Subcategories
+                        </button>
+                    </Link>
                 </form>
             </nav>
         </div>

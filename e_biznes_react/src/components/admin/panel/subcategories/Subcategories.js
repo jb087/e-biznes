@@ -1,17 +1,18 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import logo from "../../../../logo-e-biznes.png";
-import {deleteCategory, getCategories} from "../../../../services/CategoryService";
 import {UserContext} from "../../../../providers/UserProvider";
+import {deleteSubcategory, getSubcategories} from "../../../../services/SubcategoryService";
 
-function Categories() {
+function Subcategories() {
+
     const {user} = useContext(UserContext);
-    const [categories, setCategories] = useState(null);
+    const [subcategories, setSubcategories] = useState(null);
 
     useEffect(() => {
-        getCategories()
-            .then(categoriesFromRepo => setCategories(categoriesFromRepo))
-    }, [setCategories]);
+        getSubcategories()
+            .then(subcategoriesFromRepo => setSubcategories(subcategoriesFromRepo))
+    }, [setSubcategories]);
 
     function getNav() {
         return <nav className="navbar navbar-light bg-light">
@@ -23,7 +24,7 @@ function Categories() {
                 />
             </Link>
             <form className="form-inline">
-                <Link to={"/adminPanel/category/create"}>
+                <Link to={"/adminPanel/subcategory/create"}>
                     <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
                         Create
                     </button>
@@ -41,23 +42,26 @@ function Categories() {
         <div>
             {getNav()}
             {
-                categories && (
-                    categories.map(category => (
-                        <div key={category.id}>
+                subcategories && (
+                    subcategories.map(subcategory => (
+                        <div key={subcategory.id}>
                             <div className="row justify-content-center">
-                                <h3>Id: {category.id}</h3>
+                                <h3 className={"mr-2"}>Id: {subcategory.id}</h3>
                             </div>
                             <div className="row justify-content-center">
-                                <h4 className={"mr-2"}>{category.name}</h4>
+                                <h3 className={"mr-2"}>CategoryId: {subcategory.parentId}</h3>
+                            </div>
+                            <div className="row justify-content-center">
+                                <h4 className={"mr-2"}>{subcategory.name}</h4>
                             </div>
                             <div className="row justify-content-center">
                                 <button
                                     className="btn btn-outline-danger my-2 my-sm-0 mr-2"
-                                    onClick={() => deleteCategory(category.id, user)}
+                                    onClick={() => deleteSubcategory(subcategory.id, user)}
                                 >
                                     Delete
                                 </button>
-                                <Link to={"/adminPanel/category/edit/" + category.id}>
+                                <Link to={"/adminPanel/subcategory/edit/" + subcategory.id}>
                                     <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
                                         Edit
                                     </button>
@@ -71,4 +75,4 @@ function Categories() {
     );
 }
 
-export default Categories;
+export default Subcategories;

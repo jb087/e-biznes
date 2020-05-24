@@ -1,3 +1,5 @@
+import {check400Status} from "../utils/RequestUtils";
+
 const host = "http://localhost:9000/";
 const apiPath = host + "api/";
 const categoriesPath = apiPath + "categories";
@@ -30,6 +32,7 @@ export function createCategory(category, user) {
             'X-Auth-Token': user?.token
         }
     })
+        .then(response => check400Status(response))
         .then(response => alert("Category created!"))
 }
 
@@ -44,6 +47,7 @@ export function deleteCategory(categoryId, user) {
             'X-Auth-Token': user?.token
         }
     })
+        .then(response => check400Status(response))
         .then(response => alert("Category deleted!"))
         .then(response => window.location.reload(false))
 }
@@ -72,6 +76,6 @@ export function editCategory(category, user) {
             'X-Auth-Token': user?.token
         }
     })
+        .then(response => check400Status(response))
         .then(response => alert("Category updated!"))
-        .then(response => window.location.reload(false))
 }

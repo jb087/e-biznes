@@ -45,7 +45,7 @@ function CategoryCreate() {
             </div>
             <div className="row justify-content-center">
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId={"finalizePurchase"}>
+                    <Form.Group controlId={"createCategory"}>
                         <Form.Label>Name</Form.Label>
                         <Form.Control
                             required

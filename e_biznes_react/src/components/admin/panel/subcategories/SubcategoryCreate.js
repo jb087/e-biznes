@@ -1,26 +1,27 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Link, useParams} from "react-router-dom";
+import {UserContext} from "../../../../providers/UserProvider";
+import {Link} from "react-router-dom";
 import logo from "../../../../logo-e-biznes.png";
 import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import {editCategory, getCategoryById} from "../../../../services/CategoryService";
-import {UserContext} from "../../../../providers/UserProvider";
+import {getCategories} from "../../../../services/CategoryService";
+import {createSubcategory} from "../../../../services/SubcategoryService";
 
-function CategoryEdit() {
+function SubcategoryCreate() {
     const {user} = useContext(UserContext);
-    const {categoryId} = useParams();
-    const [category, setCategory] = useState(null);
+    const [categories, setCategories] = useState(null);
 
     useEffect(() => {
-        getCategoryById(categoryId)
-            .then(categoryFromRepo => setCategory(categoryFromRepo))
-    }, [categoryId, setCategory]);
+        getCategories()
+            .then(categoriesFromRepo => setCategories(categoriesFromRepo))
+    }, [setCategories]);
 
     function handleSubmit(event) {
         event.preventDefault();
 
-        editCategory({
-            id: categoryId,
+        createSubcategory({
+            id: "",
+            parentId: event.target.elements.categoryId.value,
             name: event.target.elements.name.value
         }, user)
     }
@@ -35,7 +36,7 @@ function CategoryEdit() {
                 />
             </Link>
             <form className="form-inline">
-                <Link to={"/adminPanel/categories"}>
+                <Link to={"/adminPanel/subcategories"}>
                     <button className="btn btn-outline-danger my-2 my-sm-0 mr-2">
                         Back
                     </button>
@@ -46,30 +47,42 @@ function CategoryEdit() {
 
     return (
         <div>
+            {getNav()}
             {
-                category && (
+                categories && (
                     <div>
-                        {getNav()}
                         <div className="row justify-content-center">
-                            <h3>Edit Category</h3>
+                            <h3>Create Subcategory</h3>
                         </div>
                         <div className="row justify-content-center">
                             <Form onSubmit={handleSubmit}>
-                                <Form.Group controlId={"editCategory"}>
+                                <Form.Group controlId={"createSubcategory"}>
                                     <Form.Label>Name</Form.Label>
                                     <Form.Control
                                         required
                                         name={"name"}
                                         type="text"
-                                        defaultValue={category.name}
-                                        placeholder="Category name"
+                                        placeholder="Subcategory name"
                                     />
+                                    <Form.Label>Category</Form.Label>
+                                    <Form.Control
+                                        required
+                                        name={"categoryId"}
+                                        as={"select"}
+                                        custom
+                                    >
+                                        {
+                                            categories.map(category => (
+                                                <option key={category.id} value={category.id}>{category.name}</option>
+                                            ))
+                                        }
+                                    </Form.Control>
                                 </Form.Group>
                                 <Button
                                     variant="primary"
                                     type="submit"
                                 >
-                                    Edit
+                                    Create
                                 </Button>
                             </Form>
                         </div>
@@ -80,4 +93,4 @@ function CategoryEdit() {
     );
 }
 
-export default CategoryEdit;
+export default SubcategoryCreate;
