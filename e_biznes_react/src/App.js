@@ -8,6 +8,7 @@ import AdminPanel from "./components/admin/panel/AdminPanel";
 import Categories from "./components/admin/panel/categories/Categories";
 import CategoryCreate from "./components/admin/panel/categories/CategoryCreate";
 import CategoryEdit from "./components/admin/panel/categories/CategoryEdit";
+import AuthAdminCheck from "./components/admin/panel/AuthAdminCheck";
 
 function App() {
 
@@ -16,10 +17,26 @@ function App() {
             <main className={"app"}>
                 <Router>
                     <Switch>
-                        <Route path={"/adminPanel/category/edit/:categoryId"} component={CategoryEdit}/>
-                        <Route path={"/adminPanel/category/create"} component={CategoryCreate}/>
-                        <Route path={"/adminPanel/categories"} component={Categories}/>
-                        <Route path={"/adminPanel"} component={AdminPanel}/>
+                        <Route path={"/adminPanel/category/edit/:categoryId"}>
+                            <AuthAdminCheck>
+                                <CategoryEdit/>
+                            </AuthAdminCheck>
+                        </Route>
+                        <Route path={"/adminPanel/category/create"}>
+                            <AuthAdminCheck>
+                                <CategoryCreate/>
+                            </AuthAdminCheck>
+                        </Route>
+                        <Route path={"/adminPanel/categories"}>
+                            <AuthAdminCheck>
+                                <Categories/>
+                            </AuthAdminCheck>
+                        </Route>
+                        <Route path={"/adminPanel"}>
+                            <AuthAdminCheck>
+                                <AdminPanel/>
+                            </AuthAdminCheck>
+                        </Route>
                         <Route path={"/auth/:provider"} component={Auth}/>
                         <Route path={"/"} component={Panel}/>
                     </Switch>
