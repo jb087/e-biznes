@@ -11,8 +11,11 @@ DELETE  /api/category/:categoryId                           api.categories.Categ
 
 GET     /api/subcategories                                  api.categories.SubcategoryResource.getSubcategories
 GET     /api/subcategory/:subcategoryId                     api.categories.SubcategoryResource.getSubcategoryById(subcategoryId: String)
++nocsrf
 POST    /api/subcategory                                    api.categories.SubcategoryResource.createSubcategory
++nocsrf
 PUT     /api/subcategory/:subcategoryId                     api.categories.SubcategoryResource.updateSubcategory(subcategoryId: String)
++nocsrf
 DELETE  /api/subcategory/:subcategoryId                     api.categories.SubcategoryResource.deleteSubcategory(subcategoryId: String)
 
 GET     /api/baskets                                        api.basket.BasketResource.getBaskets
