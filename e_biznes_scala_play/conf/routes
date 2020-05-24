@@ -2,8 +2,11 @@ GET     /                                                   controllers.HomeCont
 
 GET     /api/categories                                     api.categories.CategoryResource.getCategories
 GET     /api/category/:categoryId                           api.categories.CategoryResource.getCategoryById(categoryId: String)
++nocsrf
 POST    /api/category                                       api.categories.CategoryResource.createCategory
++nocsrf
 PUT     /api/category/:categoryId                           api.categories.CategoryResource.updateCategory(categoryId: String)
++nocsrf
 DELETE  /api/category/:categoryId                           api.categories.CategoryResource.deleteCategory(categoryId: String)
 
 GET     /api/subcategories                                  api.categories.SubcategoryResource.getSubcategories

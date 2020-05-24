@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import logo from "../../../../logo-e-biznes.png";
 import {deleteCategory, getCategories} from "../../../../services/CategoryService";
+import {UserContext} from "../../../../providers/UserProvider";
 
 function Categories() {
-
+    const {user} = useContext(UserContext);
     const [categories, setCategories] = useState(null);
 
     useEffect(() => {
@@ -46,7 +47,7 @@ function Categories() {
                             <h3 className={"mr-2"}>{category.name}</h3>
                             <button
                                 className="btn btn-outline-danger my-2 my-sm-0 mr-2"
-                                onClick={() => deleteCategory(category.id)}
+                                onClick={() => deleteCategory(category.id, user)}
                             >
                                 Delete
                             </button>

@@ -18,26 +18,30 @@ export function getCategories() {
         .then(response => response.json());
 }
 
-export function createCategory(category) {
+export function createCategory(category, user) {
     return fetch(createCategoryPath, {
         method: "POST",
+        credentials: 'include',
         body: JSON.stringify(category),
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin':'http://localhost:3000'
+            'Access-Control-Allow-Origin':'http://localhost:3000',
+            'X-Auth-Token': user?.token
         }
     })
         .then(response => alert("Category created!"))
 }
 
-export function deleteCategory(categoryId) {
+export function deleteCategory(categoryId, user) {
     return fetch(deleteCategoryPath.replace("{id}", categoryId), {
         method: "DELETE",
+        credentials: 'include',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin':'http://localhost:3000'
+            'Access-Control-Allow-Origin':'http://localhost:3000',
+            'X-Auth-Token': user?.token
         }
     })
         .then(response => alert("Category deleted!"))
@@ -56,14 +60,16 @@ export function getCategoryById(categoryId) {
         .then(response => response.json());
 }
 
-export function editCategory(category) {
+export function editCategory(category, user) {
     return fetch(editCategoryPath.replace("{id}", category.id), {
         method: "PUT",
+        credentials: 'include',
         body: JSON.stringify(category),
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin':'http://localhost:3000'
+            'Access-Control-Allow-Origin':'http://localhost:3000',
+            'X-Auth-Token': user?.token
         }
     })
         .then(response => alert("Category updated!"))
