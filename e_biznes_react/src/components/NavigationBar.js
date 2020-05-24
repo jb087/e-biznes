@@ -4,6 +4,7 @@ import '../css/NavigationBar.css'
 import SocialLoginButton from "./SocialLoginButton";
 import {UserContext} from "../providers/UserProvider";
 import {signOut} from "../services/AuthService"
+import {Link} from "react-router-dom";
 
 export default function NavigationBar({hideBasket, showBasket}) {
     const {user, setUser} = useContext(UserContext);
@@ -32,7 +33,11 @@ export default function NavigationBar({hideBasket, showBasket}) {
                 </button>
                 {
                     user && user.role === "Admin" && (
-                        <a href="http://localhost:9000/" className="btn btn-outline-primary my-2 my-sm-0 mr-2">Administration Panel</a>
+                        <Link to={"/adminPanel"}>
+                            <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
+                                Administration Panel
+                            </button>
+                        </Link>
                     )
                 }
                 {
