@@ -47,6 +47,9 @@ function Photos() {
                             <div className="row justify-content-center">
                                 <h3 className={"mr-2"}>Id: {photo.id}</h3>
                             </div>
+                            <div className="row justify-content-center">
+                                <h3 className={"mr-2"}>ProductId: {photo.productId}</h3>
+                            </div>
                             <div className="d-flex justify-content-between">
                                 <div>
                                     <img

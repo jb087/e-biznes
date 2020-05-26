@@ -5,6 +5,7 @@ const apiPath = host + "api/";
 const photosPath = apiPath + "photos";
 const photosByProductIdPath = apiPath + "photos/";
 const deletePhotoByIdPath = apiPath + "photo/{id}";
+const createPhotoPath = apiPath + "photo";
 export const photoJPGById = host + "photoJPG/";
 
 export async function getPhotos() {
@@ -45,4 +46,18 @@ export function deletePhotoById(photoId, user) {
         .then(response => check400Status(response))
         .then(response => alert("Photo deleted!"))
         .then(response => window.location.reload(false))
+}
+
+export function createPhoto(photoForm, user) {
+    return fetch(createPhotoPath, {
+        method: "POST",
+        body: photoForm,
+        credentials: 'include',
+        headers: {
+            'Access-Control-Allow-Origin':'http://localhost:3000',
+            'X-Auth-Token': user?.token
+        }
+    })
+        .then(response => check400Status(response))
+        .then(response => alert("Photo created!"))
 }
