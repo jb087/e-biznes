@@ -12,6 +12,9 @@ import AuthAdminCheck from "./components/admin/panel/AuthAdminCheck";
 import Subcategories from "./components/admin/panel/subcategories/Subcategories";
 import SubcategoryCreate from "./components/admin/panel/subcategories/SubcategoryCreate";
 import SubcategoryEdit from "./components/admin/panel/subcategories/SubcategoryEdit";
+import Products from "./components/admin/panel/products/Products";
+import ProductCreate from "./components/admin/panel/products/ProductCreate";
+import ProductEdit from "./components/admin/panel/products/ProductEdit";
 
 function App() {
 
@@ -20,6 +23,21 @@ function App() {
             <main className={"app"}>
                 <Router>
                     <Switch>
+                        <Route path={"/adminPanel/product/edit/:productId"}>
+                            <AuthAdminCheck>
+                                <ProductEdit/>
+                            </AuthAdminCheck>
+                        </Route>
+                        <Route path={"/adminPanel/product/create"}>
+                            <AuthAdminCheck>
+                                <ProductCreate/>
+                            </AuthAdminCheck>
+                        </Route>
+                        <Route path={"/adminPanel/products"}>
+                            <AuthAdminCheck>
+                                <Products/>
+                            </AuthAdminCheck>
+                        </Route>
                         <Route path={"/adminPanel/subcategory/edit/:subcategoryId"}>
                             <AuthAdminCheck>
                                 <SubcategoryEdit/>

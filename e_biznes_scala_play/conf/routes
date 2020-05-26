@@ -65,8 +65,11 @@ DELETE  /api/photo/:photoId                                 api.products.PhotoRe
 
 GET     /api/products                                       api.products.ProductResource.getProducts
 GET     /api/product/:productId                             api.products.ProductResource.getProductById(productId: String)
++nocsrf
 POST    /api/product                                        api.products.ProductResource.createProduct
++nocsrf
 PUT     /api/product/:productId                             api.products.ProductResource.updateProduct(productId: String)
++nocsrf
 DELETE  /api/product/:productId                             api.products.ProductResource.deleteProduct(productId: String)
 
 

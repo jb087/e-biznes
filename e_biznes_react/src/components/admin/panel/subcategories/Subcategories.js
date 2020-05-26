@@ -5,7 +5,6 @@ import {UserContext} from "../../../../providers/UserProvider";
 import {deleteSubcategory, getSubcategories} from "../../../../services/SubcategoryService";
 
 function Subcategories() {
-
     const {user} = useContext(UserContext);
     const [subcategories, setSubcategories] = useState(null);
 
@@ -67,6 +66,7 @@ function Subcategories() {
                                     </button>
                                 </Link>
                             </div>
+                            <br/>
                         </div>
                     ))
                 )

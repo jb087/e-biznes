@@ -18,7 +18,7 @@ function SubcategoryEdit() {
             .then(categoriesFromRepo => setCategories(categoriesFromRepo));
         getSubcategoryById(subcategoryId)
             .then(subcategoryFromRepo => setSubcategory(subcategoryFromRepo));
-    }, [setCategories, setSubcategory]);
+    }, [subcategoryId, setCategories, setSubcategory]);
 
     function handleSubmit(event) {
         event.preventDefault();
