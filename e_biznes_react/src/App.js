@@ -16,6 +16,7 @@ import Products from "./components/admin/panel/products/Products";
 import ProductCreate from "./components/admin/panel/products/ProductCreate";
 import ProductEdit from "./components/admin/panel/products/ProductEdit";
 import Opinions from "./components/admin/panel/opinions/Opinions";
+import Photos from "./components/admin/panel/photos/Photos";
 
 function App() {
 
@@ -24,6 +25,11 @@ function App() {
             <main className={"app"}>
                 <Router>
                     <Switch>
+                        <Route path={"/adminPanel/photos"}>
+                            <AuthAdminCheck>
+                                <Photos/>
+                            </AuthAdminCheck>
+                        </Route>
                         <Route path={"/adminPanel/opinions"}>
                             <AuthAdminCheck>
                                 <Opinions/>

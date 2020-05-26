@@ -35,6 +35,11 @@ function AdminPanel() {
                             Opinions
                         </button>
                     </Link>
+                    <Link to={"/adminPanel/photos"}>
+                        <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
+                            Photos
+                        </button>
+                    </Link>
                 </form>
             </nav>
         </div>

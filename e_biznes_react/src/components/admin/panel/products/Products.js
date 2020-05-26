@@ -5,7 +5,6 @@ import {Link} from "react-router-dom";
 import logo from "../../../../logo-e-biznes.png";
 
 function Products() {
-
     const {user} = useContext(UserContext);
     const [products, setProducts] = useState(null);
 

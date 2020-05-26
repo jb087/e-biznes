@@ -61,8 +61,10 @@ DELETE  /api/opinion/:opinionId                             api.products.Opinion
 GET     /api/photos                                         api.products.PhotoResource.getPhotos
 GET     /api/photos/:productId                              api.products.PhotoResource.getPhotosByProductId(productId: String)
 GET     /api/photo/:photoId                                 api.products.PhotoResource.getPhotoById(photoId: String)
++nocsrf
 POST    /api/photo                                          api.products.PhotoResource.createPhoto
 PUT     /api/photo/:photoId/:productId                      api.products.PhotoResource.updatePhoto(photoId: String, productId: String)
++nocsrf
 DELETE  /api/photo/:photoId                                 api.products.PhotoResource.deletePhoto(photoId: String)
 
 GET     /api/products                                       api.products.ProductResource.getProducts
