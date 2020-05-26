@@ -15,6 +15,7 @@ import SubcategoryEdit from "./components/admin/panel/subcategories/SubcategoryE
 import Products from "./components/admin/panel/products/Products";
 import ProductCreate from "./components/admin/panel/products/ProductCreate";
 import ProductEdit from "./components/admin/panel/products/ProductEdit";
+import Opinions from "./components/admin/panel/opinions/Opinions";
 
 function App() {
 
@@ -23,6 +24,11 @@ function App() {
             <main className={"app"}>
                 <Router>
                     <Switch>
+                        <Route path={"/adminPanel/opinions"}>
+                            <AuthAdminCheck>
+                                <Opinions/>
+                            </AuthAdminCheck>
+                        </Route>
                         <Route path={"/adminPanel/product/edit/:productId"}>
                             <AuthAdminCheck>
                                 <ProductEdit/>

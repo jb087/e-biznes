@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {UserContext} from "../../../../providers/UserProvider";
 import {getSubcategories} from "../../../../services/SubcategoryService";
-import {createProduct, editProduct, getProductById} from "../../../../services/ProductService";
+import {editProduct, getProductById} from "../../../../services/ProductService";
 import {Link, useParams} from "react-router-dom";
 import logo from "../../../../logo-e-biznes.png";
 import {Form} from "react-bootstrap";
@@ -64,7 +64,7 @@ function ProductEdit() {
                         </div>
                         <div className="row justify-content-center">
                             <Form onSubmit={handleSubmit}>
-                                <Form.Group controlId={"createProduct"}>
+                                <Form.Group controlId={"editProduct"}>
                                     <Form.Label>Title</Form.Label>
                                     <Form.Control
                                         required

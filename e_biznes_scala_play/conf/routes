@@ -53,7 +53,9 @@ GET     /api/opinions                                       api.products.Opinion
 GET     /api/opinions/:productId                            api.products.OpinionResource.getOpinionsByProductId(productId: String)
 GET     /api/opinion/:opinionId                             api.products.OpinionResource.getOpinionById(opinionId: String)
 POST    /api/opinion                                        api.products.OpinionResource.createOpinion
++nocsrf
 PUT     /api/opinion/:opinionId                             api.products.OpinionResource.updateOpinion(opinionId: String)
++nocsrf
 DELETE  /api/opinion/:opinionId                             api.products.OpinionResource.deleteOpinion(opinionId: String)
 
 GET     /api/photos                                         api.products.PhotoResource.getPhotos
