@@ -22,6 +22,9 @@ import Baskets from "./components/admin/panel/basket/Baskets";
 import OrderedProducts from "./components/admin/panel/orderedProducts/OrderedProducts";
 import OrderedProductCreate from "./components/admin/panel/orderedProducts/OrderedProductCreate";
 import OrderedProductEdit from "./components/admin/panel/orderedProducts/OrderedProductEdit";
+import ShippingInformation from "./components/admin/panel/shippingInformation/ShippingInformation";
+import ShippingInformationCreate from "./components/admin/panel/shippingInformation/ShippingInformationCreate";
+import ShippingInformationEdit from "./components/admin/panel/shippingInformation/ShippingInformationEdit";
 
 function App() {
 
@@ -30,6 +33,21 @@ function App() {
             <main className={"app"}>
                 <Router>
                     <Switch>
+                        <Route path={"/adminPanel/shippingInformation/edit/:shippingInformationId"}>
+                            <AuthAdminCheck>
+                                <ShippingInformationEdit/>
+                            </AuthAdminCheck>
+                        </Route>
+                        <Route path={"/adminPanel/shippingInformation/create"}>
+                            <AuthAdminCheck>
+                                <ShippingInformationCreate/>
+                            </AuthAdminCheck>
+                        </Route>
+                        <Route path={"/adminPanel/shippingInformation"}>
+                            <AuthAdminCheck>
+                                <ShippingInformation/>
+                            </AuthAdminCheck>
+                        </Route>
                         <Route path={"/adminPanel/orderedProduct/edit/:orderedProductId"}>
                             <AuthAdminCheck>
                                 <OrderedProductEdit/>

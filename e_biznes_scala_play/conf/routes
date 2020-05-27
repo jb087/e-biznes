@@ -50,7 +50,9 @@ DELETE  /api/payment/:paymentId                             api.orders.PaymentRe
 GET     /api/shippingInformation                            api.orders.ShippingInformationResource.getShippingInformation
 GET     /api/shippingInformation/:shippingInformationId     api.orders.ShippingInformationResource.getShippingInformationById(shippingInformationId: String)
 POST    /api/shippingInformation                            api.orders.ShippingInformationResource.createShippingInformation
++nocsrf
 PUT     /api/shippingInformation/:shippingInformationId     api.orders.ShippingInformationResource.updateShippingInformation(shippingInformationId: String)
++nocsrf
 DELETE  /api/shippingInformation/:shippingInformationId     api.orders.ShippingInformationResource.deleteShippingInformation(shippingInformationId: String)
 
 GET     /api/opinions                                       api.products.OpinionResource.getOpinions
