@@ -45,6 +45,11 @@ function AdminPanel() {
                             Baskets
                         </button>
                     </Link>
+                    <Link to={"/adminPanel/orderedProducts"}>
+                        <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
+                            Ordered Products
+                        </button>
+                    </Link>
                 </form>
             </nav>
         </div>

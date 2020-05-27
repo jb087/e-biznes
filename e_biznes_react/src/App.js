@@ -19,6 +19,9 @@ import Opinions from "./components/admin/panel/opinions/Opinions";
 import Photos from "./components/admin/panel/photos/Photos";
 import PhotoCreate from "./components/admin/panel/photos/PhotoCreate";
 import Baskets from "./components/admin/panel/basket/Baskets";
+import OrderedProducts from "./components/admin/panel/orderedProducts/OrderedProducts";
+import OrderedProductCreate from "./components/admin/panel/orderedProducts/OrderedProductCreate";
+import OrderedProductEdit from "./components/admin/panel/orderedProducts/OrderedProductEdit";
 
 function App() {
 
@@ -27,6 +30,21 @@ function App() {
             <main className={"app"}>
                 <Router>
                     <Switch>
+                        <Route path={"/adminPanel/orderedProduct/edit/:orderedProductId"}>
+                            <AuthAdminCheck>
+                                <OrderedProductEdit/>
+                            </AuthAdminCheck>
+                        </Route>
+                        <Route path={"/adminPanel/orderedProduct/create"}>
+                            <AuthAdminCheck>
+                                <OrderedProductCreate/>
+                            </AuthAdminCheck>
+                        </Route>
+                        <Route path={"/adminPanel/orderedProducts"}>
+                            <AuthAdminCheck>
+                                <OrderedProducts/>
+                            </AuthAdminCheck>
+                        </Route>
                         <Route path={"/adminPanel/baskets"}>
                             <AuthAdminCheck>
                                 <Baskets/>

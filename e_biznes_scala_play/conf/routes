@@ -29,7 +29,9 @@ DELETE  /api/basket/:basketId                               api.basket.BasketRes
 GET     /api/orderedProducts                                api.basket.OrderedProductsResource.getOrderedProducts
 GET     /api/orderedProduct/:orderedProductId               api.basket.OrderedProductsResource.getOrderedProductById(orderedProductId: String)
 POST    /api/orderedProduct                                 api.basket.OrderedProductsResource.createOrderedProduct
++nocsrf
 PUT     /api/orderedProduct/:orderedProductId               api.basket.OrderedProductsResource.updateOrderedProduct(orderedProductId: String)
++nocsrf
 DELETE  /api/orderedProduct/:orderedProductId               api.basket.OrderedProductsResource.deleteOrderedProduct(orderedProductId: String)
 
 GET     /api/orders                                         api.orders.OrderResource.getOrders
