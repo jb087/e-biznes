@@ -21,7 +21,9 @@ DELETE  /api/subcategory/:subcategoryId                     api.categories.Subca
 GET     /api/baskets                                        api.basket.BasketResource.getBaskets
 GET     /api/basket/:basketId                               api.basket.BasketResource.getBasketById(basketId: String)
 POST    /api/basket                                         api.basket.BasketResource.createBasket
++nocsrf
 PUT     /api/basket/:basketId                               api.basket.BasketResource.updateBasket(basketId: String)
++nocsrf
 DELETE  /api/basket/:basketId                               api.basket.BasketResource.deleteBasket(basketId: String)
 
 GET     /api/orderedProducts                                api.basket.OrderedProductsResource.getOrderedProducts

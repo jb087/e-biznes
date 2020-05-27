@@ -40,6 +40,11 @@ function AdminPanel() {
                             Photos
                         </button>
                     </Link>
+                    <Link to={"/adminPanel/baskets"}>
+                        <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
+                            Baskets
+                        </button>
+                    </Link>
                 </form>
             </nav>
         </div>

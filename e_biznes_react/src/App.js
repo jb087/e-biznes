@@ -18,6 +18,7 @@ import ProductEdit from "./components/admin/panel/products/ProductEdit";
 import Opinions from "./components/admin/panel/opinions/Opinions";
 import Photos from "./components/admin/panel/photos/Photos";
 import PhotoCreate from "./components/admin/panel/photos/PhotoCreate";
+import Baskets from "./components/admin/panel/basket/Baskets";
 
 function App() {
 
@@ -26,6 +27,11 @@ function App() {
             <main className={"app"}>
                 <Router>
                     <Switch>
+                        <Route path={"/adminPanel/baskets"}>
+                            <AuthAdminCheck>
+                                <Baskets/>
+                            </AuthAdminCheck>
+                        </Route>
                         <Route path={"/adminPanel/photo/create"}>
                             <AuthAdminCheck>
                                 <PhotoCreate/>
