@@ -55,6 +55,11 @@ function AdminPanel() {
                             Shipping Information
                         </button>
                     </Link>
+                    <Link to={"/adminPanel/orders"}>
+                        <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
+                            Orders
+                        </button>
+                    </Link>
                 </form>
             </nav>
         </div>

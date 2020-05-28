@@ -47,7 +47,7 @@ function OrderedProducts() {
             {
                 baskets && orderedProducts && (
                     orderedProducts.map(orderedProduct => (
-                        <div>
+                        <div key={orderedProduct.id}>
                             <div className="row justify-content-center">
                                 <h3 className={"mr-2"}>Id: {orderedProduct.id}</h3>
                             </div>

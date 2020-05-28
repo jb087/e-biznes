@@ -37,8 +37,11 @@ DELETE  /api/orderedProduct/:orderedProductId               api.basket.OrderedPr
 GET     /api/orders                                         api.orders.OrderResource.getOrders
 GET     /api/order/:orderId                                 api.orders.OrderResource.getOrderById(orderId: String)
 POST    /api/order                                          api.orders.OrderResource.createOrder
++nocsrf
 PUT     /api/order/:orderId                                 api.orders.OrderResource.updateOrder(orderId: String)
++nocsrf
 DELETE  /api/order/:orderId                                 api.orders.OrderResource.deleteOrder(orderId: String)
++nocsrf
 PUT     /api/orderDeliver/:orderId                          api.orders.OrderResource.deliverOrder(orderId: String)
 
 GET     /api/payments                                       api.orders.PaymentResource.getPayments
