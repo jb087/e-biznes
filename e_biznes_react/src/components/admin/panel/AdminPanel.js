@@ -60,6 +60,11 @@ function AdminPanel() {
                             Orders
                         </button>
                     </Link>
+                    <Link to={"/adminPanel/payments"}>
+                        <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
+                            Payments
+                        </button>
+                    </Link>
                 </form>
             </nav>
         </div>

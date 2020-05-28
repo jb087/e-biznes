@@ -28,6 +28,8 @@ import ShippingInformationEdit from "./components/admin/panel/shippingInformatio
 import Orders from "./components/admin/panel/orders/Orders";
 import OrderCreate from "./components/admin/panel/orders/OrderCreate";
 import OrderEdit from "./components/admin/panel/orders/OrderEdit";
+import Payments from "./components/admin/panel/payments/Payments";
+import PaymentCreate from "./components/admin/panel/payments/PaymentCreate";
 
 function App() {
 
@@ -36,6 +38,16 @@ function App() {
             <main className={"app"}>
                 <Router>
                     <Switch>
+                        <Route path={"/adminPanel/payment/create"}>
+                            <AuthAdminCheck>
+                                <PaymentCreate/>
+                            </AuthAdminCheck>
+                        </Route>
+                        <Route path={"/adminPanel/payments"}>
+                            <AuthAdminCheck>
+                                <Payments/>
+                            </AuthAdminCheck>
+                        </Route>
                         <Route path={"/adminPanel/order/edit/:orderId"}>
                             <AuthAdminCheck>
                                 <OrderEdit/>
