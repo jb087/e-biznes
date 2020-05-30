@@ -1,5 +1,6 @@
 package repositories.products
 
+import java.time.LocalDate
 import java.util.UUID
 
 import javax.inject.{Inject, Singleton}
@@ -34,7 +35,7 @@ class ProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
   def createProduct(newProduct: Product): Future[Int] = db.run {
     val id: String = UUID.randomUUID().toString
 
-    product += Product(id, newProduct.subcategoryId, newProduct.title, newProduct.price, newProduct.description, newProduct.date, newProduct.quantity)
+    product += Product(id, newProduct.subcategoryId, newProduct.title, newProduct.price, newProduct.description, LocalDate.now(), newProduct.quantity)
   }
 
   def deleteProduct(productId: String): Future[Int] = db.run {
@@ -42,6 +43,9 @@ class ProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
   }
 
   def updateProduct(productToUpdate: Product): Future[Int] = db.run {
-    product.filter(_.id === productToUpdate.id).update(productToUpdate)
+    val productToModify = Product(productToUpdate.id, productToUpdate.subcategoryId, productToUpdate.title, productToUpdate.price,
+      productToUpdate.description, LocalDate.now(), productToUpdate.quantity)
+
+    product.filter(_.id === productToModify.id).update(productToModify)
   }
 }

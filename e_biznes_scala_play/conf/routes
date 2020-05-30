@@ -2,33 +2,46 @@ GET     /                                                   controllers.HomeCont
 
 GET     /api/categories                                     api.categories.CategoryResource.getCategories
 GET     /api/category/:categoryId                           api.categories.CategoryResource.getCategoryById(categoryId: String)
++nocsrf
 POST    /api/category                                       api.categories.CategoryResource.createCategory
++nocsrf
 PUT     /api/category/:categoryId                           api.categories.CategoryResource.updateCategory(categoryId: String)
++nocsrf
 DELETE  /api/category/:categoryId                           api.categories.CategoryResource.deleteCategory(categoryId: String)
 
 GET     /api/subcategories                                  api.categories.SubcategoryResource.getSubcategories
 GET     /api/subcategory/:subcategoryId                     api.categories.SubcategoryResource.getSubcategoryById(subcategoryId: String)
++nocsrf
 POST    /api/subcategory                                    api.categories.SubcategoryResource.createSubcategory
++nocsrf
 PUT     /api/subcategory/:subcategoryId                     api.categories.SubcategoryResource.updateSubcategory(subcategoryId: String)
++nocsrf
 DELETE  /api/subcategory/:subcategoryId                     api.categories.SubcategoryResource.deleteSubcategory(subcategoryId: String)
 
 GET     /api/baskets                                        api.basket.BasketResource.getBaskets
 GET     /api/basket/:basketId                               api.basket.BasketResource.getBasketById(basketId: String)
 POST    /api/basket                                         api.basket.BasketResource.createBasket
++nocsrf
 PUT     /api/basket/:basketId                               api.basket.BasketResource.updateBasket(basketId: String)
++nocsrf
 DELETE  /api/basket/:basketId                               api.basket.BasketResource.deleteBasket(basketId: String)
 
 GET     /api/orderedProducts                                api.basket.OrderedProductsResource.getOrderedProducts
 GET     /api/orderedProduct/:orderedProductId               api.basket.OrderedProductsResource.getOrderedProductById(orderedProductId: String)
 POST    /api/orderedProduct                                 api.basket.OrderedProductsResource.createOrderedProduct
++nocsrf
 PUT     /api/orderedProduct/:orderedProductId               api.basket.OrderedProductsResource.updateOrderedProduct(orderedProductId: String)
++nocsrf
 DELETE  /api/orderedProduct/:orderedProductId               api.basket.OrderedProductsResource.deleteOrderedProduct(orderedProductId: String)
 
 GET     /api/orders                                         api.orders.OrderResource.getOrders
 GET     /api/order/:orderId                                 api.orders.OrderResource.getOrderById(orderId: String)
 POST    /api/order                                          api.orders.OrderResource.createOrder
++nocsrf
 PUT     /api/order/:orderId                                 api.orders.OrderResource.updateOrder(orderId: String)
++nocsrf
 DELETE  /api/order/:orderId                                 api.orders.OrderResource.deleteOrder(orderId: String)
++nocsrf
 PUT     /api/orderDeliver/:orderId                          api.orders.OrderResource.deliverOrder(orderId: String)
 
 GET     /api/payments                                       api.orders.PaymentResource.getPayments
@@ -40,27 +53,36 @@ DELETE  /api/payment/:paymentId                             api.orders.PaymentRe
 GET     /api/shippingInformation                            api.orders.ShippingInformationResource.getShippingInformation
 GET     /api/shippingInformation/:shippingInformationId     api.orders.ShippingInformationResource.getShippingInformationById(shippingInformationId: String)
 POST    /api/shippingInformation                            api.orders.ShippingInformationResource.createShippingInformation
++nocsrf
 PUT     /api/shippingInformation/:shippingInformationId     api.orders.ShippingInformationResource.updateShippingInformation(shippingInformationId: String)
++nocsrf
 DELETE  /api/shippingInformation/:shippingInformationId     api.orders.ShippingInformationResource.deleteShippingInformation(shippingInformationId: String)
 
 GET     /api/opinions                                       api.products.OpinionResource.getOpinions
 GET     /api/opinions/:productId                            api.products.OpinionResource.getOpinionsByProductId(productId: String)
 GET     /api/opinion/:opinionId                             api.products.OpinionResource.getOpinionById(opinionId: String)
 POST    /api/opinion                                        api.products.OpinionResource.createOpinion
++nocsrf
 PUT     /api/opinion/:opinionId                             api.products.OpinionResource.updateOpinion(opinionId: String)
++nocsrf
 DELETE  /api/opinion/:opinionId                             api.products.OpinionResource.deleteOpinion(opinionId: String)
 
 GET     /api/photos                                         api.products.PhotoResource.getPhotos
 GET     /api/photos/:productId                              api.products.PhotoResource.getPhotosByProductId(productId: String)
 GET     /api/photo/:photoId                                 api.products.PhotoResource.getPhotoById(photoId: String)
++nocsrf
 POST    /api/photo                                          api.products.PhotoResource.createPhoto
 PUT     /api/photo/:photoId/:productId                      api.products.PhotoResource.updatePhoto(photoId: String, productId: String)
++nocsrf
 DELETE  /api/photo/:photoId                                 api.products.PhotoResource.deletePhoto(photoId: String)
 
 GET     /api/products                                       api.products.ProductResource.getProducts
 GET     /api/product/:productId                             api.products.ProductResource.getProductById(productId: String)
++nocsrf
 POST    /api/product                                        api.products.ProductResource.createProduct
++nocsrf
 PUT     /api/product/:productId                             api.products.ProductResource.updateProduct(productId: String)
++nocsrf
 DELETE  /api/product/:productId                             api.products.ProductResource.deleteProduct(productId: String)
 
 
@@ -148,3 +170,11 @@ GET     /paymentCreate                                      controllers.orders.P
 POST    /paymentCreateHandler                               controllers.orders.PaymentController.createPaymentHandler
 GET     /paymentDelete/:paymentId                           controllers.orders.PaymentController.deletePayment(paymentId: String)
 GET     /pay/:paymentId                                     controllers.orders.PaymentController.finalizePayment(paymentId: String)
+
+#Auth
+GET     /authenticate/:provider                             auth.SocialAuthController.authenticate(provider)
+GET     /api/signOut                                        controllers.HomeController.signOut()
+GET     /api/user/role                                      auth.UserManagerController.userRoles()
+POST    /api/user/:userId/role                              auth.UserManagerController.changeUserRole(userId: java.util.UUID)
+
+GET     /$any<.*>                                           controllers.HomeController.reactApp(any)
