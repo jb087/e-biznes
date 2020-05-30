@@ -77,6 +77,7 @@ class PurchaseModal extends Component {
     getBasket = () => {
         return {
             id: "",
+            userId: "",
             isBought: 0
         }
     };

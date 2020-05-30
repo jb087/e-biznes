@@ -32,6 +32,23 @@ export async function createBasket(basket) {
         .then(response => response.text())
 }
 
+export async function createBasketWithUser(basket, user) {
+    return fetch(createBasketPath, {
+        method: "POST",
+        credentials: 'include',
+        body: JSON.stringify(basket),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin':'http://localhost:3000',
+            'X-Auth-Token': user?.token
+        }
+    })
+        .then(response => check400Status(response))
+        .then(response => alert("Basket created!"))
+        .then(response => window.location.reload(false))
+}
+
 export function deleteBasketById(basketId, user) {
     return fetch(deleteBasketByIdPath.replace("{id}", basketId), {
         method: "DELETE",

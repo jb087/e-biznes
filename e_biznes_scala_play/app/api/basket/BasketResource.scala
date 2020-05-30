@@ -60,8 +60,8 @@ class BasketResource @Inject()(basketRepository: BasketRepository,
       case JsSuccess(basket, _) =>
         basketRepository.getBasketByIdOption(basketId)
           .map({
-            case Some(value) =>
-              val basketToUpdate = Basket(basketId, basket.userId, basket.isBought)
+            case Some(basketFromRepo) =>
+              val basketToUpdate = Basket(basketId, basketFromRepo.userId, basket.isBought)
               Await.result(basketRepository.updateBasket(basketToUpdate)
                 .map(_ => Ok("Basket Updated!")), Duration.Inf)
             case None => InternalServerError("Basket with id: " + basketId + " does not exist!")
