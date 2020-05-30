@@ -27,7 +27,7 @@ function SubcategoryCreate() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel/subcategories"}/>
+            <SimplyNavigation backLink={"/adminPanel/subcategories"}/>
             {
                 categories && (
                     <div>

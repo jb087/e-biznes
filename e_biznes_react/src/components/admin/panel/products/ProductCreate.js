@@ -31,7 +31,7 @@ function ProductCreate() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel/products"}/>
+            <SimplyNavigation backLink={"/adminPanel/products"}/>
             {
                 subcategories && (
                     <div>

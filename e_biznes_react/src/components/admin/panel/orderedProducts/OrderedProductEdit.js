@@ -37,7 +37,7 @@ function OrderedProductEdit() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel/orderedProducts"}/>
+            <SimplyNavigation backLink={"/adminPanel/orderedProducts"}/>
             {
                 orderedProduct && baskets && products && (
                     <div>

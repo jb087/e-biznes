@@ -23,7 +23,7 @@ function ShippingInformationCreate() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel/shippingInformation"}/>
+            <SimplyNavigation backLink={"/adminPanel/shippingInformation"}/>
             <div>
                 <div className="row justify-content-center">
                     <h3>Create Shipping Information</h3>

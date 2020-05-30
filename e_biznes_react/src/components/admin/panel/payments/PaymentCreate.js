@@ -25,7 +25,7 @@ function PaymentCreate() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel/payments"}/>
+            <SimplyNavigation backLink={"/adminPanel/payments"}/>
             {
                 orders && paymentOrderIds && (
                     <div>

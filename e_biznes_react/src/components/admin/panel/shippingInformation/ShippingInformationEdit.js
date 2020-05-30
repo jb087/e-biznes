@@ -33,7 +33,7 @@ function ShippingInformationEdit() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel/shippingInformation"}/>
+            <SimplyNavigation backLink={"/adminPanel/shippingInformation"}/>
             {
                 shippingInformation && (
                     <div>

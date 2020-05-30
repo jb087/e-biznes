@@ -19,7 +19,7 @@ function CategoryCreate() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel/categories"}/>
+            <SimplyNavigation backLink={"/adminPanel/categories"}/>
             <div className="row justify-content-center">
                 <h3>Create Category</h3>
             </div>

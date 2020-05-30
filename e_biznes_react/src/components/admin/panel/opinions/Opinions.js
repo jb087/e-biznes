@@ -14,7 +14,7 @@ function Opinions() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel"}/>
+            <SimplyNavigation backLink={"/adminPanel"}/>
             {
                 opinions && (
                     opinions.map(opinion => (

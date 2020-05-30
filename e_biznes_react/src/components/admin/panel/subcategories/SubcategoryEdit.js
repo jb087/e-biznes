@@ -32,7 +32,7 @@ function SubcategoryEdit() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel/subcategories"}/>
+            <SimplyNavigation backLink={"/adminPanel/subcategories"}/>
             {
                 categories && subcategory && (
                     <div>

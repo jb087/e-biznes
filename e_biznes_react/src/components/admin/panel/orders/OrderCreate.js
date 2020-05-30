@@ -33,7 +33,7 @@ function OrderCreate() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel/orders"}/>
+            <SimplyNavigation backLink={"/adminPanel/orders"}/>
             {
                 baskets && shippingInformation && (
                     <div>

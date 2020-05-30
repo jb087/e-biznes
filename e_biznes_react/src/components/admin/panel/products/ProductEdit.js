@@ -36,7 +36,7 @@ function ProductEdit() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel/products"}/>
+            <SimplyNavigation backLink={"/adminPanel/products"}/>
             {
                 product && subcategories && (
                     <div>

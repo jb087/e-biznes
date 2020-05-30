@@ -33,7 +33,7 @@ function PhotoCreate() {
 
     return (
         <div>
-            <SimplyNavigation upperLink={"/adminPanel/photos"}/>
+            <SimplyNavigation backLink={"/adminPanel/photos"}/>
             {
                 products && (
                     <div>

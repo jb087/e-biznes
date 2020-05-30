@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import logo from "../../logo-e-biznes.png";
 
-function SimplyNavigation({upperLink}) {
+function SimplyNavigation({backLink}) {
     return (
         <div>
             <nav className="navbar navbar-light bg-light">
@@ -14,7 +14,7 @@ function SimplyNavigation({upperLink}) {
                     />
                 </Link>
                 <form className="form-inline">
-                    <Link to={upperLink}>
+                    <Link to={backLink}>
                         <button className="btn btn-outline-danger my-2 my-sm-0 mr-2">
                             Back
                         </button>

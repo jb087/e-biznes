@@ -30,7 +30,7 @@ function CategoryEdit() {
             {
                 category && (
                     <div>
-                        <SimplyNavigation upperLink={"/adminPanel/categories"}/>
+                        <SimplyNavigation backLink={"/adminPanel/categories"}/>
                         <div className="row justify-content-center">
                             <h3>Edit Category</h3>
                         </div>
