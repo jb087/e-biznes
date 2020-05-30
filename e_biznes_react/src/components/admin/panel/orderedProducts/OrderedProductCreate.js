@@ -6,6 +6,7 @@ import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {check400Status} from "../../../../utils/RequestUtils";
 import SimplyNavigation from "../../SimplyNavigation";
+import BasketIdSelector from "../BasketIdSelector";
 
 function OrderedProductCreate() {
     const [baskets, setBaskets] = useState(null);
@@ -43,21 +44,7 @@ function OrderedProductCreate() {
                         <div className="row justify-content-center">
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group controlId={"createOrderedProduct"}>
-                                    <Form.Label>BasketId</Form.Label>
-                                    <Form.Control
-                                        required
-                                        name={"basketId"}
-                                        as={"select"}
-                                        custom
-                                    >
-                                        {
-                                            baskets.filter(basket => basket.isBought === 0)
-                                                .map(basket => (
-                                                    <option key={basket.id}
-                                                            value={basket.id}>{basket.id}</option>
-                                                ))
-                                        }
-                                    </Form.Control>
+                                    <BasketIdSelector baskets={baskets} />
                                     <Form.Label>Product</Form.Label>
                                     <Form.Control
                                         required
