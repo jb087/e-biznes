@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {getBaskets} from "../../../../services/BasketService";
 import {getShippingInformation} from "../../../../services/ShippingInformationService";
-import {Link} from "react-router-dom";
-import logo from "../../../../logo-e-biznes.png";
 import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {check400Status} from "../../../../utils/RequestUtils";
 import {createOrder} from "../../../../services/OrderService";
+import SimplyNavigation from "../../SimplyNavigation";
 
 function OrderCreate() {
     const [baskets, setBaskets] = useState(null);
@@ -32,28 +31,9 @@ function OrderCreate() {
             .then(response => alert("Order created!"));
     }
 
-    function getNav() {
-        return <nav className="navbar navbar-light bg-light">
-            <Link to={"/"}>
-                <img
-                    src={logo}
-                    alt="logo"
-                    className="d-inline-block align-top logo mr-4"
-                />
-            </Link>
-            <form className="form-inline">
-                <Link to={"/adminPanel/orders"}>
-                    <button className="btn btn-outline-danger my-2 my-sm-0 mr-2">
-                        Back
-                    </button>
-                </Link>
-            </form>
-        </nav>;
-    }
-
     return (
         <div>
-            {getNav()}
+            <SimplyNavigation upperLink={"/adminPanel/orders"}/>
             {
                 baskets && shippingInformation && (
                     <div>

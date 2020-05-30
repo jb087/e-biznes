@@ -5,6 +5,7 @@ import logo from "../../../../logo-e-biznes.png";
 import {UserContext} from "../../../../providers/UserProvider";
 import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import SimplyNavigation from "../../SimplyNavigation";
 
 function ShippingInformationEdit() {
     const {user} = useContext(UserContext);
@@ -31,28 +32,9 @@ function ShippingInformationEdit() {
         }, user)
     }
 
-    function getNav() {
-        return <nav className="navbar navbar-light bg-light">
-            <Link to={"/"}>
-                <img
-                    src={logo}
-                    alt="logo"
-                    className="d-inline-block align-top logo mr-4"
-                />
-            </Link>
-            <form className="form-inline">
-                <Link to={"/adminPanel/shippingInformation"}>
-                    <button className="btn btn-outline-danger my-2 my-sm-0 mr-2">
-                        Back
-                    </button>
-                </Link>
-            </form>
-        </nav>;
-    }
-
     return (
         <div>
-            {getNav()}
+            <SimplyNavigation upperLink={"/adminPanel/shippingInformation"}/>
             {
                 shippingInformation && (
                     <div>

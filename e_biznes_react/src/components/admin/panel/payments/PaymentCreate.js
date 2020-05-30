@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {getOrders} from "../../../../services/OrderService";
 import {createPayment, getPayments} from "../../../../services/PaymentService";
-import {Link} from "react-router-dom";
-import logo from "../../../../logo-e-biznes.png";
 import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import SimplyNavigation from "../../SimplyNavigation";
 
 function PaymentCreate() {
     const [orders, setOrders] = useState(null);
@@ -24,28 +23,9 @@ function PaymentCreate() {
             .then(response => alert("Payment created!"));
     }
 
-    function getNav() {
-        return <nav className="navbar navbar-light bg-light">
-            <Link to={"/"}>
-                <img
-                    src={logo}
-                    alt="logo"
-                    className="d-inline-block align-top logo mr-4"
-                />
-            </Link>
-            <form className="form-inline">
-                <Link to={"/adminPanel/payments"}>
-                    <button className="btn btn-outline-danger my-2 my-sm-0 mr-2">
-                        Back
-                    </button>
-                </Link>
-            </form>
-        </nav>;
-    }
-
     return (
         <div>
-            {getNav()}
+            <SimplyNavigation upperLink={"/adminPanel/payments"}/>
             {
                 orders && paymentOrderIds && (
                     <div>
