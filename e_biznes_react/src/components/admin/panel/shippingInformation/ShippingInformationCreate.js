@@ -3,6 +3,7 @@ import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {createShippingInformation} from "../../../../services/ShippingInformationService";
 import SimplyNavigation from "../../SimplyNavigation";
+import ShippingInformationFormGroup from "../../../ShippingInformationFormGroup";
 
 function ShippingInformationCreate() {
     function handleSubmit(event) {
@@ -30,57 +31,7 @@ function ShippingInformationCreate() {
                 </div>
                 <div className="row justify-content-center">
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId={"createShippingInformation"}>
-                            <Form.Label>First name</Form.Label>
-                            <Form.Control
-                                required
-                                name={"firstName"}
-                                type="text"
-                                placeholder="First name"
-                            />
-                            <Form.Label>Last name</Form.Label>
-                            <Form.Control
-                                required
-                                name={"lastName"}
-                                type="text"
-                                placeholder="Last name"
-                            />
-                            <Form.Label>E-mail</Form.Label>
-                            <Form.Control
-                                required
-                                name={"email"}
-                                type="email"
-                                placeholder="e-mail"
-                            />
-                            <Form.Label>Street</Form.Label>
-                            <Form.Control
-                                required
-                                name={"street"}
-                                type="text"
-                                placeholder="street"
-                            />
-                            <Form.Label>House Number</Form.Label>
-                            <Form.Control
-                                required
-                                name={"houseNumber"}
-                                type="text"
-                                placeholder="house number"
-                            />
-                            <Form.Label>City</Form.Label>
-                            <Form.Control
-                                required
-                                name={"city"}
-                                type="text"
-                                placeholder="city"
-                            />
-                            <Form.Label>Zip-code</Form.Label>
-                            <Form.Control
-                                required
-                                name={"zipCode"}
-                                type="text"
-                                placeholder="zip-code"
-                            />
-                        </Form.Group>
+                        <ShippingInformationFormGroup/>
                         <Button
                             variant="primary"
                             type="submit"
