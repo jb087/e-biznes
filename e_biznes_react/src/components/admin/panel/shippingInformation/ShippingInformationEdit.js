@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {editShippingInformation, getShippingInformationById} from "../../../../services/ShippingInformationService";
-import {Link, useParams} from "react-router-dom";
-import logo from "../../../../logo-e-biznes.png";
+import {useParams} from "react-router-dom";
 import {UserContext} from "../../../../providers/UserProvider";
 import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
