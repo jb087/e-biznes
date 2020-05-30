@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import Panel from "./components/Panel";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import UserProvider from "./providers/UserProvider";

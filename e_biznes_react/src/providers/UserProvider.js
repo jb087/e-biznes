@@ -9,14 +9,14 @@ export default function UserProvider({ children }) {
         return userString ? JSON.parse(userString) : null;
     });
     const handleSetUser = useCallback(
-        (user) => {
-            if (user) {
-                window.localStorage.setItem("e-biznes-user", JSON.stringify(user));
+        (handledUser) => {
+            if (handledUser) {
+                window.localStorage.setItem("e-biznes-user", JSON.stringify(handledUser));
             } else {
                 window.localStorage.removeItem("e-biznes-user");
             }
 
-            setUser(user);
+            setUser(handledUser);
         },
         [setUser]
     );
