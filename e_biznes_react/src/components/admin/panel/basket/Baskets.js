@@ -53,6 +53,13 @@ function Baskets() {
                             <div className="row justify-content-center">
                                 <h3 className={"mr-2"}>Id: {basket.id}</h3>
                             </div>
+                            {
+                                basket.userId !== "" && (
+                                    <div className="row justify-content-center">
+                                        <h3 className={"mr-2"}>UserId: {basket.userId}</h3>
+                                    </div>
+                                )
+                            }
                             <div className="row justify-content-center">
                                 <h4 className={"mr-2"}>Is bought: {basket.isBought}</h4>
                             </div>
