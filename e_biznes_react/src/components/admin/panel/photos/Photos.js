@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {UserContext} from "../../../../providers/UserProvider";
 import {deletePhotoById, getPhotos, photoJPGById} from "../../../../services/PhotoService";
-import logo from "../../../../logo-e-biznes.png";
 import SimplyNavigation from "../../SimplyNavigation";
 
 function Photos() {
