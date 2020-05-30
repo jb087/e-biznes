@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {UserContext} from "../../../../providers/UserProvider";
 import {deletePhotoById, getPhotos, photoJPGById} from "../../../../services/PhotoService";
-import {Link} from "react-router-dom";
 import logo from "../../../../logo-e-biznes.png";
+import SimplyNavigation from "../../SimplyNavigation";
 
 function Photos() {
     const {user} = useContext(UserContext);
@@ -13,33 +13,9 @@ function Photos() {
             .then(photosFromRepo => setPhotos(photosFromRepo));
     }, [setPhotos]);
 
-    function getNav() {
-        return <nav className="navbar navbar-light bg-light">
-            <Link to={"/"}>
-                <img
-                    src={logo}
-                    alt="logo"
-                    className="d-inline-block align-top logo mr-4"
-                />
-            </Link>
-            <form className="form-inline">
-                <Link to={"/adminPanel/photo/create"}>
-                    <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
-                        Create
-                    </button>
-                </Link>
-                <Link to={"/adminPanel"}>
-                    <button className="btn btn-outline-danger my-2 my-sm-0 mr-2">
-                        Back
-                    </button>
-                </Link>
-            </form>
-        </nav>;
-    }
-
     return (
         <div>
-            {getNav()}
+            <SimplyNavigation backLink={"/adminPanel"} createLink={"/adminPanel/photo/create"}/>
             {
                 photos && (
                     photos.map(photo => (

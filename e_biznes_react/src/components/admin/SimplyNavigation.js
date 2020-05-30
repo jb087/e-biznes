@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import logo from "../../logo-e-biznes.png";
 
-function SimplyNavigation({backLink}) {
+function SimplyNavigation({backLink, createLink}) {
     return (
         <div>
             <nav className="navbar navbar-light bg-light">
@@ -14,6 +14,15 @@ function SimplyNavigation({backLink}) {
                     />
                 </Link>
                 <form className="form-inline">
+                    {
+                        createLink && (
+                            <Link to={createLink}>
+                                <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
+                                    Create
+                                </button>
+                            </Link>
+                        )
+                    }
                     <Link to={backLink}>
                         <button className="btn btn-outline-danger my-2 my-sm-0 mr-2">
                             Back

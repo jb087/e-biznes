@@ -3,7 +3,7 @@ import {UserContext} from "../../../../providers/UserProvider";
 import {getBaskets} from "../../../../services/BasketService";
 import {deleteOrderedProductById, getOrderedProducts} from "../../../../services/OrderedProductsService";
 import {Link} from "react-router-dom";
-import logo from "../../../../logo-e-biznes.png";
+import SimplyNavigation from "../../SimplyNavigation";
 
 function OrderedProducts() {
     const {user} = useContext(UserContext);
@@ -17,33 +17,9 @@ function OrderedProducts() {
             .then(orderedProductsFromRepo => setOrderedProducts(orderedProductsFromRepo));
     }, [setBaskets, setOrderedProducts]);
 
-    function getNav() {
-        return <nav className="navbar navbar-light bg-light">
-            <Link to={"/"}>
-                <img
-                    src={logo}
-                    alt="logo"
-                    className="d-inline-block align-top logo mr-4"
-                />
-            </Link>
-            <form className="form-inline">
-                <Link to={"/adminPanel/orderedProduct/create"}>
-                    <button className="btn btn-outline-primary my-2 my-sm-0 mr-2">
-                        Create
-                    </button>
-                </Link>
-                <Link to={"/adminPanel"}>
-                    <button className="btn btn-outline-danger my-2 my-sm-0 mr-2">
-                        Back
-                    </button>
-                </Link>
-            </form>
-        </nav>;
-    }
-
     return (
         <div>
-            {getNav()}
+            <SimplyNavigation backLink={"/adminPanel"} createLink={"/adminPanel/orderedProduct/create"}/>
             {
                 baskets && orderedProducts && (
                     orderedProducts.map(orderedProduct => (
