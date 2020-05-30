@@ -32,10 +32,26 @@ class BasketResource @Inject()(basketRepository: BasketRepository,
       })
   }
 
-  def createBasket: Action[JsValue] = Action.async(parse.json) {
-    _.body.validate[Basket] match {
-      case JsSuccess(basket, _) => basketRepository.createBasket(basket.isBought).map(basketId => Ok(basketId))
-      case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
+  def createBasket: Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
+    silhouette.UserAwareRequestHandler { userAwareRequest =>
+      Future.successful(HandlerResult(Ok, userAwareRequest.identity))
+    }(request).flatMap {
+      case HandlerResult(r, Some(user)) => {
+        request.body.asJson match {
+          case Some(json) => json.validate[Basket] match {
+            case JsSuccess(basket, _) => basketRepository.createBasket(user.userID, basket.isBought).map(basketId => Ok(basketId))
+            case _ => Future.successful(InternalServerError(getErrorMessage))
+          }
+          case None => Future.successful(InternalServerError(getErrorMessage))
+        }
+      }
+      case HandlerResult(r, None) => request.body.asJson match {
+        case Some(json) => json.validate[Basket] match {
+          case JsSuccess(basket, _) => basketRepository.createBasket(basket.isBought).map(basketId => Ok(basketId))
+          case _ => Future.successful(InternalServerError(getErrorMessage))
+        }
+        case None => Future.successful(InternalServerError(getErrorMessage))
+      }
     }
   }
 
@@ -45,12 +61,12 @@ class BasketResource @Inject()(basketRepository: BasketRepository,
         basketRepository.getBasketByIdOption(basketId)
           .map({
             case Some(value) =>
-              val basketToUpdate = Basket(basketId, basket.isBought)
+              val basketToUpdate = Basket(basketId, basket.userId, basket.isBought)
               Await.result(basketRepository.updateBasket(basketToUpdate)
                 .map(_ => Ok("Basket Updated!")), Duration.Inf)
             case None => InternalServerError("Basket with id: " + basketId + " does not exist!")
           })
-      case _ => Future.successful(InternalServerError("Provided body is not valid. Please provide correct body with empty id."))
+      case _ => Future.successful(InternalServerError(getErrorMessage))
     }
   }
 
@@ -76,5 +92,9 @@ class BasketResource @Inject()(basketRepository: BasketRepository,
       case HandlerResult(r, Some(user)) => Await.result(delete, Duration.Inf)
       case HandlerResult(r, None) => Unauthorized
     }
+  }
+
+  private def getErrorMessage = {
+    "Provided body is not valid. Please provide correct body with empty id."
   }
 }

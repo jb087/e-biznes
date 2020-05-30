@@ -59,7 +59,7 @@ class BasketController @Inject()(basketRepository: BasketRepository, cc: Message
         }
       },
       basket => {
-        basketRepository.updateBasket(Basket(basket.basketId, basket.isBought))
+        basketRepository.updateBasket(Basket(basket.basketId, "", basket.isBought))
           .map(_ => Redirect(routes.BasketController.updateBasket(basket.basketId)).flashing("success" -> "Basket updated!"))
       }
     )
