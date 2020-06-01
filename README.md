@@ -1,3 +1,9 @@
-# e-biznes
+# E-biznes
 
 Link do DockerHub: https://hub.docker.com/repository/docker/jb087/e-biznes
+
+### Run
+
+```
+docker-compose up
+```
