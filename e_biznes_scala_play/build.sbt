@@ -8,6 +8,8 @@ resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 
 resolvers += "Akka Snapshot Repository" at "https://repo.akka.io/snapshots/"
 
+resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
+
 scalaVersion := "2.12.4"
 
 libraryDependencies ++= Seq(
