@@ -72,7 +72,7 @@ class PaymentRepository @Inject()(
     }
 
     def updateBasketForPaymentCreation = {
-      val basketToModify = Basket(basketToUpdate.id, 1)
+      val basketToModify = Basket(basketToUpdate.id, basketToUpdate.userId, 1)
 
       basket.filter(_.id === basketToUpdate.id).update(basketToModify)
     }

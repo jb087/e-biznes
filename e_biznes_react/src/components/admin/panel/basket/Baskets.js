@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {UserContext} from "../../../../providers/UserProvider";
-import {createBasket, deleteBasketById, editBasket, getBaskets} from "../../../../services/BasketService";
+import {createBasketWithUser, deleteBasketById, editBasket, getBaskets} from "../../../../services/BasketService";
 import {Link} from "react-router-dom";
 import logo from "../../../../logo-e-biznes.png";
 import {check400Status} from "../../../../utils/RequestUtils";
@@ -26,10 +26,11 @@ function Baskets() {
             <form className="form-inline">
                 <button
                     className="btn btn-outline-primary my-2 my-sm-0 mr-2"
-                    onClick={() => createBasket({
+                    onClick={() => createBasketWithUser({
                         id: "",
+                        userId: "",
                         isBought: 0
-                    })
+                    }, user)
                         .then(response => check400Status(response))
                         .then(response => alert("Basket created!"))
                         .then(response => window.location.reload(false))
@@ -56,6 +57,13 @@ function Baskets() {
                             <div className="row justify-content-center">
                                 <h3 className={"mr-2"}>Id: {basket.id}</h3>
                             </div>
+                            {
+                                basket.userId !== "" && (
+                                    <div className="row justify-content-center">
+                                        <h3 className={"mr-2"}>UserId: {basket.userId}</h3>
+                                    </div>
+                                )
+                            }
                             <div className="row justify-content-center">
                                 <h4 className={"mr-2"}>Is bought: {basket.isBought}</h4>
                             </div>
@@ -73,6 +81,7 @@ function Baskets() {
                                                 className="btn btn-outline-primary my-2 my-sm-0 mr-2"
                                                 onClick={() => editBasket({
                                                     id: basket.id,
+                                                    userId: "",
                                                     isBought: 1
                                                 }, user)}
                                             >

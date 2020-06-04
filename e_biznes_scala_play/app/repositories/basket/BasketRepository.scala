@@ -23,6 +23,10 @@ class BasketRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impli
     basket.result
   }
 
+  def getBasketsByUserId(userId: String): Future[Seq[Basket]] = db.run {
+    basket.filter(_.isBought === 1).filter(_.userId === userId).result
+  }
+
   def getBaskets(isBought: Int): Future[Seq[Basket]] = db.run {
     basket.filter(_.isBought === isBought).result
   }
@@ -35,10 +39,17 @@ class BasketRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impli
     basket.filter(_.id === basketId).result.headOption
   }
 
+  def createBasket(userId: String, isBought: Int): Future[String] = {
+    val id: String = UUID.randomUUID().toString
+    db.run {
+      basket += Basket(id, userId, isBought)
+    }.map(_ => id)
+  }
+
   def createBasket(isBought: Int): Future[String] = {
     val id: String = UUID.randomUUID().toString
     db.run {
-      basket += Basket(id, isBought)
+      basket += Basket(id, "", isBought)
     }.map(_ => id)
   }
 

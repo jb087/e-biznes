@@ -1,0 +1,26 @@
+version: '3'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: e_biznes_scala_play/Dockerfile
+    environment:
+      NODE_ENV: developement
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./e_biznes_scala_play:/home/bjedrzejczyk/e_biznes_scala_play/
+
+  client:
+    build:
+      context: .
+      dockerfile: e_biznes_react/Dockerfile
+    tty: true
+    environment:
+      NODE_ENV: developement
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+    volumes:
+      - ./e_biznes_react:/home/bjedrzejczyk/e_biznes_react/

@@ -6,6 +6,7 @@ const basketsPath = apiPath + "baskets";
 const createBasketPath = apiPath + "basket";
 const deleteBasketByIdPath = apiPath + "basket/{id}";
 const editBasketPath = apiPath + "basket/{id}";
+const boughtBasketsByUserPath = apiPath + "basketByUser";
 
 export function getBaskets() {
     return fetch(basketsPath, {
@@ -30,6 +31,20 @@ export async function createBasket(basket) {
         }
     })
         .then(response => response.text())
+}
+
+export async function createBasketWithUser(basket, user) {
+    return fetch(createBasketPath, {
+        method: "POST",
+        credentials: 'include',
+        body: JSON.stringify(basket),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin':'http://localhost:3000',
+            'X-Auth-Token': user?.token
+        }
+    })
 }
 
 export function deleteBasketById(basketId, user) {
@@ -63,4 +78,19 @@ export function editBasket(basket, user) {
         .then(response => check400Status(response))
         .then(response => alert("Basket edited!"))
         .then(response => window.location.reload(false))
+}
+
+export function getBoughtBasketsByUser(user) {
+    return fetch(boughtBasketsByUserPath, {
+        method: "GET",
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin':'http://localhost:3000',
+            'X-Auth-Token': user?.token
+        }
+    })
+        .then(response => check400Status(response))
+        .then(response => response.json());
 }
