@@ -1,7 +1,7 @@
 package api.basket
 
-import com.mohiva.play.silhouette.api.{HandlerResult, Silhouette}
 import com.mohiva.play.silhouette.api.actions.SecuredRequest
+import com.mohiva.play.silhouette.api.{HandlerResult, Silhouette}
 import javax.inject.{Inject, Singleton}
 import models.auth.UserRoles
 import models.basket.Basket
@@ -22,6 +22,17 @@ class BasketResource @Inject()(basketRepository: BasketRepository,
   def getBaskets: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     basketRepository.getBaskets
       .map(baskets => Ok(Json.toJson(baskets)))
+  }
+
+  def getBoughtBasketsByLoggedUser: Action[AnyContent] = Action.async { implicit request =>
+    silhouette.SecuredRequestHandler { securedRequest =>
+      Future.successful(HandlerResult(Ok, Some(securedRequest.identity)))
+    }.map {
+      case HandlerResult(r, Some(user)) =>
+        val baskets = Await.result(basketRepository.getBasketsByUserId(user.userID), Duration.Inf)
+        Ok(Json.toJson(baskets))
+      case HandlerResult(r, None) => Unauthorized
+    }
   }
 
   def getBasketById(basketId: String): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>

@@ -1,80 +1,51 @@
-import React, {Component} from 'react';
+import React, {useContext} from 'react';
 import {Form, Modal} from 'react-bootstrap'
 import Button from "react-bootstrap/Button";
-import {createBasket} from "../services/BasketService";
+import {createBasket, createBasketWithUser} from "../services/BasketService";
 import {createOrderedProduct} from "../services/OrderedProductsService";
 import {createShippingInformation} from "../services/ShippingInformationService";
 import {createOrder} from "../services/OrderService";
 import {createPayment, deletePayment, finalizePayment} from "../services/PaymentService";
 import {wasPaid} from "../services/PaymentServiceMock";
 import ShippingInformationFormGroup from "./ShippingInformationFormGroup";
+import {UserContext} from "../providers/UserProvider";
 
-class PurchaseModal extends Component {
+function PurchaseModal({show, onHide, orderedProducts}) {
+    const {user} = useContext(UserContext);
 
-    render() {
-        return (
-            <Modal size={"lg"} show={this.props.show} onHide={() => this.props.onHide()}>
-                <Modal.Header closeButton>
-                    <h2>Purchase Process</h2>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form onSubmit={this.finalizePurchase}>
-                        <div className="d-flex justify-content-between">
-                            <div>
-                                <h3>Shipping Information</h3>
-                                <ShippingInformationFormGroup/>
-                            </div>
-                            <div>
-                                {
-                                    this.props.orderedProducts && (
-                                        <h4>
-                                            Total price: {
-                                            this.props.orderedProducts
-                                                .reduce((sum, product) => sum + (product.product.price), 0)
-                                        }
-                                        </h4>
-                                    )
-                                }
-                            </div>
-                        </div>
-                        <div className="row justify-content-center">
-                            <Button
-                                variant="primary"
-                                type="submit"
-                            >
-                                Pay and Buy
-                            </Button>
-                        </div>
-                    </Form>
-                </Modal.Body>
-            </Modal>
-        );
-    }
-
-    finalizePurchase = async (event) => {
+    const finalizePurchase = async (event) => {
         event.preventDefault();
         event.persist();
 
-        const basketId = await createBasket(this.getBasket());
-        for (let i = 0; i < this.props.orderedProducts.length; i++) {
-            await createOrderedProduct(this.getOrderedProduct(basketId, this.props.orderedProducts[i]));
+        const basketId = await getBasketId();
+        for (let i = 0; i < orderedProducts.length; i++) {
+            await createOrderedProduct(getOrderedProduct(basketId, orderedProducts[i]));
         }
 
-        const shippingInformationId = await createShippingInformation(this.getShippingInformation(event));
-        const orderId = await createOrder(this.getOrder(basketId, shippingInformationId));
+        const shippingInformationId = await createShippingInformation(getShippingInformation(event));
+        const orderId = await createOrder(getOrder(basketId, shippingInformationId));
 
-        const paymentId = await createPayment(orderId, this.onError);
+        const paymentId = await createPayment(orderId, onError);
         if (wasPaid()) {
-            await finalizePayment(paymentId, this.onError);
+            await finalizePayment(paymentId, onError);
 
             window.location.reload(false);
         } else {
             alert("Problem with payment. Probably You do not have enough money on account!");
-            await deletePayment(paymentId, this.onError);
+            await deletePayment(paymentId, onError);
         }
     };
 
-    getBasket = () => {
+    const getBasketId = async () => {
+        if (user) {
+            return await createBasketWithUser(getBasket(), user)
+                .then(response => response.text())
+        } else {
+            return await createBasket(getBasket());
+        }
+    };
+
+    const getBasket = () => {
         return {
             id: "",
             userId: "",
@@ -82,7 +53,7 @@ class PurchaseModal extends Component {
         }
     };
 
-    getOrderedProduct = (basketId, product) => {
+    const getOrderedProduct = (basketId, product) => {
         return {
             id: "",
             basketId: basketId,
@@ -91,7 +62,7 @@ class PurchaseModal extends Component {
         }
     };
 
-    getShippingInformation = (event) => {
+    const getShippingInformation = (event) => {
         let elements = event.target.elements;
         return {
             id: "",
@@ -105,7 +76,7 @@ class PurchaseModal extends Component {
         }
     };
 
-    getOrder = (basketId, shippingInformationId) => {
+    const getOrder = (basketId, shippingInformationId) => {
         return {
             id: "",
             basketId: basketId,
@@ -114,10 +85,48 @@ class PurchaseModal extends Component {
         }
     };
 
-    onError = (errorMessage) => {
+    const onError = (errorMessage) => {
         alert(errorMessage);
-        this.props.onHide();
-    }
+        onHide();
+    };
+
+    return (
+        <Modal size={"lg"} show={show} onHide={() => onHide()}>
+            <Modal.Header closeButton>
+                <h2>Purchase Process</h2>
+            </Modal.Header>
+            <Modal.Body>
+                <Form onSubmit={finalizePurchase}>
+                    <div className="d-flex justify-content-between">
+                        <div>
+                            <h3>Shipping Information</h3>
+                            <ShippingInformationFormGroup/>
+                        </div>
+                        <div>
+                            {
+                                orderedProducts && (
+                                    <h4>
+                                        Total price: {
+                                        orderedProducts
+                                            .reduce((sum, product) => sum + (product.product.price), 0)
+                                    }
+                                    </h4>
+                                )
+                            }
+                        </div>
+                    </div>
+                    <div className="row justify-content-center">
+                        <Button
+                            variant="primary"
+                            type="submit"
+                        >
+                            Pay and Buy
+                        </Button>
+                    </div>
+                </Form>
+            </Modal.Body>
+        </Modal>
+    );
 }
 
 export default PurchaseModal;

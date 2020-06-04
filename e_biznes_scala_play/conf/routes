@@ -20,6 +20,7 @@ DELETE  /api/subcategory/:subcategoryId                     api.categories.Subca
 
 GET     /api/baskets                                        api.basket.BasketResource.getBaskets
 GET     /api/basket/:basketId                               api.basket.BasketResource.getBasketById(basketId: String)
+GET     /api/basketByUser                                   api.basket.BasketResource.getBoughtBasketsByLoggedUser
 +nocsrf
 POST    /api/basket                                         api.basket.BasketResource.createBasket
 +nocsrf

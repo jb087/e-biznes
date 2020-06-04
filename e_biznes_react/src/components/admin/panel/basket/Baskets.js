@@ -3,6 +3,7 @@ import {UserContext} from "../../../../providers/UserProvider";
 import {createBasketWithUser, deleteBasketById, editBasket, getBaskets} from "../../../../services/BasketService";
 import {Link} from "react-router-dom";
 import logo from "../../../../logo-e-biznes.png";
+import {check400Status} from "../../../../utils/RequestUtils";
 
 function Baskets() {
     const {user} = useContext(UserContext);
@@ -30,6 +31,9 @@ function Baskets() {
                         userId: "",
                         isBought: 0
                     }, user)
+                        .then(response => check400Status(response))
+                        .then(response => alert("Basket created!"))
+                        .then(response => window.location.reload(false))
                     }
                 >
                     Create
