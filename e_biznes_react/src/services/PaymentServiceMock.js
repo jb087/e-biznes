@@ -1,4 +1,4 @@
 export function wasPaid() {
     const random = Math.random();
-    return random < 0.8;
+    return random < 2.0;
 }

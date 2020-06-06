@@ -108,7 +108,7 @@ function PurchaseModal({show, onHide, orderedProducts}) {
                                     <h4>
                                         Total price: {
                                         orderedProducts
-                                            .reduce((sum, product) => sum + (product.product.price), 0)
+                                            .reduce((sum, product) => sum + (product.quantity * product.product.price), 0)
                                     }
                                     </h4>
                                 )
