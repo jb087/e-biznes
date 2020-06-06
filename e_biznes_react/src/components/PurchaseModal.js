@@ -58,7 +58,7 @@ function PurchaseModal({show, onHide, orderedProducts}) {
             id: "",
             basketId: basketId,
             productId: product.product.id,
-            quantity: product.quantity
+            quantity: parseInt(product.quantity)
         }
     };
 
